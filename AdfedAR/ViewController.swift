@@ -19,6 +19,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         defineSceneView()
+        setupScene()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -28,11 +29,6 @@ class ViewController: UIViewController {
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-//        sceneView.session.pause()
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
     }
 
     // MARK: - AR Setup
@@ -47,26 +43,42 @@ class ViewController: UIViewController {
         sceneView.scene             = scene
         sceneView.delegate          = self
         sceneView.showsStatistics   = true
+        
+        sceneView.automaticallyUpdatesLighting = true
+        #if DEBUG
+        sceneView.showsStatistics   = true
         sceneView.debugOptions      = [ SCNDebugOptions.showLightExtents,
                                         ARSCNDebugOptions.showFeaturePoints,
                                         ARSCNDebugOptions.showWorldOrigin ]
-        sceneView.automaticallyUpdatesLighting = true
+        #endif
     }
+    
+    private func setupScene() {
+        
+    }
+    
 }
 
 extension ViewController: ARSCNViewDelegate {
- 
-    func session(_ session: ARSession, didFailWithError error: Error) {
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        guard let planeAnchor = anchor as? ARPlaneAnchor else { return }
+        let plane = SCNPlane(width: CGFloat(planeAnchor.extent.x), height: CGFloat(planeAnchor.extent.z))
+        let planeNode = SCNNode(geometry: plane)
+        planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
+        planeNode.eulerAngles.x = -.pi / 2
+        planeNode.opacity = 0.25
+        node.addChildNode(planeNode)
         
     }
     
-    func sessionWasInterrupted(_ session: ARSession) {
-        // Inform the user that the session has been interrupted, for example, by presenting an overlay
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        guard let planeAnchor = anchor as? ARPlaneAnchor,
+              let planeNode = node.childNodes.first,
+              let plane = planeNode.geometry as? SCNPlane else { return }
         
-    }
-    
-    func sessionInterruptionEnded(_ session: ARSession) {
-        // Reset tracking and/or remove existing anchors if consistent tracking is required
+        planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
         
+        plane.width = CGFloat(planeAnchor.extent.x)
+        plane.height = CGFloat(planeAnchor.extent.z)
     }
 }
