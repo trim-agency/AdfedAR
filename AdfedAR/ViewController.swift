@@ -19,7 +19,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         defineSceneView()
-        setupScene()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -53,10 +52,9 @@ class ViewController: UIViewController {
         #endif
     }
     
-    private func setupScene() {
+    private func addCubeAtTouch(withGestureRecognizer recognizer: UIGestureRecognizer) {
         
     }
-    
 }
 
 extension ViewController: ARSCNViewDelegate {
@@ -68,7 +66,6 @@ extension ViewController: ARSCNViewDelegate {
         planeNode.eulerAngles.x = -.pi / 2
         planeNode.opacity = 0.25
         node.addChildNode(planeNode)
-        
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
@@ -81,4 +78,32 @@ extension ViewController: ARSCNViewDelegate {
         plane.width = CGFloat(planeAnchor.extent.x)
         plane.height = CGFloat(planeAnchor.extent.z)
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        let hitTestResults = sceneView.hitTest(touch.location(in: sceneView), types: .featurePoint)
+        
+        guard let hitTestResult = hitTestResults.last else { return }
+        let hitTransform = SCNMatrix4(hitTestResult.worldTransform)
+        let hitVector = SCNVector3Make(hitTransform.m41, hitTransform.m42, hitTransform.m43)
+        createCube(hitVector)
+    }
+    
+    func createCube(_ vector: SCNVector3) {
+        let cube = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0.001)
+        let node = SCNNode(geometry: cube)
+        node.position = vector
+        sceneView.scene.rootNode.addChildNode(node)
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
