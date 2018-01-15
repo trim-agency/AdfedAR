@@ -1,70 +1,62 @@
-//
-//  ViewController.swift
-//  AdfedAR
-//
-//  Created by Sharkmaul on 1/15/18.
-//  Copyright © 2018 trim. All rights reserved.
-//
-
 import UIKit
 import SceneKit
 import ARKit
 
-class ViewController: UIViewController, ARSCNViewDelegate {
-
+class ViewController: UIViewController {
+   
     @IBOutlet var sceneView: ARSCNView!
+    var configuration: ARWorldTrackingConfiguration?
+    let planeHeight: CGFloat = 0
     
+    var planeIdentifiers    = [UUID]()
+    var anchors             = [ARAnchor]()
+    var nodes               = [SCNNode]()
+    var planeNodesCount     =  0
+    var isPlaneSelected     = false
+    var isSessionPaused     = false
+    
+    // MARK: - Protocol Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Set the view's delegate
-        sceneView.delegate = self
-        
-        // Show statistics such as fps and timing information
-        sceneView.showsStatistics = true
-        
-        // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
-        
-        // Set the scene to the view
-        sceneView.scene = scene
+        defineSceneView()
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
-        // Create a session configuration
-        let configuration = ARWorldTrackingConfiguration()
-
-        // Run the view's session
-        sceneView.session.run(configuration)
+        configureAR()
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
-        // Pause the view's session
-        sceneView.session.pause()
+//        sceneView.session.pause()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
     }
 
-    // MARK: - ARSCNViewDelegate
-    
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-     
-        return node
+    // MARK: - AR Setup
+    private func configureAR() {
+        let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = .horizontal
+        sceneView.session.run(configuration)
     }
-*/
     
+    private func defineSceneView() {
+        let scene                   = SCNScene()
+        sceneView.scene             = scene
+        sceneView.delegate          = self
+        sceneView.showsStatistics   = true
+        sceneView.debugOptions      = [ SCNDebugOptions.showLightExtents,
+                                        ARSCNDebugOptions.showFeaturePoints,
+                                        ARSCNDebugOptions.showWorldOrigin ]
+        sceneView.automaticallyUpdatesLighting = true
+    }
+}
+
+extension ViewController: ARSCNViewDelegate {
+ 
     func session(_ session: ARSession, didFailWithError error: Error) {
-        // Present an error message to the user
         
     }
     
