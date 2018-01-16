@@ -6,7 +6,7 @@ class ViewController: UIViewController {
    
     @IBOutlet var sceneView: ARSCNView!
     var configuration: ARWorldTrackingConfiguration?
-    let planeHeight: CGFloat = 0
+    let planeHeight: CGFloat = 1
     
     var planeIdentifiers    = [UUID]()
     var anchors             = [ARAnchor]()
@@ -47,14 +47,12 @@ class ViewController: UIViewController {
         #if DEBUG
         sceneView.showsStatistics   = true
         sceneView.debugOptions      = [ SCNDebugOptions.showLightExtents,
-                                        ARSCNDebugOptions.showFeaturePoints,
-                                        ARSCNDebugOptions.showWorldOrigin ]
+                                        ARSCNDebugOptions.showFeaturePoints ]
         #endif
     }
     
-    private func addCubeAtTouch(withGestureRecognizer recognizer: UIGestureRecognizer) {
-        
-    }
+    
+    
 }
 
 extension ViewController: ARSCNViewDelegate {
@@ -69,9 +67,9 @@ extension ViewController: ARSCNViewDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
-        guard let planeAnchor = anchor as? ARPlaneAnchor,
-              let planeNode = node.childNodes.first,
-              let plane = planeNode.geometry as? SCNPlane else { return }
+        guard let planeAnchor   = anchor as? ARPlaneAnchor,
+              let planeNode     = node.childNodes.first,
+              let plane         = planeNode.geometry as? SCNPlane else { return }
         
         planeNode.simdPosition = float3(planeAnchor.center.x, 0, planeAnchor.center.z)
         
@@ -80,19 +78,19 @@ extension ViewController: ARSCNViewDelegate {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        let hitTestResults = sceneView.hitTest(touch.location(in: sceneView), types: .featurePoint)
+        guard let touch     = touches.first else { return }
+        let hitTestResults  = sceneView.hitTest(touch.location(in: sceneView), types: .existingPlaneUsingExtent)
         
-        guard let hitTestResult = hitTestResults.last else { return }
-        let hitTransform = SCNMatrix4(hitTestResult.worldTransform)
-        let hitVector = SCNVector3Make(hitTransform.m41, hitTransform.m42, hitTransform.m43)
+        guard let hitTestResult = hitTestResults.first else { return }
+        let hitTransform        = SCNMatrix4(hitTestResult.worldTransform)
+        let hitVector           = SCNVector3Make(hitTransform.m41, hitTransform.m42, hitTransform.m43)
         createCube(hitVector)
     }
     
     func createCube(_ vector: SCNVector3) {
-        let cube = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0.001)
-        let node = SCNNode(geometry: cube)
-        node.position = vector
+        let cube        = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0.001)
+        let node        = SCNNode(geometry: cube)
+        node.position   = vector
         sceneView.scene.rootNode.addChildNode(node)
     }
 }
