@@ -13,6 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         #if DEBUG
             let console = ConsoleDestination()  // log to Xcode Console
+            log.addDestination(console)
         #endif
         return true
     }
