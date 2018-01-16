@@ -16,7 +16,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        log.debug("foo")
         // Set the view's delegate
         sceneView.delegate = self
         
