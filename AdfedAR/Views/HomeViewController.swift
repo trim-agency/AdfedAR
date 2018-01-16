@@ -3,7 +3,7 @@ import SceneKit
 import ARKit
 import Vision
 
-class ViewController: UIViewController {
+class HomeViewController: UIViewController {
    
     let planeHeight: CGFloat    = 1
     var planeIdentifiers        = [UUID]()
@@ -16,7 +16,6 @@ class ViewController: UIViewController {
     
     @IBOutlet var sceneView: ARSCNView!
     var configuration: ARWorldTrackingConfiguration?
-    var rectangleDetectionService: RectangleDetectionService!
     var lastObservation: VNDetectedObjectObservation?
     var debugLayer: CAShapeLayer?
     var rootAnchor: ARAnchor?
@@ -25,7 +24,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         defineSceneView()
-        rectangleDetectionService = RectangleDetectionService(sceneView)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -129,7 +127,7 @@ class ViewController: UIViewController {
     }
 }
 
-extension ViewController: ARSCNViewDelegate {
+extension HomeViewController: ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         loadVision()
     }
