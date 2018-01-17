@@ -13,7 +13,9 @@ class HomeViewController: UIViewController {
     var isPlaneSelected         = false
     var isSessionPaused         = false
     let visionHandler           = VNSequenceRequestHandler()
-    
+    let scene                   = SCNScene()
+    var animations              = [String: CAAnimation]()
+
     @IBOutlet var sceneView: ARSCNView!
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
@@ -44,7 +46,6 @@ class HomeViewController: UIViewController {
     }
     
     private func defineSceneView() {
-        let scene                   = SCNScene()
         sceneView.scene             = scene
         sceneView.delegate          = self
         sceneView.showsStatistics   = true
@@ -59,10 +60,10 @@ class HomeViewController: UIViewController {
     
     func loadVision() {
         DispatchQueue.global(qos: .background).async {
-            let pixelBuffer = self.sceneView.session.currentFrame?.capturedImage
-            let ciImage     = CIImage(cvImageBuffer: pixelBuffer!)
-            let handler     = VNImageRequestHandler(ciImage: ciImage)
-            let rectangleRequest = VNDetectRectanglesRequest(completionHandler: self.handleRectangles)
+            let pixelBuffer         = self.sceneView.session.currentFrame?.capturedImage
+            let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
+            let handler             = VNImageRequestHandler(ciImage: ciImage)
+            let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: self.handleRectangles)
             
             do {
                 try handler.perform([rectangleRequest])
@@ -74,11 +75,26 @@ class HomeViewController: UIViewController {
     
     func handleRectangles(request: VNRequest, error: Error?) {
         guard let observations      = request.results as? [VNRectangleObservation],
-              let firstObservation  = observations.first else {
+            let firstObservation = observations.first else {
                 return
         }
         
+log.debug(firstObservation.confidence)
+//        var firstObservation: VNRectangleObservation?
+//        observations.forEach{
+//            guard let observation = firstObservation else {
+//                firstObservation = $0
+//                return
+//            }
+//
+//            if observation.confidence > (firstObservation?.confidence)! {
+//                firstObservation = $0
+//            }
+//        }
+        
+
         DispatchQueue.main.async {
+//            guard let firstObservation = firstObservation else { return }
             let points          = [ firstObservation.topLeft, firstObservation.topRight, firstObservation.bottomRight, firstObservation.bottomLeft]
             let convertedPoints = points.map{ self.sceneView.convertFromCamera($0) }
             
@@ -101,6 +117,8 @@ class HomeViewController: UIViewController {
                 // Creates a element if rootAnchor doesn't exist
                 self.rootAnchor = ARAnchor(transform: result.worldTransform)
                 self.sceneView.session.add(anchor: self.rootAnchor!)
+                
+                let rectTrackingRequest = VNTrackRectangleRequest(rectangleObservation: firstObservation, completionHandler: self.handleRectangles)
             }
             
             #if DEBUG
@@ -125,6 +143,38 @@ class HomeViewController: UIViewController {
         layer.path = path.cgPath
         return layer
     }
+    
+    // MARK: - Custom Animations
+    private func loadAllAnimations() {
+        let jumpingScene = SCNScene(named: "3dAssets.scnassets/JumpingFixed.dae")!
+        let node = SCNNode()
+        for child in jumpingScene.rootNode.childNodes {
+            node.addChildNode(child)
+        }
+        
+        node.position = SCNVector3(0, -1, -2)
+        node.scale = SCNVector3(0.2, 0.2, 0.2)
+        
+        sceneView.scene.rootNode.addChildNode(node)
+        
+        loadAnimation(withKey: "jumping", sceneName: "3dAssets.scnassets/JumpingFixed", animationIdentifier: "JumpingFixed")
+    }
+    
+    func loadAnimation(withKey: String, sceneName:String, animationIdentifier:String) {
+        let sceneURL = Bundle.main.url(forResource: sceneName, withExtension: "dae")
+        let sceneSource = SCNSceneSource(url: sceneURL!, options: nil)
+        
+        if let animationObject = sceneSource?.entryWithIdentifier(animationIdentifier, withClass: CAAnimation.self) {
+            // The animation will only play once
+            animationObject.repeatCount = 1
+            // To create smooth transitions between animations
+            animationObject.fadeInDuration = CGFloat(1)
+            animationObject.fadeOutDuration = CGFloat(0.5)
+            
+            // Store the animation for later use
+            animations[withKey] = animationObject
+        }
+    }
 }
 
 extension HomeViewController: ARSCNViewDelegate {
@@ -147,18 +197,24 @@ extension HomeViewController: ARSCNViewDelegate {
             return nil
         }
         
-        let hitTransform = SCNMatrix4(result.worldTransform)
-        let vector = SCNVector3Make(hitTransform.m41, hitTransform.m42, hitTransform.m43)
+        let hitTransform    = SCNMatrix4(result.worldTransform)
+        let vector          = SCNVector3Make(hitTransform.m41, hitTransform.m42, hitTransform.m43)
         
         return vector
     }
     
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let cube = SCNBox(width: 0.1, height: 0.01, length: 0.1, chamferRadius: 0.005)
-        let cubeNode = SCNNode(geometry: cube)
-        let wrapper = SCNNode()
-        wrapper.addChildNode(cubeNode)
-        wrapper.transform = SCNMatrix4(anchor.transform)
+        
+        var jumpingScene = SCNScene(named: "3dAssets.scnassets/JumpingFixed.dae")!
+        let wrapper     = SCNNode()
+        
+        scene.rootNode.childNodes.forEach{ wrapper.addChildNode($0) }
+        
+        wrapper.position = SCNVector3(0, -1, -2)
+        wrapper.scale = SCNVector3(0.2, 0.2, 0.2)
+        
+        sceneView.scene.rootNode.addChildNode(wrapper)
+        loadAnimation(withKey: "Jumping", sceneName: "3dAssets.scnassets/JumpingFixed", animationIdentifier: "JumpingFixed")
         return wrapper
     }
 }
