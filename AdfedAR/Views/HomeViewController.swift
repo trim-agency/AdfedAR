@@ -8,10 +8,6 @@ class HomeViewController: UIViewController {
     let planeHeight: CGFloat    = 1
     var planeIdentifiers        = [UUID]()
     var anchors                 = [ARAnchor]()
-    var nodes                   = [SCNNode]()
-    var planeNodesCount         =  0
-    var isPlaneSelected         = false
-    var isSessionPaused         = false
     let visionHandler           = VNSequenceRequestHandler()
     let scene                   = SCNScene()
     var animations              = [String: CAAnimation]()
@@ -74,35 +70,28 @@ class HomeViewController: UIViewController {
     }
     
     func handleRectangles(request: VNRequest, error: Error?) {
-        guard let observations      = request.results as? [VNRectangleObservation],
-            let firstObservation = observations.first else {
+        guard let observations      = request.results as? [VNRectangleObservation] else {
                 return
         }
-        
-log.debug(firstObservation.confidence)
-//        var firstObservation: VNRectangleObservation?
-//        observations.forEach{
-//            guard let observation = firstObservation else {
-//                firstObservation = $0
-//                return
-//            }
-//
-//            if observation.confidence > (firstObservation?.confidence)! {
-//                firstObservation = $0
-//            }
-//        }
-        
 
+        let highConfidenceObservation = observations.max { a, b in a.confidence < b.confidence }
+        
+        guard let highestConfidenceObservation = highConfidenceObservation else {
+            log.debug("Error with high confidence observation")
+            return
+        }
+        
         DispatchQueue.main.async {
-//            guard let firstObservation = firstObservation else { return }
-            let points          = [ firstObservation.topLeft, firstObservation.topRight, firstObservation.bottomRight, firstObservation.bottomLeft]
-            let convertedPoints = points.map{ self.sceneView.convertFromCamera($0) }
-            
-            var rect    = firstObservation.boundingBox
-            rect        = rect.applying(CGAffineTransform(scaleX: 1, y: -1))
-            rect        = rect.applying(CGAffineTransform(translationX: 0, y: 1))
-            
-            let center          = CGPoint(x: rect.midX, y: rect.midY)
+            let points          = [ highestConfidenceObservation.topLeft,
+                                    highestConfidenceObservation.topRight,
+                                    highestConfidenceObservation.bottomRight,
+                                    highestConfidenceObservation.bottomLeft]
+
+            highestConfidenceObservation.boundingBox.applying(CGAffineTransform(scaleX: 1, y: -1))
+            highestConfidenceObservation.boundingBox.applying(CGAffineTransform(translationX: 0, y: 1))
+
+            let center          = CGPoint(x: (highConfidenceObservation?.boundingBox.midX)!,
+                                          y: (highConfidenceObservation?.boundingBox.midY)!)
             let hitTestResults  = self.sceneView.hitTest(center, types: [.existingPlaneUsingExtent, .featurePoint])
             guard let result    = hitTestResults.first else {
                 log.debug("no hit test results")
@@ -116,16 +105,13 @@ log.debug(firstObservation.confidence)
                 // Updates position of element when rect moves
                 node.transform = SCNMatrix4(result.worldTransform)
                 
-                self.playAnimation(key: "jumping")
             } else {
                 
                 // Creates a element if rootAnchor doesn't exist
                 self.rootAnchor = ARAnchor(transform: result.worldTransform)
                 self.sceneView.session.add(anchor: self.rootAnchor!)
-                
-                self.playAnimation(key: "jumping")
-                
-                let rectTrackingRequest = VNTrackRectangleRequest(rectangleObservation: firstObservation, completionHandler: self.handleRectangles)
+
+                let rectTrackingRequest = VNTrackRectangleRequest(rectangleObservation: highestConfidenceObservation, completionHandler: self.handleRectangles)
             }
             
             #if DEBUG
@@ -134,13 +120,7 @@ log.debug(firstObservation.confidence)
             #endif
         }
     }
-    
-    func playAnimation(key: String) {
-        // Add the animation to start playing it right away
-        log.debug("Animation Should Play")
-//        sceneView.scene.rootNode.addAnimation(animations[key]!, forKey: key)
-    }
-    
+
     private func drawPolygon(_ points: [CGPoint], color: UIColor) -> CAShapeLayer {
        
         let layer           = CAShapeLayer()
@@ -159,18 +139,18 @@ log.debug(firstObservation.confidence)
     
     // MARK: - Custom Animations
     private func loadAllAnimations(_ vector: SCNVector3) {
-        let jumpingScene = SCNScene(named: "3dAssets.scnassets/JumpingFixed.dae")!
-        let node = SCNNode()
+        let jumpingScene    = SCNScene(named: "3dAssets.scnassets/BellydancingFormatted.dae")!
+        let node            = SCNNode()
+        
         for child in jumpingScene.rootNode.childNodes {
             node.addChildNode(child)
         }
 
-        node.position = vector
-        node.scale = SCNVector3(0.0008, 0.0008, 0.0008)
+        node.scale      = SCNVector3(0.0008, 0.0008, 0.0008)
 
         sceneView.scene.rootNode.addChildNode(node)
 
-        loadAnimation(withKey: "jumping", sceneName: "3dAssets.scnassets/JumpingFixed", animationIdentifier: "JumpingFixed-1")
+        loadAnimation(withKey: "bellyDancing", sceneName: "3dAssets.scnassets/BellydancingFormatted", animationIdentifier: "BellydancingFormatted-1")
     }
     
     func loadAnimation(withKey: String, sceneName:String, animationIdentifier:String) {
@@ -195,31 +175,11 @@ extension HomeViewController: ARSCNViewDelegate {
         loadVision() // Waits to load vision framework until after a plane is detected
     }
 
-    
-    func createCube(_ vector: SCNVector3) {
-        let cube        = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0.001)
-        let node        = SCNNode(geometry: cube)
-        node.position   = vector
-        sceneView.scene.rootNode.addChildNode(node)
-    }
-    
-
-    private func pointToVect(_ results: [ARHitTestResult]) -> SCNVector3? {
-        guard let result = results.first else {
-            log.debug("No Hit Test Results")
-            return nil
-        }
-        
-        let hitTransform    = SCNMatrix4(result.worldTransform)
-        let vector          = SCNVector3Make(hitTransform.m41, hitTransform.m42, hitTransform.m43)
-        
-        return vector
-    }
-    
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
-        
-        node.transform = SCNMatrix4(anchor.transform)
+
+        rootAnchor      = anchor
+        node.transform  = SCNMatrix4(anchor.transform)
         loadAllAnimations(node.worldPosition)
 
         return node
