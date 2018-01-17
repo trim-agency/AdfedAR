@@ -103,8 +103,12 @@ log.debug(firstObservation.confidence)
             rect        = rect.applying(CGAffineTransform(translationX: 0, y: 1))
             
             let center          = CGPoint(x: rect.midX, y: rect.midY)
-            let hitTestResults  = self.sceneView.hitTest(center, types: [.existingPlaneUsingExtent])
-            guard let result    = hitTestResults.first else { return }
+            let hitTestResults  = self.sceneView.hitTest(center, types: [.existingPlaneUsingExtent, .featurePoint])
+            guard let result    = hitTestResults.first else {
+                log.debug("no hit test results")
+                return
+                
+            }
             
             if let rootAnchor = self.rootAnchor,
                let node = self.sceneView.node(for: rootAnchor) {
@@ -112,11 +116,14 @@ log.debug(firstObservation.confidence)
                 // Updates position of element when rect moves
                 node.transform = SCNMatrix4(result.worldTransform)
                 
+                self.playAnimation(key: "jumping")
             } else {
                 
                 // Creates a element if rootAnchor doesn't exist
                 self.rootAnchor = ARAnchor(transform: result.worldTransform)
                 self.sceneView.session.add(anchor: self.rootAnchor!)
+                
+                self.playAnimation(key: "jumping")
                 
                 let rectTrackingRequest = VNTrackRectangleRequest(rectangleObservation: firstObservation, completionHandler: self.handleRectangles)
             }
@@ -126,6 +133,12 @@ log.debug(firstObservation.confidence)
                 self.sceneView.layer.addSublayer(self.debugLayer!)
             #endif
         }
+    }
+    
+    func playAnimation(key: String) {
+        // Add the animation to start playing it right away
+        log.debug("Animation Should Play")
+//        sceneView.scene.rootNode.addAnimation(animations[key]!, forKey: key)
     }
     
     private func drawPolygon(_ points: [CGPoint], color: UIColor) -> CAShapeLayer {
@@ -145,19 +158,19 @@ log.debug(firstObservation.confidence)
     }
     
     // MARK: - Custom Animations
-    private func loadAllAnimations() {
+    private func loadAllAnimations(_ vector: SCNVector3) {
         let jumpingScene = SCNScene(named: "3dAssets.scnassets/JumpingFixed.dae")!
         let node = SCNNode()
         for child in jumpingScene.rootNode.childNodes {
             node.addChildNode(child)
         }
-        
-        node.position = SCNVector3(0, -1, -2)
-        node.scale = SCNVector3(0.2, 0.2, 0.2)
-        
+
+        node.position = vector
+        node.scale = SCNVector3(0.0008, 0.0008, 0.0008)
+
         sceneView.scene.rootNode.addChildNode(node)
-        
-        loadAnimation(withKey: "jumping", sceneName: "3dAssets.scnassets/JumpingFixed", animationIdentifier: "JumpingFixed")
+
+        loadAnimation(withKey: "jumping", sceneName: "3dAssets.scnassets/JumpingFixed", animationIdentifier: "JumpingFixed-1")
     }
     
     func loadAnimation(withKey: String, sceneName:String, animationIdentifier:String) {
@@ -179,7 +192,7 @@ log.debug(firstObservation.confidence)
 
 extension HomeViewController: ARSCNViewDelegate {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        loadVision()
+        loadVision() // Waits to load vision framework until after a plane is detected
     }
 
     
@@ -204,18 +217,12 @@ extension HomeViewController: ARSCNViewDelegate {
     }
     
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
+        let node = SCNNode()
         
-        var jumpingScene = SCNScene(named: "3dAssets.scnassets/JumpingFixed.dae")!
-        let wrapper     = SCNNode()
-        
-        scene.rootNode.childNodes.forEach{ wrapper.addChildNode($0) }
-        
-        wrapper.position = SCNVector3(0, -1, -2)
-        wrapper.scale = SCNVector3(0.2, 0.2, 0.2)
-        
-        sceneView.scene.rootNode.addChildNode(wrapper)
-        loadAnimation(withKey: "Jumping", sceneName: "3dAssets.scnassets/JumpingFixed", animationIdentifier: "JumpingFixed")
-        return wrapper
+        node.transform = SCNMatrix4(anchor.transform)
+        loadAllAnimations(node.worldPosition)
+
+        return node
     }
 }
 
