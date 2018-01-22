@@ -13,7 +13,7 @@ class HomeViewController: UIViewController {
     var animations              = [String: CAAnimation]()
     var hasFoundRectangle       = false
     let animationScene          = SCNScene(named: "3dAssets.scnassets/BellydancingFormatted.dae")!
-    
+
     @IBOutlet var sceneView: ARSCNView!
     var animationNode: SCNNode?
     var configuration: ARWorldTrackingConfiguration?
@@ -168,27 +168,48 @@ class HomeViewController: UIViewController {
             animations[withKey] = animationObject
         }
     }
+    
+    private func loadCoreMLService() {
+        let coreMLService       = CoreMLService()
+        coreMLService.delegate  = self
+        DispatchQueue.global(qos: .userInteractive).async {
+            do {
+                let result = try coreMLService.getPageType((self.sceneView.session.currentFrame?.capturedImage)!)
+                log.debug(result)
+            } catch {
+                log.error(error)
+            }
+        }
+    }
 }
 
 // MARK: - ARKit Delegate
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        loadVision() // Waits to load vision framework until after a plane is detected
+//        loadVision() // Waits to load vision framework until after a plane is detected
+        loadCoreMLService()
     }
 
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node                = SCNNode()
         rootAnchor              = anchor
         node.transform          = SCNMatrix4(anchor.transform)
-        animationNode?.position = node.worldPosition
-        sceneView.scene.rootNode.addChildNode(animationNode!)
+//        animationNode?.position = node.worldPosition
+//        sceneView.scene.rootNode.addChildNode(animationNode!)
         return node
     }
-    
-    
 }
 
-
+// MARK: - CoreMLService Delegate
+extension HomeViewController: CoreMLServiceDelegate {
+    func didRecognizePage(sender: CoreMLService, page: Page) {
+        log.debug(page)
+    }
+    
+    func didReceiveRecognitionError(sender: CoreMLService, error: Error) {
+        log.debug(error)
+    }
+}
 
 
 

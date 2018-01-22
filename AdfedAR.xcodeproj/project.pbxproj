@@ -15,6 +15,10 @@
 		69297995200CF4120019A0B9 /* AdfedARTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69297994200CF4120019A0B9 /* AdfedARTests.swift */; };
 		692979A0200CF4120019A0B9 /* AdfedARUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6929799F200CF4120019A0B9 /* AdfedARUITests.swift */; };
 		6937D8AA200E7ED70024AC33 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D8A9200E7ED70024AC33 /* UIViewExtension.swift */; };
+		69D1210F20166E9B00B39411 /* adFed.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 69D1210E20166E9B00B39411 /* adFed.mlmodel */; };
+		69D121122016715B00B39411 /* CoreMLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121112016715B00B39411 /* CoreMLService.swift */; };
+		69D121162016727E00B39411 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121152016727E00B39411 /* Page.swift */; };
+		69D121192016877800B39411 /* CoreMLServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121182016877800B39411 /* CoreMLServiceDelegate.swift */; };
 		69D617F3200EB4D40067FC36 /* 3dAssets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 69D617F2200EB4D40067FC36 /* 3dAssets.scnassets */; };
 		9816AB41C660356A4A94F75D /* Pods_AdfedARUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5D15C24C3C493A3E5D0D87A /* Pods_AdfedARUITests.framework */; };
 		E800A42CEC8EF0EA8EE98283 /* Pods_AdfedARTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660BC9C20DDA71A324F106BE /* Pods_AdfedARTests.framework */; };
@@ -59,6 +63,10 @@
 		6929799F200CF4120019A0B9 /* AdfedARUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdfedARUITests.swift; sourceTree = "<group>"; };
 		692979A1200CF4120019A0B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6937D8A9200E7ED70024AC33 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		69D1210E20166E9B00B39411 /* adFed.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = adFed.mlmodel; sourceTree = "<group>"; };
+		69D121112016715B00B39411 /* CoreMLService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLService.swift; sourceTree = "<group>"; };
+		69D121152016727E00B39411 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
+		69D121182016877800B39411 /* CoreMLServiceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLServiceDelegate.swift; sourceTree = "<group>"; };
 		69D617F2200EB4D40067FC36 /* 3dAssets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = 3dAssets.scnassets; sourceTree = "<group>"; };
 		8B17EF5604D866D7559D229D /* Pods-AdfedARTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedARTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedARTests/Pods-AdfedARTests.release.xcconfig"; sourceTree = "<group>"; };
 		B4B3E575B685449E3A1EE296 /* Pods-AdfedARUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedARUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedARUITests/Pods-AdfedARUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -131,12 +139,16 @@
 		6929797C200CF4120019A0B9 /* AdfedAR */ = {
 			isa = PBXGroup;
 			children = (
-				6929798B200CF4120019A0B9 /* Info.plist */,
+				69D121172016870600B39411 /* Protocols */,
+				69D121132016726900B39411 /* Enums */,
+				69D617F2200EB4D40067FC36 /* 3dAssets.scnassets */,
 				6937D8A8200E7EC80024AC33 /* Extensions */,
+				6929798B200CF4120019A0B9 /* Info.plist */,
+				69D1210D20166E8000B39411 /* Models */,
 				697EED7E200E9E4600A345DB /* Other */,
+				69D121102016714600B39411 /* Services */,
 				6937D8AB200E9DC30024AC33 /* StoryBoards */,
 				6937D8AC200E9DD80024AC33 /* Views */,
-				69D617F2200EB4D40067FC36 /* 3dAssets.scnassets */,
 			);
 			path = AdfedAR;
 			sourceTree = "<group>";
@@ -191,6 +203,40 @@
 				69297986200CF4120019A0B9 /* Assets.xcassets */,
 			);
 			path = Other;
+			sourceTree = "<group>";
+		};
+		69D1210D20166E8000B39411 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				69D1210E20166E9B00B39411 /* adFed.mlmodel */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		69D121102016714600B39411 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				69D121112016715B00B39411 /* CoreMLService.swift */,
+			);
+			name = Services;
+			path = "New Group";
+			sourceTree = "<group>";
+		};
+		69D121132016726900B39411 /* Enums */ = {
+			isa = PBXGroup;
+			children = (
+				69D121152016727E00B39411 /* Page.swift */,
+			);
+			path = Enums;
+			sourceTree = "<group>";
+		};
+		69D121172016870600B39411 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				69D121182016877800B39411 /* CoreMLServiceDelegate.swift */,
+			);
+			name = Protocols;
+			path = "New Group1";
 			sourceTree = "<group>";
 		};
 		A6256199BFCF2CEF56B550CF /* Frameworks */ = {
@@ -498,7 +544,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				6937D8AA200E7ED70024AC33 /* UIViewExtension.swift in Sources */,
+				69D1210F20166E9B00B39411 /* adFed.mlmodel in Sources */,
+				69D121162016727E00B39411 /* Page.swift in Sources */,
+				69D121122016715B00B39411 /* CoreMLService.swift in Sources */,
 				69297982200CF4120019A0B9 /* HomeViewController.swift in Sources */,
+				69D121192016877800B39411 /* CoreMLServiceDelegate.swift in Sources */,
 				6929797E200CF4120019A0B9 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -667,10 +717,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZVRNHU225Q;
+				DEVELOPMENT_TEAM = FV9NULGJG4;
+				DISPLAY_NAME = "Adfed-debug";
 				INFOPLIST_FILE = AdfedAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.trim.AdfedAR;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.trim.AdfedAR-debug";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -683,7 +734,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = ZVRNHU225Q;
+				DEVELOPMENT_TEAM = FV9NULGJG4;
+				DISPLAY_NAME = "AdFed AR";
 				INFOPLIST_FILE = AdfedAR/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.trim.AdfedAR;
