@@ -11,8 +11,11 @@ class HomeViewController: UIViewController {
     let visionHandler           = VNSequenceRequestHandler()
     let scene                   = SCNScene()
     var animations              = [String: CAAnimation]()
-
+    var hasFoundRectangle       = false
+    let animationScene          = SCNScene(named: "3dAssets.scnassets/BellydancingFormatted.dae")!
+    
     @IBOutlet var sceneView: ARSCNView!
+    var animationNode: SCNNode?
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
     var debugLayer: CAShapeLayer?
@@ -27,6 +30,7 @@ class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureAR()
+        loadAllAnimations()
     }
    
 
@@ -44,9 +48,8 @@ class HomeViewController: UIViewController {
     private func defineSceneView() {
         sceneView.scene             = scene
         sceneView.delegate          = self
-        sceneView.showsStatistics   = true
-        
         sceneView.automaticallyUpdatesLighting = true
+        
         #if DEBUG
         sceneView.showsStatistics   = true
         sceneView.debugOptions      = [ SCNDebugOptions.showLightExtents,
@@ -70,8 +73,8 @@ class HomeViewController: UIViewController {
     }
     
     func handleRectangles(request: VNRequest, error: Error?) {
-        guard let observations      = request.results as? [VNRectangleObservation] else {
-                return
+        guard let observations = request.results as? [VNRectangleObservation] else {
+            return
         }
 
         let highConfidenceObservation = observations.max { a, b in a.confidence < b.confidence }
@@ -81,17 +84,16 @@ class HomeViewController: UIViewController {
             return
         }
         
-        DispatchQueue.main.async {
-            let points          = [ highestConfidenceObservation.topLeft,
-                                    highestConfidenceObservation.topRight,
-                                    highestConfidenceObservation.bottomRight,
-                                    highestConfidenceObservation.bottomLeft]
+        DispatchQueue.global(qos: .background).async {
+            let points = [ highestConfidenceObservation.topLeft,
+                           highestConfidenceObservation.topRight,
+                           highestConfidenceObservation.bottomRight,
+                           highestConfidenceObservation.bottomLeft]
 
             highestConfidenceObservation.boundingBox.applying(CGAffineTransform(scaleX: 1, y: -1))
             highestConfidenceObservation.boundingBox.applying(CGAffineTransform(translationX: 0, y: 1))
 
-            let center          = CGPoint(x: (highConfidenceObservation?.boundingBox.midX)!,
-                                          y: (highConfidenceObservation?.boundingBox.midY)!)
+            let center          = self.getBoxCenter(highConfidenceObservation)
             let hitTestResults  = self.sceneView.hitTest(center, types: [.existingPlaneUsingExtent, .featurePoint])
             guard let result    = hitTestResults.first else {
                 log.debug("no hit test results")
@@ -108,17 +110,22 @@ class HomeViewController: UIViewController {
             } else {
                 
                 // Creates a element if rootAnchor doesn't exist
-                self.rootAnchor = ARAnchor(transform: result.worldTransform)
+                self.rootAnchor         = ARAnchor(transform: result.worldTransform)
+                self.hasFoundRectangle  = true
                 self.sceneView.session.add(anchor: self.rootAnchor!)
-
-                let rectTrackingRequest = VNTrackRectangleRequest(rectangleObservation: highestConfidenceObservation, completionHandler: self.handleRectangles)
             }
             
             #if DEBUG
-                self.debugLayer = self.drawPolygon(convertedPoints, color: .red)
+                let convertedPoints = points.map{ self.sceneView.convertFromCamera($0) }
+                self.debugLayer     = self.drawPolygon(convertedPoints, color: .red)
                 self.sceneView.layer.addSublayer(self.debugLayer!)
             #endif
         }
+    }
+    
+    private func getBoxCenter(_ observation: VNRectangleObservation?) -> CGPoint {
+        return CGPoint(x: (observation?.boundingBox.midX)!,
+                       y: (observation?.boundingBox.midY)!)
     }
 
     private func drawPolygon(_ points: [CGPoint], color: UIColor) -> CAShapeLayer {
@@ -138,52 +145,47 @@ class HomeViewController: UIViewController {
     }
     
     // MARK: - Custom Animations
-    private func loadAllAnimations(_ vector: SCNVector3) {
-        let jumpingScene    = SCNScene(named: "3dAssets.scnassets/BellydancingFormatted.dae")!
-        let node            = SCNNode()
+    private func loadAllAnimations() {
+        let scene       = animationScene
+        animationNode   = SCNNode()
         
-        for child in jumpingScene.rootNode.childNodes {
-            node.addChildNode(child)
+        for child in scene.rootNode.childNodes {
+            animationNode?.addChildNode(child)
         }
-
-        node.scale      = SCNVector3(0.0008, 0.0008, 0.0008)
-
-        sceneView.scene.rootNode.addChildNode(node)
+        
+        animationNode?.scale = SCNVector3(0.0008, 0.0008, 0.0008)
 
         loadAnimation(withKey: "bellyDancing", sceneName: "3dAssets.scnassets/BellydancingFormatted", animationIdentifier: "BellydancingFormatted-1")
     }
     
     func loadAnimation(withKey: String, sceneName:String, animationIdentifier:String) {
-        let sceneURL = Bundle.main.url(forResource: sceneName, withExtension: "dae")
+        let sceneURL    = Bundle.main.url(forResource: sceneName, withExtension: "dae")
         let sceneSource = SCNSceneSource(url: sceneURL!, options: nil)
         
         if let animationObject = sceneSource?.entryWithIdentifier(animationIdentifier, withClass: CAAnimation.self) {
-            // The animation will only play once
-            animationObject.repeatCount = 1
-            // To create smooth transitions between animations
             animationObject.fadeInDuration = CGFloat(1)
             animationObject.fadeOutDuration = CGFloat(0.5)
-            
-            // Store the animation for later use
             animations[withKey] = animationObject
         }
     }
 }
 
-extension HomeViewController: ARSCNViewDelegate {
+// MARK: - ARKit Delegate
+extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         loadVision() // Waits to load vision framework until after a plane is detected
     }
 
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-
-        rootAnchor      = anchor
-        node.transform  = SCNMatrix4(anchor.transform)
-        loadAllAnimations(node.worldPosition)
-
+        let node                = SCNNode()
+        rootAnchor              = anchor
+        node.transform          = SCNMatrix4(anchor.transform)
+        animationNode?.position = node.worldPosition
+        sceneView.scene.rootNode.addChildNode(animationNode!)
         return node
     }
+    
+    
 }
 
 
