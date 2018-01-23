@@ -24,14 +24,14 @@ class CoreMLService {
             delegate?.didReceiveRecognitionError(sender: self, error: error!)
         }
     }
-    
+    // TODO: Fix creation of page, currently failing
     private func parseResults(_ observations: [VNClassificationObservation] ) {
-        let highConfidenceObservation = observations.max { a, b in a.confidence < b.confidence }
-        
-        if highConfidenceObservation?.identifier == "judgesChoice" {
-            delegate?.didRecognizePage(sender: self, page: Page.JudgesChoice)
+        let highConfidenceObservation = (observations.max { a, b in a.confidence < b.confidence })?.identifier
+        log.debug(highConfidenceObservation)
+        if let page = Page(rawValue: highConfidenceObservation!) {
+            log.debug(page)
         } else {
-            delegate?.didRecognizePage(sender: self, page: Page.BestOfShow)
+            log.error("Page not created")
         }
     }
 }

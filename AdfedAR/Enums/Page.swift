@@ -1,6 +1,8 @@
 import Foundation
 
-enum Page {
-    case BestOfShow
-    case JudgesChoice
+enum Page: String {
+    case BestOfShowGlobal
+    case BestOfShowLogo
+    case JudgesChoiceGlobal
+    case JudgesChoiceLogo
 }
