@@ -3,11 +3,10 @@ import CoreML
 import Vision
 
 class CoreMLService {
-    let model = adFed()
     var delegate: CoreMLServiceDelegate?
     
     func getPageType(_ image: CVPixelBuffer) throws {
-        let model = try VNCoreMLModel(for: adFed().model)
+        let model = try VNCoreMLModel(for: AdFed().model)
         let request = VNCoreMLRequest(model: model, completionHandler: pageRecognitionHandler)
         let handler = VNImageRequestHandler(cvPixelBuffer: image, options: [:])
         try handler.perform([request])
