@@ -3,7 +3,7 @@
 ## Getting Started
 - Pull Repo
 - `pod install`
-- Download the most recent MLModel from `Dropbox > AdFed > 02 - iOS AR App > CoreML Models/`
+- Download the most recent MLModel from `Dropbox > AdFed > 02 - iOS AR App > CoreML Models`
 - Make sure that the coreML filename is `AdFed.mlModel` before dropping it into the app
 - Should be good to go after that
 
