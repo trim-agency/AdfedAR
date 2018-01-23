@@ -14,9 +14,9 @@
 - [x] dropping a custom animated object onto a plane
 
 #### v.2
-- [ ] Train Caffe Digits model to detect different pages of handout
+- [x] Train Caffe Digits model to detect different pages of handout
 - [ ] Train Caffe Digits model to detect different symbols on handout
-- [ ] Setup app to detect pages with exported Caffe DIGITS model
+- [x] Setup app to detect pages with exported Caffe DIGITS model
 
 #### v.3
 - [ ] Display instructions to user giving feedback (errors and hints for better experience)
