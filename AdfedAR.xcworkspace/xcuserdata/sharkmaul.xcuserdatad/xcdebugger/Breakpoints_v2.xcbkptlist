@@ -9,14 +9,46 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "AdfedAR/Views/HomeViewController.swift"
-            timestampString = "537969145.187312"
+            filePath = "AdfedAR/New Group/CoreMLService.swift"
+            timestampString = "538593351.489807"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "177"
-            endingLineNumber = "177"
-            landmarkName = "renderer(_:didAdd:for:)"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "parseResults(_:)"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "AdfedAR.CoreMLService.(parseResults in _3A50B4D33076BA93E463BF2E7DC9F6A4)(Swift.Array&lt;__ObjC.VNClassificationObservation&gt;) -&gt; ()"
+                  moduleName = "AdfedAR"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sharkmaul/Development/TRIM/AdfedAR/AdfedAR/New%20Group/CoreMLService.swift"
+                  timestampString = "538413534.602579"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "29"
+                  endingLineNumber = "29"
+                  offsetFromSymbolStart = "36">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (__ObjC.VNClassificationObservation, __ObjC.VNClassificationObservation) -&gt; Swift.Bool in AdfedAR.CoreMLService.(parseResults in _3A50B4D33076BA93E463BF2E7DC9F6A4)(Swift.Array&lt;__ObjC.VNClassificationObservation&gt;) -&gt; ()"
+                  moduleName = "AdfedAR"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/sharkmaul/Development/TRIM/AdfedAR/AdfedAR/New%20Group/CoreMLService.swift"
+                  timestampString = "538413534.606101"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "29"
+                  endingLineNumber = "29"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
