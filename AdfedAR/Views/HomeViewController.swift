@@ -25,7 +25,7 @@ class HomeViewController: UIViewController {
             pageDetected()
         }
     }
-    
+
     // MARK: - Protocol Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -158,7 +158,6 @@ class HomeViewController: UIViewController {
         }
         
         animationNode?.scale = SCNVector3(0.0008, 0.0008, 0.0008)
-        
         loadAnimation(withKey: "dribbling", sceneName: "3dAssets.scnassets/DribbleFormatted", animationIdentifier: "DribbleFormatted-1")
         loadAnimation(withKey: "quickRoll", sceneName: "3dAssets.scnassets/quickRollFormatted", animationIdentifier: "QuickRollFormatted-1")
         loadAnimation(withKey: "bellyDancing", sceneName: "3dAssets.scnassets/BellydancingFormatted", animationIdentifier: "BellydancingFormatted-1")
@@ -234,7 +233,6 @@ extension HomeViewController: CoreMLServiceDelegate {
         log.debug(error)
     }
 }
-
 
 
 

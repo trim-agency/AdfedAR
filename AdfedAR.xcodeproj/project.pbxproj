@@ -20,6 +20,7 @@
 		69D121122016715B00B39411 /* CoreMLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121112016715B00B39411 /* CoreMLService.swift */; };
 		69D121162016727E00B39411 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121152016727E00B39411 /* Page.swift */; };
 		69D121192016877800B39411 /* CoreMLServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121182016877800B39411 /* CoreMLServiceDelegate.swift */; };
+		6937D8AA200E7ED70024AC33 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D8A9200E7ED70024AC33 /* UIViewExtension.swift */; };
 		69D617F3200EB4D40067FC36 /* 3dAssets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 69D617F2200EB4D40067FC36 /* 3dAssets.scnassets */; };
 		9816AB41C660356A4A94F75D /* Pods_AdfedARUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5D15C24C3C493A3E5D0D87A /* Pods_AdfedARUITests.framework */; };
 		E800A42CEC8EF0EA8EE98283 /* Pods_AdfedARTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660BC9C20DDA71A324F106BE /* Pods_AdfedARTests.framework */; };
@@ -69,6 +70,7 @@
 		69D121112016715B00B39411 /* CoreMLService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLService.swift; sourceTree = "<group>"; };
 		69D121152016727E00B39411 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		69D121182016877800B39411 /* CoreMLServiceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLServiceDelegate.swift; sourceTree = "<group>"; };
+		6937D8A9200E7ED70024AC33 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		69D617F2200EB4D40067FC36 /* 3dAssets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = 3dAssets.scnassets; sourceTree = "<group>"; };
 		8B17EF5604D866D7559D229D /* Pods-AdfedARTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedARTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedARTests/Pods-AdfedARTests.release.xcconfig"; sourceTree = "<group>"; };
 		B4B3E575B685449E3A1EE296 /* Pods-AdfedARUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedARUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedARUITests/Pods-AdfedARUITests.release.xcconfig"; sourceTree = "<group>"; };
