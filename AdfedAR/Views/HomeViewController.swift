@@ -33,7 +33,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         defineSceneView()
-        setupDebugButton()
+        setupDebug()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -65,6 +65,9 @@ class HomeViewController: UIViewController {
             let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
             let handler             = VNImageRequestHandler(ciImage: ciImage)
             let rectService         = RectangleDetectionService(sceneView: self.sceneView, rootAnchor: self.rootAnchor!)
+            #if DEBUG
+                rectService.delegate = self
+            #endif
             let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: rectService.handleRectangles)
             
             do {
@@ -142,30 +145,32 @@ class HomeViewController: UIViewController {
     // MARK: - Debug Methods
     private func displayDebugLabel() {
         #if DEBUG
-            DispatchQueue.main.async { self.debugLabel.text = self.detectedPage?.rawValue }
+            DispatchQueue.main.async { self.debugLabel.text = "✅" + (self.detectedPage?.rawValue)! }
         #endif
     }
     
-    private func setupDebugButton() {
-        log.debug("debug setup")
+    private func setupDebug() {
         #if DEBUG
-            debugButton.isHidden = false
+            debugLabel.sizeToFit()
+            debugLabel.isHidden     = false
+            debugButton.isHidden    = false
         #endif
     }
 }
 
 // MARK: - ARKit Delegate
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
+    
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        loadCoreMLService()
+    }
+    
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node                = SCNNode()
         rootAnchor              = anchor
         node.transform          = SCNMatrix4(anchor.transform)
         animationNode?.position = node.worldPosition
         return node
-    }
-    
-    func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
-        loadCoreMLService()
     }
 }
 
@@ -182,6 +187,13 @@ extension HomeViewController: CoreMLServiceDelegate {
     }
 }
 
+// MARK: - Rectangle Detection Delegate
+extension HomeViewController: RectangleDetectionServiceDelegate {
+    func didDetectRectangle(sender: RectangleDetectionService) {
+        debugLabel.text?.append("\n ✅ Rectangle Detected")
+        pageDetected()
+    }
+}
 
 
 

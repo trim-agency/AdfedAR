@@ -5,6 +5,7 @@ import ARKit
 class RectangleDetectionService {
     let sceneView: MainARSCNView!
     var rootAnchor: ARAnchor!
+    var delegate: RectangleDetectionServiceDelegate?
     
     init(sceneView: MainARSCNView, rootAnchor: ARAnchor) {
         self.sceneView = sceneView
@@ -12,7 +13,7 @@ class RectangleDetectionService {
     }
     
     func handleRectangles(request: VNRequest, error: Error?) {
-        log.debug("Rect service")
+        log.debug("Rect Service Started")
         guard let observations = request.results as? [VNRectangleObservation] else {
             return
         }
@@ -63,6 +64,7 @@ class RectangleDetectionService {
                 let convertedPoints = points.map{ self.sceneView.convertFromCamera($0) }
                 let debugLayer = DebugPolygon(points: convertedPoints, color: color)
                 self.sceneView.layer.addSublayer(debugLayer)
+                self.delegate?.didDetectRectangle(sender: self)
             }
         #endif
     }
