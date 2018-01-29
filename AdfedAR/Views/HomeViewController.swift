@@ -15,9 +15,12 @@ class HomeViewController: UIViewController {
     let animationScene          = SCNScene(named: "3dAssets.scnassets/IdleFormatted.dae")!
     
     @IBAction func didTapDebug(_ sender: Any) {
-        defineSceneView()
-        configureAR()
-        loadAllAnimations()
+        sceneView.session.pause()
+        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+            node.removeFromParentNode()
+        }
+        sceneView.layer.sublayers?.removeAll()
+        sceneView.session.run(configuration!, options: [.resetTracking, .removeExistingAnchors])
     }
     @IBOutlet weak var debugButton: UIButton!
     @IBOutlet weak var debugLabel: UILabel!
@@ -49,12 +52,13 @@ class HomeViewController: UIViewController {
     // MARK: - ARKit
     // MARK: Setup
     private func configureAR() {
-        let configuration               = ARWorldTrackingConfiguration()
-        configuration.planeDetection    = .horizontal
-        sceneView.session.run(configuration)
+        configuration                   = ARWorldTrackingConfiguration()
+        configuration?.planeDetection    = .horizontal
+        sceneView.session.run(configuration!)
     }
     
     private func defineSceneView() {
+        sceneView.setup()
         sceneView.scene     = scene
         sceneView.delegate  = self
     }
@@ -131,6 +135,9 @@ class HomeViewController: UIViewController {
     
     // MARK: - Core ML
     private func loadCoreMLService() {
+        DispatchQueue.main.async {
+           self.debugLabel.text?.append("✅ CoreML Running")
+        }
         let coreMLService       = CoreMLService()
         coreMLService.delegate  = self
         DispatchQueue.global(qos: .userInteractive).async {
@@ -189,9 +196,15 @@ extension HomeViewController: CoreMLServiceDelegate {
 
 // MARK: - Rectangle Detection Delegate
 extension HomeViewController: RectangleDetectionServiceDelegate {
-    func didDetectRectangle(sender: RectangleDetectionService) {
+    func didDetectRectangle(sender: RectangleDetectionService, corners: [CGPoint]) {
         debugLabel.text?.append("\n ✅ Rectangle Detected")
         pageDetected()
+    }
+    
+    func rectangleDetectionError(sender: RectangleDetectionService) {
+        log.error("Rectangle Error")
+        debugLabel.text?.append("💥 Rectangle Detection Error")
+        loadRectangleDetection()
     }
 }
 

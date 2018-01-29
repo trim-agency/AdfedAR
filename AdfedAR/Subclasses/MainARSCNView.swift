@@ -2,16 +2,13 @@ import Foundation
 import ARKit
 
 class MainARSCNView: ARSCNView {
-
-    convenience init() {
-        self.init()
+    func setup() {
         self.debugOptions      = [ ARSCNDebugOptions.showFeaturePoints ]
         self.automaticallyUpdatesLighting = true
         #if DEBUG
             self.showsStatistics   = true
             self.debugOptions      = [ SCNDebugOptions.showLightExtents,
-                                       ARSCNDebugOptions.showFeaturePoints,
-                                       SCNDebugOptions.showWireframe]
+                                       ARSCNDebugOptions.showFeaturePoints]
         #endif
     }
 }

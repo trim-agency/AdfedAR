@@ -21,7 +21,7 @@ class RectangleDetectionService {
         let highConfidenceObservation = observations.max { a, b in a.confidence < b.confidence }
         
         guard let highestConfidenceObservation = highConfidenceObservation else {
-            log.debug("Error with high confidence observation")
+            delegate?.rectangleDetectionError(sender: self)
             return
         }
         
@@ -60,11 +60,10 @@ class RectangleDetectionService {
     private func drawDebugPolygon(_ points: [CGPoint], color: UIColor) {
         #if DEBUG
             DispatchQueue.main.async {
-                log.debug("Should display Rect")
                 let convertedPoints = points.map{ self.sceneView.convertFromCamera($0) }
                 let debugLayer = DebugPolygon(points: convertedPoints, color: color)
                 self.sceneView.layer.addSublayer(debugLayer)
-                self.delegate?.didDetectRectangle(sender: self)
+                self.delegate?.didDetectRectangle(sender: self, corners: convertedPoints)
             }
         #endif
     }
