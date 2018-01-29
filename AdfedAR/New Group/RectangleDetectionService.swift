@@ -39,19 +39,16 @@ class RectangleDetectionService {
         
         if let rootAnchor = self.rootAnchor,
             let node = self.sceneView.node(for: rootAnchor) {
-            
-            // Updates position of element when rect moves
-            node.transform = SCNMatrix4(result.worldTransform)
-            
+                node.transform = SCNMatrix4(result.worldTransform)
         } else {
-            
-            // Creates a element if rootAnchor doesn't exist
-            self.rootAnchor         = ARAnchor(transform: result.worldTransform)
-//            self.hasFoundRectangle  = true
-            self.sceneView.session.add(anchor: self.rootAnchor!)
+            updateRootAnchor(result)
         }
-        
         drawDebugPolygon(points, color: .red)
+    }
+  
+    private func updateRootAnchor(_ result: ARHitTestResult) {
+        self.rootAnchor = ARAnchor(transform: result.worldTransform)
+        self.sceneView.session.add(anchor: self.rootAnchor!)
     }
     
     private func getBoxCenter(_ observation: VNRectangleObservation?) -> CGPoint {

@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -13,12 +14,25 @@
         <scene sceneID="tXr-a1-R10">
             <objects>
                 <viewController id="BV1-FR-VrT" customClass="HomeViewController" customModule="AdfedAR" customModuleProvider="target" sceneMemberID="viewController">
-                    <arscnView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="BrB-h1-WRS">
+                    <view key="view" contentMode="scaleToFill" id="gLx-C2-PS4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </arscnView>
+                        <subviews>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U7P-0S-NKa" customClass="MainARSCNView" customModule="AdfedAR" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </arscnView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="U7P-0S-NKa" firstAttribute="top" secondItem="gLx-C2-PS4" secondAttribute="top" id="AhR-nM-6Ah"/>
+                            <constraint firstAttribute="trailing" secondItem="U7P-0S-NKa" secondAttribute="trailing" id="CZ7-zc-qgw"/>
+                            <constraint firstItem="U7P-0S-NKa" firstAttribute="leading" secondItem="XkV-5f-4kR" secondAttribute="leading" id="Wox-en-4Hf"/>
+                            <constraint firstAttribute="bottom" secondItem="U7P-0S-NKa" secondAttribute="bottom" id="h9n-xy-ipJ"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="XkV-5f-4kR"/>
+                    </view>
                     <connections>
-                        <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
+                        <outlet property="sceneView" destination="U7P-0S-NKa" id="wuf-f7-Km6"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>

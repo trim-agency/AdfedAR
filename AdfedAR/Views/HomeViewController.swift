@@ -20,12 +20,8 @@ class HomeViewController: UIViewController {
     var lastObservation: VNDetectedObjectObservation?
     var debugLayer: CAShapeLayer?
     var rootAnchor: ARAnchor?
-    var detectedPage: Page? {
-        didSet {
-            pageDetected()
-        }
-    }
-
+    var detectedPage: Page?
+    
     // MARK: - Protocol Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -115,12 +111,10 @@ class HomeViewController: UIViewController {
     }
     
     func playAnimation(key: String) {
-        // Add the animation to start playing it right away
         sceneView.scene.rootNode.addAnimation(animations[key]!, forKey: key)
     }
     
     func stopAnimation(key: String) {
-        // Stop the animation with a smooth transition
         sceneView.scene.rootNode.removeAnimation(forKey: key, blendOutDuration: CGFloat(0.5))
     }
     
@@ -141,8 +135,8 @@ class HomeViewController: UIViewController {
 // MARK: - ARKit Delegate
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        loadVision() // Waits to load vision framework until after a plane is detected
-//        loadCoreMLService()
+//        loadVision() // Waits to load vision framework until after a plane is detected
+        loadCoreMLService()
     }
     
     func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
@@ -167,6 +161,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
         detectedPage = page
+        loadVision()
     }
     
     func didReceiveRecognitionError(sender: CoreMLService, error: Error) {
