@@ -19,8 +19,9 @@ class HomeViewController: UIViewController {
         sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
             node.removeFromParentNode()
         }
-        sceneView.layer.sublayers?.removeAll()
+//        sceneView.layer.sublayers?.removeAll()
         sceneView.session.run(configuration!, options: [.resetTracking, .removeExistingAnchors])
+        loadAllAnimations()
     }
     @IBOutlet weak var debugButton: UIButton!
     @IBOutlet weak var debugLabel: UILabel!
@@ -84,7 +85,6 @@ class HomeViewController: UIViewController {
    
     // MARK: Methods
     private func pageDetected() {
-        log.debug("Animation Node Added")
         sceneView.scene.rootNode.addChildNode(animationNode!)
         switch detectedPage! {
 //        case .judgesChoiceGlobal:
@@ -135,9 +135,7 @@ class HomeViewController: UIViewController {
     
     // MARK: - Core ML
     private func loadCoreMLService() {
-        DispatchQueue.main.async {
-           self.debugLabel.text?.append("✅ CoreML Running")
-        }
+        appendToDebugLabel("\n✅ CoreML Running")
         let coreMLService       = CoreMLService()
         coreMLService.delegate  = self
         DispatchQueue.global(qos: .userInteractive).async {
@@ -150,12 +148,6 @@ class HomeViewController: UIViewController {
     }
     
     // MARK: - Debug Methods
-    private func displayDebugLabel() {
-        #if DEBUG
-            DispatchQueue.main.async { self.debugLabel.text = "✅" + (self.detectedPage?.rawValue)! }
-        #endif
-    }
-    
     private func setupDebug() {
         #if DEBUG
             debugLabel.sizeToFit()
@@ -169,6 +161,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        appendToDebugLabel("\n✅ Plane Detected")
         loadCoreMLService()
     }
     
@@ -185,25 +178,36 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
         detectedPage = page
-        displayDebugLabel()
-        if rootAnchor != nil  { loadRectangleDetection() }
+        appendToDebugLabel("\n✅ " + (self.detectedPage?.rawValue)!)
+        if rootAnchor != nil  {
+            appendToDebugLabel("\n✅ Rectangle DetectionRunning")
+            loadRectangleDetection()
+        }
     }
     
     func didReceiveRecognitionError(sender: CoreMLService, error: Error) {
         log.debug(error)
+    }
+    
+    private func appendToDebugLabel(_ string: String) {
+        #if DEBUG
+            DispatchQueue.main.async {
+                self.debugLabel.text?.append(string)
+            }
+        #endif
     }
 }
 
 // MARK: - Rectangle Detection Delegate
 extension HomeViewController: RectangleDetectionServiceDelegate {
     func didDetectRectangle(sender: RectangleDetectionService, corners: [CGPoint]) {
-        debugLabel.text?.append("\n ✅ Rectangle Detected")
+        appendToDebugLabel("\n✅ Rectangle Detected")
         pageDetected()
     }
     
     func rectangleDetectionError(sender: RectangleDetectionService) {
         log.error("Rectangle Error")
-        debugLabel.text?.append("💥 Rectangle Detection Error")
+        appendToDebugLabel("\n💥 Rectangle Detection Error")
         loadRectangleDetection()
     }
 }
