@@ -26,11 +26,16 @@ class CoreMLService {
     }
     // TODO: Fix creation of page, currently failing
     private func parseResults(_ observations: [VNClassificationObservation] ) {
-        let highConfidenceObservation = (observations.max { a, b in a.confidence < b.confidence })?.identifier
-        if let page = Page(rawValue: highConfidenceObservation!) {
-            delegate?.didRecognizePage(sender: self, page: page)
-        } else {
-            log.error("Page not created")
+        guard let highConfidenceObservation = (observations.max { a, b in a.confidence < b.confidence }) else {
+            log.debug("Highest confidence observation error")
+            return
+        }
+        if highConfidenceObservation.confidence > 0.70 {
+            if let page = Page(rawValue: highConfidenceObservation.identifier) {
+                delegate?.didRecognizePage(sender: self, page: page)
+            } else {
+                log.error("Page not created")
+            }
         }
     }
 }

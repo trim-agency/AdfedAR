@@ -1,8 +1,8 @@
 import Foundation
 
 enum Page: String {
-    case bestOfShowGlobal
+//    case bestOfShowGlobal
     case bestOfShowLogo
-    case judgesChoiceGlobal
+//    case judgesChoiceGlobal
     case judgesChoiceLogo
 }

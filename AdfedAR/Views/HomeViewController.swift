@@ -14,6 +14,13 @@ class HomeViewController: UIViewController {
     var hasFoundRectangle       = false
     let animationScene          = SCNScene(named: "3dAssets.scnassets/IdleFormatted.dae")!
     
+    @IBAction func didTapDebug(_ sender: Any) {
+        defineSceneView()
+        configureAR()
+        loadAllAnimations()
+    }
+    @IBOutlet weak var debugButton: UIButton!
+    @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet var sceneView: MainARSCNView!
     var animationNode: SCNNode?
     var configuration: ARWorldTrackingConfiguration?
@@ -26,6 +33,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         defineSceneView()
+        setupDebugButton()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -51,7 +59,7 @@ class HomeViewController: UIViewController {
         sceneView.delegate  = self
     }
     
-    func loadVision() {
+    func loadRectangleDetection() {
         DispatchQueue.global(qos: .background).async {
             let pixelBuffer         = self.sceneView.session.currentFrame?.capturedImage
             let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
@@ -72,12 +80,12 @@ class HomeViewController: UIViewController {
         log.debug("Animation Node Added")
         sceneView.scene.rootNode.addChildNode(animationNode!)
         switch detectedPage! {
-        case .judgesChoiceGlobal:
-            playAnimation(key: "punching")
+//        case .judgesChoiceGlobal:
+//            playAnimation(key: "punching")
         case .judgesChoiceLogo:
             playAnimation(key: "dribbling")
-        case .bestOfShowGlobal:
-            playAnimation(key: "quickRoll")
+//        case .bestOfShowGlobal:
+//            playAnimation(key: "quickRoll")
         case .bestOfShowLogo:
             playAnimation(key: "bellyDancing")
         }
@@ -130,30 +138,34 @@ class HomeViewController: UIViewController {
             }
         }
     }
+    
+    // MARK: - Debug Methods
+    private func displayDebugLabel() {
+        #if DEBUG
+            DispatchQueue.main.async { self.debugLabel.text = self.detectedPage?.rawValue }
+        #endif
+    }
+    
+    private func setupDebugButton() {
+        log.debug("debug setup")
+        #if DEBUG
+            debugButton.isHidden = false
+        #endif
+    }
 }
 
 // MARK: - ARKit Delegate
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
-    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-//        loadVision() // Waits to load vision framework until after a plane is detected
-        loadCoreMLService()
-    }
-    
-    func renderer(_ renderer: SCNSceneRenderer, updateAtTime time: TimeInterval) {
-        if hasFoundRectangle {
-            log.debug("found Loading COREML")
-            loadCoreMLService()
-        }
-    }
-    
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        log.debug("Root Anchor Set")
         let node                = SCNNode()
         rootAnchor              = anchor
         node.transform          = SCNMatrix4(anchor.transform)
         animationNode?.position = node.worldPosition
-//        sceneView.scene.rootNode.addChildNode(animationNode!)
         return node
+    }
+    
+    func session(_ session: ARSession, cameraDidChangeTrackingState camera: ARCamera) {
+        loadCoreMLService()
     }
 }
 
@@ -161,7 +173,8 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
         detectedPage = page
-        loadVision()
+        displayDebugLabel()
+        if rootAnchor != nil  { loadRectangleDetection() }
     }
     
     func didReceiveRecognitionError(sender: CoreMLService, error: Error) {
