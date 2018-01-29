@@ -54,11 +54,10 @@ class HomeViewController: UIViewController {
         sceneView.scene             = scene
         sceneView.delegate          = self
         sceneView.automaticallyUpdatesLighting = true
-        
+        sceneView.debugOptions      = [ ARSCNDebugOptions.showFeaturePoints ]
         #if DEBUG
         sceneView.showsStatistics   = true
-        sceneView.debugOptions      = [ SCNDebugOptions.showLightExtents,
-                                        ARSCNDebugOptions.showFeaturePoints ]
+        sceneView.debugOptions      = [ SCNDebugOptions.showLightExtents ]
         #endif
     }
     

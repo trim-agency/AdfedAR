@@ -17,7 +17,6 @@ default_platform(:ios)
 
 platform :ios do
   before_all do
-    # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
     cocoapods
     # cocoapods
   end
@@ -30,12 +29,14 @@ platform :ios do
   desc "Submit a new Beta Build to Apple TestFlight"
   desc "This will also make sure the profile is up to date"
   lane :beta do
-    # sync_code_signing(type: "appstore") # more information: https://codesigning.guide
+    increment_build_number
     build_app(scheme: "Adfed AR") # more options available
     upload_to_testflight
+    pilot(
+      skip_submission: true,
+      skip_waiting_for_build_processing: true
 
-    # sh "your_script.sh"
-    # You can also use other beta testing services here (run `fastlane actions`)
+    )
   end
 
   desc "Deploy a new version to the App Store"
@@ -43,7 +44,7 @@ platform :ios do
     # sync_code_signing(type: "appstore")
     capture_screenshots
     build_app(scheme: "Adfed AR") # more options available
-    upload_to_app_store(force: true)
+    skip_waiting_for_build_processing
     # frame_screenshots
   end
 
@@ -52,16 +53,16 @@ platform :ios do
   after_all do |lane|
     # This block is called, only if the executed lane was successful
 
-    # slack(
-    #   message: "Successfully deployed new App Update."
-    # )
+   # slack(
+   #   message: "Successfully deployed new App Update."
+   # )
   end
 
   error do |lane, exception|
-    # slack(
-    #   message: exception.message,
-    #   success: false
-    # )
+   # slack(
+   #   message: exception.message,
+   #   success: false
+   # )
   end
 end
 

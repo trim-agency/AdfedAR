@@ -2,6 +2,7 @@ app_identifier "com.trim.AdfedAR" # The bundle identifier of your app
 apple_id "ryan@ryanstonephoto.com" # Your Apple email address
 
 team_id "ZVRNHU225Q" # Developer Portal Team ID
+itc_team_id "2051807"
 
 # you can even provide different app identifiers, Apple IDs and team names per lane:
 # More information: https://docs.fastlane.tools/advanced/#appfile
