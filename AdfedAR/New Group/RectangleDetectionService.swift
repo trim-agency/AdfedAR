@@ -44,6 +44,7 @@ class RectangleDetectionService {
         } else {
             updateRootAnchor(result)
         }
+        delegate?.didDetectRectangle(sender: self, corners: points)
         drawDebugPolygon(points, color: .red)
     }
   

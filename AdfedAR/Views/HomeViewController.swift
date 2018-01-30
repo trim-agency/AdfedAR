@@ -74,9 +74,7 @@ class HomeViewController: UIViewController {
             let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
             let handler             = VNImageRequestHandler(ciImage: ciImage)
             let rectService         = RectangleDetectionService(sceneView: self.sceneView, rootAnchor: self.rootAnchor!)
-//            #if DEBUG
-                rectService.delegate = self
-//            #endif
+            rectService.delegate    = self
             let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: rectService.handleRectangles)
             do {
                 try handler.perform([rectangleRequest])
