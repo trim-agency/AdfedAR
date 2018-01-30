@@ -21,7 +21,7 @@ class CoreMLService {
             log.debug(results)
             parseResults(results)
         } else {
-            delegate?.didReceiveRecognitionError(sender: self, error: error!)
+            delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.observationError)
         }
     }
     // TODO: Fix creation of page, currently failing
@@ -34,6 +34,7 @@ class CoreMLService {
             if let page = Page(rawValue: highConfidenceObservation.identifier) {
                 delegate?.didRecognizePage(sender: self, page: page)
             } else {
+                delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.lowConfidence)
                 log.error("Page not created")
             }
         }
