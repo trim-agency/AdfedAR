@@ -26,9 +26,11 @@ class CoreMLService {
     }
     
     private func logResults(_ results: [VNClassificationObservation]) {
+        var logString = ""
         results.forEach({ (observation) in
-            log.info("\(observation.identifier) -> \(observation.confidence)")
+            logString.append("\(observation.identifier) -> \(observation.confidence)\n")
         })
+        log.info(logString)
     }
     
     private func parseResults(_ observations: [VNClassificationObservation] ) {
