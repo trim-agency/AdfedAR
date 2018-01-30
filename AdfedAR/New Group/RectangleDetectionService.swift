@@ -64,7 +64,6 @@ class RectangleDetectionService {
                 let convertedPoints = points.map{ self.sceneView.convertFromCamera($0) }
                 let debugLayer = DebugPolygon(points: convertedPoints, color: color)
                 self.sceneView.layer.addSublayer(debugLayer)
-                self.delegate?.didDetectRectangle(sender: self, corners: convertedPoints)
             }
         #endif
     }
