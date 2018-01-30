@@ -13,60 +13,70 @@ class HomeViewController: UIViewController {
     var animations              = [String: CAAnimation]()
     var hasFoundRectangle       = false
     let animationScene          = SCNScene(named: "3dAssets.scnassets/IdleFormatted.dae")!
-    
-    @IBOutlet var sceneView: ARSCNView!
+    var waitingOnPlane          = false
+
+    @IBAction func didTapDebug(_ sender: Any) {
+        sceneView.session.pause()
+        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+            node.removeFromParentNode()
+        }
+//        sceneView.layer.sublayers?.removeAll()
+        sceneView.session.run(configuration!, options: [.resetTracking, .removeExistingAnchors])
+        loadAllAnimations()
+    }
+    @IBOutlet weak var debugButton: UIButton!
+    @IBOutlet weak var debugLabel: UILabel!
+    @IBOutlet var sceneView: MainARSCNView!
     var animationNode: SCNNode?
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
     var debugLayer: CAShapeLayer?
     var rootAnchor: ARAnchor?
-    var detectedPage: Page? {
-        didSet {
-            pageDetected()
-        }
-    }
-
+    var detectedPage: Page?
+    var coreMLService: CoreMLService!
+    
     // MARK: - Protocol Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         defineSceneView()
+        setupDebug()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureAR()
         loadAllAnimations()
+        loadCoreMLService()
     }
-   
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
 
-    // MARK: - AR Setup
+    // MARK: - ARKit
+    // MARK: Setup
     private func configureAR() {
-        let configuration               = ARWorldTrackingConfiguration()
-        configuration.planeDetection    = .horizontal
-        sceneView.session.run(configuration)
+        configuration                   = ARWorldTrackingConfiguration()
+        configuration?.planeDetection    = .horizontal
+        sceneView.session.run(configuration!)
     }
     
     private func defineSceneView() {
-        sceneView.scene             = scene
-        sceneView.delegate          = self
-        sceneView.automaticallyUpdatesLighting = true
-        sceneView.debugOptions      = [ ARSCNDebugOptions.showFeaturePoints ]
-        #if DEBUG
-        sceneView.showsStatistics   = true
-        sceneView.debugOptions      = [ SCNDebugOptions.showLightExtents ]
-        #endif
+        sceneView.setup()
+        sceneView.scene     = scene
+        sceneView.delegate  = self
     }
     
-    func loadVision() {
+    func loadRectangleDetection() {
         DispatchQueue.global(qos: .background).async {
             let pixelBuffer         = self.sceneView.session.currentFrame?.capturedImage
             let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
             let handler             = VNImageRequestHandler(ciImage: ciImage)
-            let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: self.handleRectangles)
+            let rectService         = RectangleDetectionService(sceneView: self.sceneView, rootAnchor: self.rootAnchor!)
+            #if DEBUG
+                rectService.delegate = self
+            #endif
+            let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: rectService.handleRectangles)
             
             do {
                 try handler.perform([rectangleRequest])
@@ -75,76 +85,20 @@ class HomeViewController: UIViewController {
             }
         }
     }
-    
-    func handleRectangles(request: VNRequest, error: Error?) {
-        guard let observations = request.results as? [VNRectangleObservation] else {
-            return
+   
+    // MARK: Methods
+    private func pageDetected() {
+        sceneView.scene.rootNode.addChildNode(animationNode!)
+        switch detectedPage! {
+//        case .judgesChoiceGlobal:
+//            playAnimation(key: "punching")
+        case .judgesChoice:
+            playAnimation(key: "dribbling")
+//        case .bestOfShowGlobal:
+//            playAnimation(key: "quickRoll")
+        case .bestOfShow:
+            playAnimation(key: "bellyDancing")
         }
-
-        let highConfidenceObservation = observations.max { a, b in a.confidence < b.confidence }
-        
-        guard let highestConfidenceObservation = highConfidenceObservation else {
-            log.debug("Error with high confidence observation")
-            return
-        }
-        
-        DispatchQueue.global(qos: .background).async {
-            let points = [ highestConfidenceObservation.topLeft,
-                           highestConfidenceObservation.topRight,
-                           highestConfidenceObservation.bottomRight,
-                           highestConfidenceObservation.bottomLeft]
-
-            highestConfidenceObservation.boundingBox.applying(CGAffineTransform(scaleX: 1, y: -1))
-            highestConfidenceObservation.boundingBox.applying(CGAffineTransform(translationX: 0, y: 1))
-
-            let center          = self.getBoxCenter(highConfidenceObservation)
-            let hitTestResults  = self.sceneView.hitTest(center, types: [.existingPlaneUsingExtent, .featurePoint])
-            guard let result    = hitTestResults.first else {
-                log.debug("no hit test results")
-                return
-                
-            }
-            
-            if let rootAnchor = self.rootAnchor,
-               let node = self.sceneView.node(for: rootAnchor) {
-                
-                // Updates position of element when rect moves
-                node.transform = SCNMatrix4(result.worldTransform)
-                
-            } else {
-                
-                // Creates a element if rootAnchor doesn't exist
-                self.rootAnchor         = ARAnchor(transform: result.worldTransform)
-                self.hasFoundRectangle  = true
-                self.sceneView.session.add(anchor: self.rootAnchor!)
-            }
-            
-            #if DEBUG
-                let convertedPoints = points.map{ self.sceneView.convertFromCamera($0) }
-                self.debugLayer     = self.drawPolygon(convertedPoints, color: .red)
-                self.sceneView.layer.addSublayer(self.debugLayer!)
-            #endif
-        }
-    }
-    
-    func playAnimation(key: String) {
-        // Add the animation to start playing it right away
-        sceneView.scene.rootNode.addAnimation(animations[key]!, forKey: key)
-    }
-    
-    func stopAnimation(key: String) {
-        // Stop the animation with a smooth transition
-        sceneView.scene.rootNode.removeAnimation(forKey: key, blendOutDuration: CGFloat(0.5))
-    }
-
-    
-    private func getBoxCenter(_ observation: VNRectangleObservation?) -> CGPoint {
-        return CGPoint(x: (observation?.boundingBox.midX)!,
-                       y: (observation?.boundingBox.midY)!)
-    }
-
-    private func drawPolygon(_ points: [CGPoint], color: UIColor) -> CAShapeLayer {
-        return DebugPolygon(points: points, color: color)
     }
     
     // MARK: - Custom Animations
@@ -174,50 +128,62 @@ class HomeViewController: UIViewController {
         }
     }
     
+    func playAnimation(key: String) {
+        sceneView.scene.rootNode.addAnimation(animations[key]!, forKey: key)
+    }
+    
+    func stopAnimation(key: String) {
+        sceneView.scene.rootNode.removeAnimation(forKey: key, blendOutDuration: CGFloat(0.5))
+    }
+    
+    // MARK: - Core ML
     private func loadCoreMLService() {
-        let coreMLService       = CoreMLService()
-        coreMLService.delegate  = self
+        appendToDebugLabel("\n✅ CoreML Waiting for Init")
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+            self.appendToDebugLabel("\n✅ CoreML Running")
+            self.coreMLService          = CoreMLService()
+            self.coreMLService.delegate = self
+            self.startPageDetection()
+        })
+    }
+    
+    private func startPageDetection() {
         DispatchQueue.global(qos: .userInteractive).async {
             do {
-                try coreMLService.getPageType((self.sceneView.session.currentFrame?.capturedImage)!)
+                try self.coreMLService.getPageType((self.sceneView.session.currentFrame?.capturedImage)!)
             } catch {
                 log.error(error)
             }
         }
     }
     
-    // MARK: - ARKit
-    private func pageDetected() {
-        log.debug("Animation Node Added")
-        sceneView.scene.rootNode.addChildNode(animationNode!)
-        switch detectedPage! {
-        case .judgesChoiceGlobal:
-            playAnimation(key: "punching")
-        case .judgesChoiceLogo:
-            playAnimation(key: "dribbling")
-        case .bestOfShowGlobal:
-            playAnimation(key: "quickRoll")
-        case .bestOfShowLogo:
-            playAnimation(key: "bellyDancing")
-        }
+    // MARK: - Debug Methods
+    private func setupDebug() {
+        #if DEBUG
+            debugLabel.sizeToFit()
+            debugLabel.isHidden     = false
+            debugButton.isHidden    = false
+        #endif
     }
 }
 
 // MARK: - ARKit Delegate
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
+    
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-//        loadVision() // Waits to load vision framework until after a plane is detected
-        log.debug("plane detected")
-        loadCoreMLService()
+        appendToDebugLabel("\n✅ Plane Detected")
+        if waitingOnPlane {
+            appendToDebugLabel("\n✅ Rectangle Detection Running")
+            loadRectangleDetection()
+        }
     }
-
+    
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        log.debug("Root Anchor Set")
         let node                = SCNNode()
         rootAnchor              = anchor
+        appendToDebugLabel("\n✅ Root Anchor Set")
         node.transform          = SCNMatrix4(anchor.transform)
         animationNode?.position = node.worldPosition
-//        sceneView.scene.rootNode.addChildNode(animationNode!)
         return node
     }
 }
@@ -226,13 +192,47 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
         detectedPage = page
+        appendToDebugLabel("\n✅ " + (self.detectedPage?.rawValue)!)
+        if rootAnchor != nil  {
+            appendToDebugLabel("\n✅ Rectangle Detection Running")
+            loadRectangleDetection()
+        } else {
+            waitingOnPlane = true
+        }
     }
     
-    func didReceiveRecognitionError(sender: CoreMLService, error: Error) {
-        log.debug(error)
+    func didReceiveRecognitionError(sender: CoreMLService, error: CoreMLError) {
+        switch error {
+        case .lowConfidence:
+            appendToDebugLabel("\n💥 Low Confidence Observation")
+            startPageDetection()
+        case .observationError:
+            log.debug("Observation Error")
+        }
+    }
+    
+    private func appendToDebugLabel(_ string: String) {
+        #if DEBUG
+            DispatchQueue.main.async {
+                self.debugLabel.text?.append(string)
+            }
+        #endif
     }
 }
 
+// MARK: - Rectangle Detection Delegate
+extension HomeViewController: RectangleDetectionServiceDelegate {
+    func didDetectRectangle(sender: RectangleDetectionService, corners: [CGPoint]) {
+        appendToDebugLabel("\n✅ Rectangle Detected")
+        pageDetected()
+    }
+    
+    func rectangleDetectionError(sender: RectangleDetectionService) {
+        log.error("Rectangle Error")
+        appendToDebugLabel("\n💥 Rectangle Detection Error")
+        loadRectangleDetection()
+    }
+}
 
 
 

@@ -39,6 +39,18 @@ platform :ios do
     )
   end
 
+ desc "Deploys debug build"
+  lane :debug do
+    increment_build_number
+    app_identifier "com.trim.AdfedAR-debug"
+    build_app(scheme: "Debug") # more options available
+    upload_to_testflight
+    pilot(skip_submission: true,
+          skip_waiting_for_build_processing: true)
+  end
+
+
+
   desc "Deploy a new version to the App Store"
   lane :release do
     # sync_code_signing(type: "appstore")
