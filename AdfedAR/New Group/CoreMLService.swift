@@ -42,9 +42,11 @@ class CoreMLService {
             if let page = Page(rawValue: highConfidenceObservation.identifier) {
                 delegate?.didRecognizePage(sender: self, page: page)
             } else {
-                delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.lowConfidence)
+                delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.observationError)
                 log.error("Page not created")
             }
+        } else {
+            delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.lowConfidence)
         }
     }
 }

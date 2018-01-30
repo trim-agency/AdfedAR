@@ -11,22 +11,22 @@ class HomeViewController: UIViewController {
     let visionHandler           = VNSequenceRequestHandler()
     let scene                   = SCNScene()
     var animations              = [String: CAAnimation]()
-    var hasFoundRectangle       = false
     let animationScene          = SCNScene(named: "3dAssets.scnassets/IdleFormatted.dae")!
-    var waitingOnPlane          = false
-
+    var waitingOnPlane          = true
+    
+    @IBOutlet weak var debugButton: UIButton!
+    @IBOutlet weak var debugLabel: UILabel!
+    @IBOutlet var sceneView: MainARSCNView!
+    @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
     @IBAction func didTapDebug(_ sender: Any) {
         sceneView.session.pause()
         sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
             node.removeFromParentNode()
         }
-//        sceneView.layer.sublayers?.removeAll()
         sceneView.session.run(configuration!, options: [.resetTracking, .removeExistingAnchors])
         loadAllAnimations()
     }
-    @IBOutlet weak var debugButton: UIButton!
-    @IBOutlet weak var debugLabel: UILabel!
-    @IBOutlet var sceneView: MainARSCNView!
+    
     var animationNode: SCNNode?
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
@@ -68,16 +68,16 @@ class HomeViewController: UIViewController {
     }
     
     func loadRectangleDetection() {
+        userInstructionLabel.updateText(.lookingForRectangle)
         DispatchQueue.global(qos: .background).async {
             let pixelBuffer         = self.sceneView.session.currentFrame?.capturedImage
             let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
             let handler             = VNImageRequestHandler(ciImage: ciImage)
             let rectService         = RectangleDetectionService(sceneView: self.sceneView, rootAnchor: self.rootAnchor!)
-            #if DEBUG
+//            #if DEBUG
                 rectService.delegate = self
-            #endif
+//            #endif
             let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: rectService.handleRectangles)
-            
             do {
                 try handler.perform([rectangleRequest])
             } catch {
@@ -88,14 +88,11 @@ class HomeViewController: UIViewController {
    
     // MARK: Methods
     private func pageDetected() {
+        userInstructionLabel.updateText(.none)
         sceneView.scene.rootNode.addChildNode(animationNode!)
         switch detectedPage! {
-//        case .judgesChoiceGlobal:
-//            playAnimation(key: "punching")
         case .judgesChoice:
-            playAnimation(key: "dribbling")
-//        case .bestOfShowGlobal:
-//            playAnimation(key: "quickRoll")
+            playAnimation(key: "punching")
         case .bestOfShow:
             playAnimation(key: "bellyDancing")
         }
@@ -111,8 +108,8 @@ class HomeViewController: UIViewController {
         }
         
         animationNode?.scale = SCNVector3(0.0008, 0.0008, 0.0008)
-        loadAnimation(withKey: "dribbling", sceneName: "3dAssets.scnassets/DribbleFormatted", animationIdentifier: "DribbleFormatted-1")
-        loadAnimation(withKey: "quickRoll", sceneName: "3dAssets.scnassets/quickRollFormatted", animationIdentifier: "QuickRollFormatted-1")
+//        loadAnimation(withKey: "dribbling", sceneName: "3dAssets.scnassets/DribbleFormatted", animationIdentifier: "DribbleFormatted-1")
+//        loadAnimation(withKey: "quickRoll", sceneName: "3dAssets.scnassets/quickRollFormatted", animationIdentifier: "quickRollFormatted-1")
         loadAnimation(withKey: "bellyDancing", sceneName: "3dAssets.scnassets/BellydancingFormatted", animationIdentifier: "BellydancingFormatted-1")
         loadAnimation(withKey: "punching", sceneName: "3dAssets.scnassets/PunchingFormatted", animationIdentifier: "PunchingFormatted-1")
     }
@@ -144,6 +141,7 @@ class HomeViewController: UIViewController {
             self.coreMLService          = CoreMLService()
             self.coreMLService.delegate = self
             self.startPageDetection()
+            self.userInstructionLabel.updateText(.lookingForSymbol)
         })
     }
     
@@ -152,7 +150,7 @@ class HomeViewController: UIViewController {
             do {
                 try self.coreMLService.getPageType((self.sceneView.session.currentFrame?.capturedImage)!)
             } catch {
-                log.error(error)
+                self.appendToDebugLabel("\n💥 Page Detection Error")
             }
         }
     }
@@ -169,21 +167,21 @@ class HomeViewController: UIViewController {
 
 // MARK: - ARKit Delegate
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
-    
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         appendToDebugLabel("\n✅ Plane Detected")
         if waitingOnPlane {
             appendToDebugLabel("\n✅ Rectangle Detection Running")
             loadRectangleDetection()
+            waitingOnPlane = false
         }
     }
     
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node                = SCNNode()
         rootAnchor              = anchor
-        appendToDebugLabel("\n✅ Root Anchor Set")
         node.transform          = SCNMatrix4(anchor.transform)
         animationNode?.position = node.worldPosition
+        appendToDebugLabel("\n✅ Root Anchor Set")
         return node
     }
 }
@@ -197,6 +195,7 @@ extension HomeViewController: CoreMLServiceDelegate {
             appendToDebugLabel("\n✅ Rectangle Detection Running")
             loadRectangleDetection()
         } else {
+            userInstructionLabel.updateText(.lookingForPlane)
             waitingOnPlane = true
         }
     }
@@ -207,7 +206,8 @@ extension HomeViewController: CoreMLServiceDelegate {
             appendToDebugLabel("\n💥 Low Confidence Observation")
             startPageDetection()
         case .observationError:
-            log.debug("Observation Error")
+            appendToDebugLabel("\n💥 Observation Error")
+            startPageDetection()
         }
     }
     
@@ -217,6 +217,7 @@ extension HomeViewController: CoreMLServiceDelegate {
                 self.debugLabel.text?.append(string)
             }
         #endif
+        log.debug(string)
     }
 }
 
