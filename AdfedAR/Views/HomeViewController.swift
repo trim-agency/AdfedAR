@@ -14,7 +14,7 @@ class HomeViewController: UIViewController {
     var hasFoundRectangle       = false
     let animationScene          = SCNScene(named: "3dAssets.scnassets/IdleFormatted.dae")!
     var waitingOnPlane          = false
-    
+
     @IBAction func didTapDebug(_ sender: Any) {
         sceneView.session.pause()
         sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
@@ -33,6 +33,7 @@ class HomeViewController: UIViewController {
     var debugLayer: CAShapeLayer?
     var rootAnchor: ARAnchor?
     var detectedPage: Page?
+    var coreMLService: CoreMLService!
     
     // MARK: - Protocol Methods
     override func viewDidLoad() {
@@ -140,16 +141,20 @@ class HomeViewController: UIViewController {
         appendToDebugLabel("\n✅ CoreML Waiting for Init")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
             self.appendToDebugLabel("\n✅ CoreML Running")
-            let coreMLService       = CoreMLService()
-            coreMLService.delegate  = self
-            DispatchQueue.global(qos: .userInteractive).async {
-                do {
-                    try coreMLService.getPageType((self.sceneView.session.currentFrame?.capturedImage)!)
-                } catch {
-                    log.error(error)
-                }
-            }
+            self.coreMLService          = CoreMLService()
+            self.coreMLService.delegate = self
+            self.startPageDetection()
         })
+    }
+    
+    private func startPageDetection() {
+        DispatchQueue.global(qos: .userInteractive).async {
+            do {
+                try self.coreMLService.getPageType((self.sceneView.session.currentFrame?.capturedImage)!)
+            } catch {
+                log.error(error)
+            }
+        }
     }
     
     // MARK: - Debug Methods
@@ -200,7 +205,7 @@ extension HomeViewController: CoreMLServiceDelegate {
         switch error {
         case .lowConfidence:
             appendToDebugLabel("\n💥 Low Confidence Observation")
-//            loadCoreMLService()
+            startPageDetection()
         case .observationError:
             log.debug("Observation Error")
         }

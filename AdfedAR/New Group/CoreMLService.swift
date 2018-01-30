@@ -18,13 +18,19 @@ class CoreMLService {
                 log.error("Classification downcast error")
                 return
             }
-            log.debug(results)
+            logResults(results)
             parseResults(results)
         } else {
             delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.observationError)
         }
     }
-    // TODO: Fix creation of page, currently failing
+    
+    private func logResults(_ results: [VNClassificationObservation]) {
+        results.forEach({ (observation) in
+            log.info("\(observation.identifier) -> \(observation.confidence)")
+        })
+    }
+    
     private func parseResults(_ observations: [VNClassificationObservation] ) {
         guard let highConfidenceObservation = (observations.max { a, b in a.confidence < b.confidence }) else {
             log.debug("Highest confidence observation error")
