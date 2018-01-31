@@ -38,7 +38,7 @@ class CoreMLService {
             log.debug("Highest confidence observation error")
             return
         }
-        if highConfidenceObservation.confidence > 0.70 {
+        if highConfidenceObservation.confidence > 0.90 {
             if let page = Page(rawValue: highConfidenceObservation.identifier) {
                 delegate?.didRecognizePage(sender: self, page: page)
             } else {

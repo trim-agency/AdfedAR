@@ -14,6 +14,7 @@ class HomeViewController: UIViewController {
     let animationScene          = SCNScene(named: "3dAssets.scnassets/IdleFormatted.dae")!
     var waitingOnPlane          = true
     
+    @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
     @IBOutlet weak var debugButton: UIButton!
     @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet var sceneView: MainARSCNView!
@@ -161,6 +162,14 @@ class HomeViewController: UIViewController {
             debugButton.isHidden    = false
         #endif
     }
+    
+    // MARK: - Haptic Feedback
+    private func provideHapticFeedback() {
+        DispatchQueue.main.async {
+            let feedbackGenerator = UINotificationFeedbackGenerator()
+            feedbackGenerator.notificationOccurred(.success)
+        }
+    }
 }
 
 // MARK: - ARKit Delegate
@@ -187,6 +196,8 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
 // MARK: - CoreMLService Delegate
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
+        logoHintOverlay.fadeOut()
+        provideHapticFeedback()
         detectedPage = page
         appendToDebugLabel("\n✅ " + (self.detectedPage?.rawValue)!)
         if rootAnchor != nil  {
@@ -227,7 +238,6 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
     }
     
     func rectangleDetectionError(sender: RectangleDetectionService) {
-        log.error("Rectangle Error")
         appendToDebugLabel("\n💥 Rectangle Detection Error")
         loadRectangleDetection()
     }
