@@ -29,6 +29,18 @@ class LogoHintOverlay: UIView {
         backgroundColor = UIColor.black.withAlphaComponent(0.5)
     }
     
+    private func setSuccessBorder() {
+        DispatchQueue.main.async {
+            self.hintWindowBorder.layer.borderColor = UIColor.green.cgColor
+        }
+    }
+    
+    private func setInitialBorder() {
+        DispatchQueue.main.async {
+            self.hintWindowBorder.layer.borderColor = UIColor.red.cgColor
+        }
+    }
+    
     private func setupBorder() {
         hintWindowBorder.layer.cornerRadius = hintWindow.bounds.height / 2
         hintWindowBorder.layer.borderWidth = 3.0
@@ -62,9 +74,7 @@ class LogoHintOverlay: UIView {
     
     // MARK: - Actions
     public func fadeOut() {
-        DispatchQueue.main.async {
-            self.hintWindowBorder.layer.borderColor = UIColor.green.cgColor
-        }
+        setSuccessBorder()
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
             UIView.animate(withDuration: 1.0) {
                 self.hintWindowBorder.alpha = 0.0
@@ -75,6 +85,8 @@ class LogoHintOverlay: UIView {
     
     public func fadeIn() {
         UIView.animate(withDuration: 1.0) {
+            self.setInitialBorder()
+            self.hintWindowBorder.alpha = 1.0
             self.alpha = 1.0
         }
     }

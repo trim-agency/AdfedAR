@@ -24,8 +24,10 @@ class HomeViewController: UIViewController {
         sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
             node.removeFromParentNode()
         }
-        sceneView.session.run(configuration!, options: [.resetTracking, .removeExistingAnchors])
-        loadAllAnimations()
+        debugLabel.text = ""
+        logoHintOverlay.fadeIn()
+        setup()
+        start()
     }
     
     var animationNode: SCNNode?
@@ -39,21 +41,31 @@ class HomeViewController: UIViewController {
     // MARK: - Protocol Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-        defineSceneView()
-        setupDebug()
+        setup()
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureAR()
-        loadAllAnimations()
-        loadCoreMLService()
+        start()
     }
 
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
     }
 
+    // MARK: - Setup, Layout & ARKIT Start
+    private func setup() {
+        defineSceneView()
+        setupDebug()
+    }
+    
+    private func start() {
+        configureAR()
+        loadAllAnimations()
+        loadCoreMLService()
+    }
+    
+    
     // MARK: - ARKit
     // MARK: Setup
     private func configureAR() {
