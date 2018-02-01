@@ -25,7 +25,7 @@ class LogoHintOverlay: UIView {
         alpha = 0.0
         hintWindow.layer.cornerRadius = bounds.size.width / 2
         hintWindow.backgroundColor = UIColor.clear
-        hintWindow.frame = CGRect(x: 0, y: 0, width: bounds.width * 0.75, height: bounds.width * 0.75)
+        hintWindow.frame = CGRect(x: 0, y: 0, width: bounds.width * 0.60, height: bounds.width * 0.60)
         backgroundColor = UIColor.black.withAlphaComponent(0.5)
     }
     
@@ -50,9 +50,8 @@ class LogoHintOverlay: UIView {
     private func defineMaskConstraints(add view: UIView, to parentView: UIView ) {
         parentView.addSubview(view)
         view.snp.makeConstraints{ make -> Void in
-            make.top.equalTo((superview?.snp.top)!).offset(75)
-            make.centerX.equalTo((superview?.snp.centerX)!)
-            make.width.height.equalTo((superview?.snp.width)!).multipliedBy(0.75)
+            make.width.height.equalTo((superview?.snp.width)!).multipliedBy(0.60)
+            make.center.equalTo((superview?.snp.center)!)
         }
     }
     

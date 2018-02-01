@@ -43,7 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             log.addDestination(console)
         #endif
         let platform = SBPlatformDestination(appID: "Z5RGrG", appSecret: "t6l4qamDqwF4c5l3gztpqsxsb1geCncg", encryptionKey: "Iz4kslnwu8tHnwoxrcxrdaha5kfqxhvt")
-        log.addDestination(platform)
+//        log.addDestination(platform)
     }
 }
 
