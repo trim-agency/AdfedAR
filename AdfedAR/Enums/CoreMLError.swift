@@ -1,6 +1,7 @@
 import Foundation
 
-enum CoreMLError  {
+enum CoreMLError: Error  {
     case lowConfidence
     case observationError
+    case invalidObject
 }

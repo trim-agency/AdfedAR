@@ -6,6 +6,7 @@ target 'AdfedAR' do
   use_frameworks!
   
   pod 'SwiftyBeaver'
+  pod 'SnapKit'
 
   target 'AdfedARTests' do
     inherit! :search_paths
