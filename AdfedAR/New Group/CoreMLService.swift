@@ -1,15 +1,44 @@
-import Foundation
+import UIKit
 import CoreML
 import Vision
+import Photos
 
 class CoreMLService {
     var delegate: CoreMLServiceDelegate?
-    
+    var frameCounter = 0
     func getPageType(_ image: CVPixelBuffer) throws {
+        let transformedImage = transformBuffer(image)
+        var croppedImage = UIImage(ciImage: transformedImage)
+        croppedImage = croppedImage.crop(to: CGSize(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.width * 0.6))
         let model   = try VNCoreMLModel(for: AdFed().model)
         let request = VNCoreMLRequest(model: model, completionHandler: pageRecognitionHandler)
-        let handler = VNImageRequestHandler(cvPixelBuffer: image, options: [:])
+        let handler = VNImageRequestHandler(ciImage: croppedImage.ciImage!, options: [:])
+//        let handler = VNImageRequestHandler(cvPixelBuffer: image, options: [:])
         try handler.perform([request])
+    }
+    
+    private func transformBuffer(_ pixelBuffer: CVPixelBuffer) -> CIImage {
+        var image = CIImage(cvPixelBuffer: pixelBuffer)
+        filterImage(image: &image, filterName: "CIColorControls", filterKey: "inputContrast", value: 1.5)
+        filterImage(image: &image, filterName: "CISharpenLuminance", filterKey: "inputSharpness", value: 1)
+        return image
+    }
+    
+    private func filterImage(image: inout CIImage, filterName: String, filterKey: String, value: Float ) {
+        let filter = CIFilter(name: filterName)!
+        filter.setValue(image, forKey: kCIInputImageKey)
+        filter.setValue(value, forKey: filterKey)
+    }
+
+    private func saveImage(_ image: CIImage?) {
+        frameCounter += 1
+            guard let image = image else {
+                return
+            }
+            let newUIImage = UIImage(ciImage: image)
+            PHPhotoLibrary.shared().performChanges({
+                PHAssetChangeRequest.creationRequestForAsset(from: newUIImage)
+            }, completionHandler: nil)
     }
     
     func pageRecognitionHandler(request: VNRequest, error: Error?) {
