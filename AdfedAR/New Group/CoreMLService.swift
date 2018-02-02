@@ -9,11 +9,11 @@ class CoreMLService {
     func getPageType(_ image: CVPixelBuffer) throws {
         let transformedImage = transformBuffer(image)
         var croppedImage = UIImage(ciImage: transformedImage)
-        croppedImage = croppedImage.crop(to: CGSize(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.width * 0.6))
+        croppedImage = croppedImage.crop(to: CGSize(width: UIScreen.main.bounds.width * 0.6,
+                                                    height: UIScreen.main.bounds.width * 0.6))
         let model   = try VNCoreMLModel(for: AdFed().model)
         let request = VNCoreMLRequest(model: model, completionHandler: pageRecognitionHandler)
         let handler = VNImageRequestHandler(ciImage: croppedImage.ciImage!, options: [:])
-//        let handler = VNImageRequestHandler(cvPixelBuffer: image, options: [:])
         try handler.perform([request])
     }
     

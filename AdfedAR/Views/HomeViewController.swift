@@ -59,15 +59,10 @@ class HomeViewController: UIViewController {
     private func reset() {
 //        sceneView.session.pause()
         didTapReset = true
-        for node in sceneView.scene.rootNode.childNodes {
-            node.removeFromParentNode()
-        }
+        removeAllNodes()
         debugLabel.text = ""
         logoHintOverlay.fadeIn()
-//        setup()
-//        start()
-//        loadAllAnimations()
-//        loadCoreMLService()
+        startPageDetection()
     }
     
 
@@ -85,23 +80,15 @@ class HomeViewController: UIViewController {
         sceneView.delegate  = self
     }
     
-    func loadRectangleDetection() {
-        userInstructionLabel.updateText(.lookingForRectangle)
-        DispatchQueue.global(qos: .background).async {
-            let pixelBuffer         = self.sceneView.session.currentFrame?.capturedImage
-            let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
-            let handler             = VNImageRequestHandler(ciImage: ciImage)
-            let rectService         = RectangleDetectionService(sceneView: self.sceneView, rootAnchor: self.rootAnchor!)
-            rectService.delegate    = self
-            let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: rectService.handleRectangles)
-            do {
-                try handler.perform([rectangleRequest])
-            } catch {
-                log.error(error)
-            }
+    
+    
+    // MARK: - RESET
+    private func removeAllNodes() {
+        for node in sceneView.scene.rootNode.childNodes {
+            node.removeFromParentNode()
         }
     }
-   
+    
     // MARK: Methods
     private func pageDetected() {
         userInstructionLabel.updateText(.none)
@@ -151,11 +138,8 @@ class HomeViewController: UIViewController {
     private func loadCoreMLService() {
         appendToDebugLabel("\n✅ CoreML Waiting for Init")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-            self.appendToDebugLabel("\n✅ CoreML Running")
-            if !self.didTapReset {
-                self.coreMLService          = CoreMLService()
-                self.coreMLService.delegate = self
-            }
+            self.coreMLService          = CoreMLService()
+            self.coreMLService.delegate = self
             self.startPageDetection()
             self.userInstructionLabel.updateText(.lookingForSymbol)
         })
@@ -163,7 +147,7 @@ class HomeViewController: UIViewController {
     
     private func startPageDetection() {
         appendToDebugLabel("\n✅ Page Detection Started")
-        DispatchQueue.main.async {
+        DispatchQueue.global(qos: .userInitiated).async {
             if self.sceneView.session.currentFrame != nil {
                 do {
                     try self.coreMLService.getPageType((self.sceneView.session.currentFrame?.capturedImage)!)
@@ -187,6 +171,24 @@ class HomeViewController: UIViewController {
         DispatchQueue.main.async {
             let feedbackGenerator = UINotificationFeedbackGenerator()
             feedbackGenerator.notificationOccurred(.success)
+        }
+    }
+    
+    // MARK: - Vision Framework
+    func loadRectangleDetection() {
+        userInstructionLabel.updateText(.lookingForRectangle)
+        DispatchQueue.global(qos: .background).async {
+            let pixelBuffer         = self.sceneView.session.currentFrame?.capturedImage
+            let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
+            let handler             = VNImageRequestHandler(ciImage: ciImage)
+            let rectService         = RectangleDetectionService(sceneView: self.sceneView, rootAnchor: self.rootAnchor!)
+            rectService.delegate    = self
+            let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: rectService.handleRectangles)
+            do {
+                try handler.perform([rectangleRequest])
+            } catch {
+                log.error(error)
+            }
         }
     }
 }
