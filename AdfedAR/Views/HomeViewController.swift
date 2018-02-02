@@ -13,22 +13,14 @@ class HomeViewController: UIViewController {
     var animations              = [String: CAAnimation]()
     let animationScene          = SCNScene(named: "3dAssets.scnassets/IdleFormatted.dae")!
     var waitingOnPlane          = true
-    
+    var didTapReset             = false
+
     @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
     @IBOutlet weak var debugButton: UIButton!
     @IBOutlet weak var debugLabel: UILabel!
-    @IBOutlet var sceneView: MainARSCNView!
+    @IBOutlet weak var sceneView: MainARSCNView!
     @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
-    @IBAction func didTapDebug(_ sender: Any) {
-        sceneView.session.pause()
-        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-            node.removeFromParentNode()
-        }
-        debugLabel.text = ""
-        logoHintOverlay.fadeIn()
-        setup()
-        start()
-    }
+    @IBAction func didTapDebug(_ sender: Any) { reset() }
     
     var animationNode: SCNNode?
     var configuration: ARWorldTrackingConfiguration?
@@ -64,8 +56,19 @@ class HomeViewController: UIViewController {
         loadAllAnimations()
         loadCoreMLService()
     }
+    private func reset() {
+//        sceneView.session.pause()
+        didTapReset = true
+        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+            node.removeFromParentNode()
+        }
+        debugLabel.text = ""
+        logoHintOverlay.fadeIn()
+        setup()
+        start()
+    }
     
-    
+
     // MARK: - ARKit
     // MARK: Setup
     private func configureAR() {
@@ -113,14 +116,12 @@ class HomeViewController: UIViewController {
     private func loadAllAnimations() {
         let scene       = animationScene
         animationNode   = SCNNode()
-        
+
         for child in scene.rootNode.childNodes {
             animationNode?.addChildNode(child)
         }
-        
+
         animationNode?.scale = SCNVector3(0.0008, 0.0008, 0.0008)
-//        loadAnimation(withKey: "dribbling", sceneName: "3dAssets.scnassets/DribbleFormatted", animationIdentifier: "DribbleFormatted-1")
-//        loadAnimation(withKey: "quickRoll", sceneName: "3dAssets.scnassets/quickRollFormatted", animationIdentifier: "quickRollFormatted-1")
         loadAnimation(withKey: "bellyDancing", sceneName: "3dAssets.scnassets/BellydancingFormatted", animationIdentifier: "BellydancingFormatted-1")
         loadAnimation(withKey: "punching", sceneName: "3dAssets.scnassets/PunchingFormatted", animationIdentifier: "PunchingFormatted-1")
     }
@@ -149,19 +150,24 @@ class HomeViewController: UIViewController {
         appendToDebugLabel("\n✅ CoreML Waiting for Init")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
             self.appendToDebugLabel("\n✅ CoreML Running")
-            self.coreMLService          = CoreMLService()
-            self.coreMLService.delegate = self
+            if !self.didTapReset {
+                self.coreMLService          = CoreMLService()
+                self.coreMLService.delegate = self
+            }
             self.startPageDetection()
             self.userInstructionLabel.updateText(.lookingForSymbol)
         })
     }
     
     private func startPageDetection() {
-        DispatchQueue.global(qos: .userInteractive).async {
-            do {
-                try self.coreMLService.getPageType((self.sceneView.session.currentFrame?.capturedImage)!)
-            } catch {
-                self.appendToDebugLabel("\n💥 Page Detection Error")
+        appendToDebugLabel("\n✅ Page Detection Started")
+        DispatchQueue.main.async {
+            if self.sceneView.session.currentFrame != nil {
+                do {
+                    try self.coreMLService.getPageType((self.sceneView.session.currentFrame?.capturedImage)!)
+                } catch {
+                    self.appendToDebugLabel("\n💥 Page Detection Error")
+                }
             }
         }
     }
@@ -171,7 +177,6 @@ class HomeViewController: UIViewController {
         #if DEBUG
             debugLabel.sizeToFit()
             debugLabel.isHidden     = false
-            debugButton.isHidden    = false
         #endif
     }
     
@@ -229,6 +234,8 @@ extension HomeViewController: CoreMLServiceDelegate {
         case .observationError:
             appendToDebugLabel("\n💥 Observation Error")
             startPageDetection()
+        case .invalidObject:
+            appendToDebugLabel("\n💥 Invalid Object")
         }
     }
     

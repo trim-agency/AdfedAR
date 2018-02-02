@@ -10,7 +10,7 @@
 		69074D072020EA3000FEC5EB /* UserInstructionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69074D062020EA3000FEC5EB /* UserInstructionLabel.swift */; };
 		69074D092020EA7500FEC5EB /* UserInstructionsEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69074D082020EA7500FEC5EB /* UserInstructionsEnum.swift */; };
 		691BFB8E202226C50086FD13 /* LogoHintOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691BFB8D202226C50086FD13 /* LogoHintOverlay.swift */; };
-		691BFBA02023706F0086FD13 /* AdFed.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 691BFB9F2023706F0086FD13 /* AdFed.mlmodel */; };
+		691BFBA82023C5C20086FD13 /* AdFed.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 691BFBA72023C5C20086FD13 /* AdFed.mlmodel */; };
 		6927A3D4201F709C00A089E0 /* VNRectangleObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927A3D3201F709C00A089E0 /* VNRectangleObservationExtension.swift */; };
 		6927A3D7201F752D00A089E0 /* MainARSCNView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927A3D6201F752D00A089E0 /* MainARSCNView.swift */; };
 		6927A3D9201F76DB00A089E0 /* RectangleDetectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927A3D8201F76DB00A089E0 /* RectangleDetectionService.swift */; };
@@ -61,7 +61,7 @@
 		69074D062020EA3000FEC5EB /* UserInstructionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInstructionLabel.swift; sourceTree = "<group>"; };
 		69074D082020EA7500FEC5EB /* UserInstructionsEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInstructionsEnum.swift; sourceTree = "<group>"; };
 		691BFB8D202226C50086FD13 /* LogoHintOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoHintOverlay.swift; sourceTree = "<group>"; };
-		691BFB9F2023706F0086FD13 /* AdFed.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AdFed.mlmodel; sourceTree = "<group>"; };
+		691BFBA72023C5C20086FD13 /* AdFed.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = AdFed.mlmodel; path = "../../../../../Dropbox (Trim Agency)/Jobs/AdFed/02 - iOS AR App/CoreML Models/02-02-18/1/AdFed.mlmodel"; sourceTree = "<group>"; };
 		6927A3D3201F709C00A089E0 /* VNRectangleObservationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VNRectangleObservationExtension.swift; sourceTree = "<group>"; };
 		6927A3D6201F752D00A089E0 /* MainARSCNView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainARSCNView.swift; sourceTree = "<group>"; };
 		6927A3D8201F76DB00A089E0 /* RectangleDetectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleDetectionService.swift; sourceTree = "<group>"; };
@@ -247,7 +247,7 @@
 		699A3C82201A775C00FFB5F6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				691BFB9F2023706F0086FD13 /* AdFed.mlmodel */,
+				691BFBA72023C5C20086FD13 /* AdFed.mlmodel */,
 			);
 			name = Model;
 			path = "New Group2";
@@ -598,7 +598,7 @@
 				6927A3D7201F752D00A089E0 /* MainARSCNView.swift in Sources */,
 				69297982200CF4120019A0B9 /* HomeViewController.swift in Sources */,
 				69074D092020EA7500FEC5EB /* UserInstructionsEnum.swift in Sources */,
-				691BFBA02023706F0086FD13 /* AdFed.mlmodel in Sources */,
+				691BFBA82023C5C20086FD13 /* AdFed.mlmodel in Sources */,
 				69074D072020EA3000FEC5EB /* UserInstructionLabel.swift in Sources */,
 				69355CAB201A352B00241310 /* DebugPolygon.swift in Sources */,
 				69D121192016877800B39411 /* CoreMLServiceDelegate.swift in Sources */,
@@ -772,7 +772,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = ZVRNHU225Q;
 				DISPLAY_NAME = "Adfed-debug";
 				INFOPLIST_FILE = AdfedAR/Info.plist;
@@ -791,7 +791,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = ZVRNHU225Q;
 				DISPLAY_NAME = "AdFed AR";
 				INFOPLIST_FILE = AdfedAR/Info.plist;

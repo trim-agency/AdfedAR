@@ -35,12 +35,16 @@ class CoreMLService {
     }
     
     private func parseResults(_ observations: [VNClassificationObservation] ) {
-        guard let highConfidenceObservation = (observations.max { a, b in a.confidence < b.confidence }) else {
-            log.debug("Highest confidence observation error")
+        var highConfidenceObservation: VNClassificationObservation!
+        do {
+           highConfidenceObservation = try highestConfidenceObservation(observations)
+        } catch {
+            delegate?.didReceiveRecognitionError(sender: self, error: error as! CoreMLError)
             return
         }
+        
         if highConfidenceObservation.confidence > 0.70 {
-            if let page = Page(rawValue: highConfidenceObservation.identifier) {
+            if let page = Page(rawValue: highConfidenceObservation.identifier)  {
                 delegate?.didRecognizePage(sender: self, page: page)
             } else {
                 delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.observationError)
@@ -48,6 +52,14 @@ class CoreMLService {
             }
         } else {
             delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.lowConfidence)
+        }
+    }
+    
+    private func highestConfidenceObservation(_ observations: [VNClassificationObservation]) throws -> VNClassificationObservation {
+        if let highConfidenceObservation = (observations.max { a, b in a.confidence < b.confidence }){
+            return highConfidenceObservation
+        } else {
+            throw CoreMLError.invalidObject
         }
     }
 }
