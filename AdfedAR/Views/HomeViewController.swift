@@ -57,12 +57,12 @@ class HomeViewController: UIViewController {
         loadCoreMLService()
     }
     private func reset() {
-//        sceneView.session.pause()
-        didTapReset = true
         removeAllNodes()
-        debugLabel.text = ""
         logoHintOverlay.fadeIn()
         startPageDetection()
+        debugLabel.text = ""
+        didTapReset     = true
+        detectedPage    = nil
     }
     
 
@@ -70,7 +70,7 @@ class HomeViewController: UIViewController {
     // MARK: Setup
     private func configureAR() {
         configuration                   = ARWorldTrackingConfiguration()
-        configuration?.planeDetection    = .horizontal
+        configuration?.planeDetection   = .horizontal
         sceneView.session.run(configuration!)
     }
     
@@ -197,11 +197,11 @@ class HomeViewController: UIViewController {
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         appendToDebugLabel("\n✅ Plane Detected")
-        if waitingOnPlane {
+//        if waitingOnPlane {
             appendToDebugLabel("\n✅ Rectangle Detection Running")
             loadRectangleDetection()
             waitingOnPlane = false
-        }
+//        }
     }
     
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
@@ -221,9 +221,15 @@ extension HomeViewController: CoreMLServiceDelegate {
         provideHapticFeedback()
         detectedPage = page
         appendToDebugLabel("\n✅ " + (self.detectedPage?.rawValue)!)
-        if rootAnchor != nil  {
+        if rootAnchor != nil && didTapReset == false {
             appendToDebugLabel("\n✅ Rectangle Detection Running")
             loadRectangleDetection()
+        } else if didTapReset == true {
+            userInstructionLabel.updateText(.lookingForPlane)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
+                self.loadRectangleDetection()
+                self.userInstructionLabel.updateText(.none)
+            })
         } else {
             userInstructionLabel.updateText(.lookingForPlane)
             waitingOnPlane = true
@@ -234,13 +240,12 @@ extension HomeViewController: CoreMLServiceDelegate {
         switch error {
         case .lowConfidence:
             appendToDebugLabel("\n💥 Low Confidence Observation")
-            startPageDetection()
         case .observationError:
             appendToDebugLabel("\n💥 Observation Error")
-            startPageDetection()
         case .invalidObject:
             appendToDebugLabel("\n💥 Invalid Object")
         }
+        startPageDetection()
     }
     
     private func appendToDebugLabel(_ string: String) {

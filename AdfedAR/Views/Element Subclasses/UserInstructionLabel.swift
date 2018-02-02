@@ -36,6 +36,7 @@ class UserInstructionLabel: UILabel {
         self.layer.insertSublayer(blurView.layer, below: layer)
     }
     
+
     private func setCorners() {
         clipsToBounds = true
         layer.cornerRadius = frame.height / 3
