@@ -59,13 +59,15 @@ class HomeViewController: UIViewController {
     private func reset() {
 //        sceneView.session.pause()
         didTapReset = true
-        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+        for node in sceneView.scene.rootNode.childNodes {
             node.removeFromParentNode()
         }
         debugLabel.text = ""
         logoHintOverlay.fadeIn()
-        setup()
-        start()
+//        setup()
+//        start()
+//        loadAllAnimations()
+//        loadCoreMLService()
     }
     
 
