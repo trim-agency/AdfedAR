@@ -7,10 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		48F3D2992024C7CB00F6045B /* AdFed.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 48F3D2982024C7CB00F6045B /* AdFed.mlmodel */; };
 		69074D072020EA3000FEC5EB /* UserInstructionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69074D062020EA3000FEC5EB /* UserInstructionLabel.swift */; };
 		69074D092020EA7500FEC5EB /* UserInstructionsEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69074D082020EA7500FEC5EB /* UserInstructionsEnum.swift */; };
 		691BFB8E202226C50086FD13 /* LogoHintOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691BFB8D202226C50086FD13 /* LogoHintOverlay.swift */; };
-		691BFBA82023C5C20086FD13 /* AdFed.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 691BFBA72023C5C20086FD13 /* AdFed.mlmodel */; };
 		6927A3D4201F709C00A089E0 /* VNRectangleObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927A3D3201F709C00A089E0 /* VNRectangleObservationExtension.swift */; };
 		6927A3D7201F752D00A089E0 /* MainARSCNView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927A3D6201F752D00A089E0 /* MainARSCNView.swift */; };
 		6927A3D9201F76DB00A089E0 /* RectangleDetectionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927A3D8201F76DB00A089E0 /* RectangleDetectionService.swift */; };
@@ -56,13 +56,13 @@
 		05226857A58285F5F98EDA71 /* Pods-AdfedARUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedARUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedARUITests/Pods-AdfedARUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		2962A94F70AC8CA252774F42 /* Pods-AdfedAR.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedAR.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedAR/Pods-AdfedAR.debug.xcconfig"; sourceTree = "<group>"; };
 		332985320A5379F0B6C3F5D5 /* Pods-AdfedARTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedARTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedARTests/Pods-AdfedARTests.debug.xcconfig"; sourceTree = "<group>"; };
+		48F3D2982024C7CB00F6045B /* AdFed.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AdFed.mlmodel; sourceTree = "<group>"; };
 		503B43A8850E6138FC212316 /* Pods-AdfedAR.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedAR.release.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedAR/Pods-AdfedAR.release.xcconfig"; sourceTree = "<group>"; };
 		599BB549AA4BDC6196DEE851 /* Pods_AdfedAR.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdfedAR.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		660BC9C20DDA71A324F106BE /* Pods_AdfedARTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdfedARTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		69074D062020EA3000FEC5EB /* UserInstructionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInstructionLabel.swift; sourceTree = "<group>"; };
 		69074D082020EA7500FEC5EB /* UserInstructionsEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInstructionsEnum.swift; sourceTree = "<group>"; };
 		691BFB8D202226C50086FD13 /* LogoHintOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoHintOverlay.swift; sourceTree = "<group>"; };
-		691BFBA72023C5C20086FD13 /* AdFed.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; name = AdFed.mlmodel; path = "../../../../../Dropbox (Trim Agency)/Jobs/AdFed/02 - iOS AR App/CoreML Models/02-02-18/1/AdFed.mlmodel"; sourceTree = "<group>"; };
 		6927A3D3201F709C00A089E0 /* VNRectangleObservationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VNRectangleObservationExtension.swift; sourceTree = "<group>"; };
 		6927A3D6201F752D00A089E0 /* MainARSCNView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainARSCNView.swift; sourceTree = "<group>"; };
 		6927A3D8201F76DB00A089E0 /* RectangleDetectionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleDetectionService.swift; sourceTree = "<group>"; };
@@ -250,7 +250,7 @@
 		699A3C82201A775C00FFB5F6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				691BFBA72023C5C20086FD13 /* AdFed.mlmodel */,
+				48F3D2982024C7CB00F6045B /* AdFed.mlmodel */,
 			);
 			name = Model;
 			path = "New Group2";
@@ -602,7 +602,7 @@
 				6927A3D7201F752D00A089E0 /* MainARSCNView.swift in Sources */,
 				69297982200CF4120019A0B9 /* HomeViewController.swift in Sources */,
 				69074D092020EA7500FEC5EB /* UserInstructionsEnum.swift in Sources */,
-				691BFBA82023C5C20086FD13 /* AdFed.mlmodel in Sources */,
+				48F3D2992024C7CB00F6045B /* AdFed.mlmodel in Sources */,
 				69074D072020EA3000FEC5EB /* UserInstructionLabel.swift in Sources */,
 				69355CAB201A352B00241310 /* DebugPolygon.swift in Sources */,
 				69D121192016877800B39411 /* CoreMLServiceDelegate.swift in Sources */,
