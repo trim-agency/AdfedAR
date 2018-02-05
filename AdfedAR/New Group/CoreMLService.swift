@@ -2,30 +2,45 @@ import UIKit
 import CoreML
 import Vision
 import Photos
+import ARKit
 
 class CoreMLService {
     var delegate: CoreMLServiceDelegate?
     
-    func getPageType(_ image: CVPixelBuffer) throws {
-        let transformedImage = transformBuffer(image)
-        var croppedImage = UIImage(ciImage: transformedImage)
-//        croppedImage = croppedImage.crop(rect: CGSize(width: UIScreen.main.bounds.width * 0.6,
-//                                                    height: UIScreen.main.bounds.width * 0.6))
-        croppedImage = croppedImage.crop(rect: CGRect(origin: .zero, size: CGSize(width: UIScreen.main.bounds.width * 0.6,
-                                                                                  height: UIScreen.main.bounds.width * 0.6)))
-        let imageCrop = croppedImage.ciImage!
-        let model   = try VNCoreMLModel(for: AdFed().model)
-        let request = VNCoreMLRequest(model: model, completionHandler: pageRecognitionHandler)
-        let handler = VNImageRequestHandler(ciImage: croppedImage.ciImage!, options: [:])
+    func getPageType(_ arFrame: ARFrame) throws {
+        let image           = arFrame.capturedImage
+        let transformedImage = transformBuffer(image, arFrame.lightEstimate?.ambientIntensity)
+        let context         = CIContext()
+        let cgImage         = context.createCGImage(transformedImage, from: transformedImage.extent)
+        let croppedImage    = UIImage(cgImage: cgImage!).cropToCenter(to: CGSize(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.width * 0.6))
+//        UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil)
+        let ciImage         = CIImage(image: croppedImage)
+        let model           = try VNCoreMLModel(for: AdFed().model)
+        let request         = VNCoreMLRequest(model: model, completionHandler: pageRecognitionHandler)
+        let handler         = VNImageRequestHandler(ciImage: ciImage!, options: [:])
         try handler.perform([request])
     }
     
-    private func transformBuffer(_ pixelBuffer: CVPixelBuffer) -> CIImage {
+    private func transformBuffer(_ pixelBuffer: CVPixelBuffer, _ exposure: CGFloat?) -> CIImage {
         var image = CIImage(cvPixelBuffer: pixelBuffer)
-        filterImage(image: &image, filterName: "CIExposureAdjust", filterKey: "inputEV", value: 0.8)
-//        filterImage(image: &image, filterName: "CIColorControls", filterKey: "inputContrast", value: 1.5)
+        if let exposure = exposure {
+            modifyExposure(exposure: exposure, for: &image)
+        }
+//        filterImage(image: &image, filterName: "CIExposureAdjust", filterKey: "inputEV", value: 0.8)
+        filterImage(image: &image, filterName: "CIColorControls", filterKey: "inputContrast", value: 1.2)
         filterImage(image: &image, filterName: "CISharpenLuminance", filterKey: "inputSharpness", value: 1)
         return image
+    }
+    
+    private func modifyExposure(exposure: CGFloat, for image: inout CIImage) {
+        switch exposure {
+        case 0..<1000:
+            log.debug("low light")
+        case 1000..<2000:
+            log.debug("above neutral")
+        default:
+            log.debug("Ambience error")
+        }
     }
     
     private func filterImage(image: inout CIImage, filterName: String, filterKey: String, value: Float ) {

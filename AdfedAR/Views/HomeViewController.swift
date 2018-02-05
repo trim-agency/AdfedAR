@@ -150,7 +150,7 @@ class HomeViewController: UIViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             if self.sceneView.session.currentFrame != nil {
                 do {
-                    try self.coreMLService.getPageType((self.sceneView.session.currentFrame?.capturedImage)!)
+                    try self.coreMLService.getPageType(self.sceneView.session.currentFrame!)
                 } catch {
                     self.appendToDebugLabel("\n💥 Page Detection Error")
                 }
