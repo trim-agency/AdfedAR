@@ -13,7 +13,7 @@ class CoreMLService {
         let context         = CIContext()
         let cgImage         = context.createCGImage(transformedImage, from: transformedImage.extent)
         let croppedImage    = UIImage(cgImage: cgImage!).cropToCenter(to: CGSize(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.width * 0.6))
-//        UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil)
+        UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil)
         let ciImage         = CIImage(image: croppedImage)
         let model           = try VNCoreMLModel(for: AdFed().model)
         let request         = VNCoreMLRequest(model: model, completionHandler: pageRecognitionHandler)
@@ -95,7 +95,7 @@ class CoreMLService {
             return
         }
         
-        if highConfidenceObservation.confidence > 0.70 {
+        if highConfidenceObservation.confidence > 0.90 {
             if let page = Page(rawValue: highConfidenceObservation.identifier)  {
                 delegate?.didRecognizePage(sender: self, page: page)
             } else {
