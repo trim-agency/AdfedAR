@@ -5,12 +5,15 @@ import Photos
 
 class CoreMLService {
     var delegate: CoreMLServiceDelegate?
-    var frameCounter = 0
+    
     func getPageType(_ image: CVPixelBuffer) throws {
         let transformedImage = transformBuffer(image)
         var croppedImage = UIImage(ciImage: transformedImage)
-        croppedImage = croppedImage.crop(to: CGSize(width: UIScreen.main.bounds.width * 0.6,
-                                                    height: UIScreen.main.bounds.width * 0.6))
+//        croppedImage = croppedImage.crop(rect: CGSize(width: UIScreen.main.bounds.width * 0.6,
+//                                                    height: UIScreen.main.bounds.width * 0.6))
+        croppedImage = croppedImage.crop(rect: CGRect(origin: .zero, size: CGSize(width: UIScreen.main.bounds.width * 0.6,
+                                                                                  height: UIScreen.main.bounds.width * 0.6)))
+        let imageCrop = croppedImage.ciImage!
         let model   = try VNCoreMLModel(for: AdFed().model)
         let request = VNCoreMLRequest(model: model, completionHandler: pageRecognitionHandler)
         let handler = VNImageRequestHandler(ciImage: croppedImage.ciImage!, options: [:])
@@ -19,7 +22,8 @@ class CoreMLService {
     
     private func transformBuffer(_ pixelBuffer: CVPixelBuffer) -> CIImage {
         var image = CIImage(cvPixelBuffer: pixelBuffer)
-        filterImage(image: &image, filterName: "CIColorControls", filterKey: "inputContrast", value: 1.5)
+        filterImage(image: &image, filterName: "CIExposureAdjust", filterKey: "inputEV", value: 0.8)
+//        filterImage(image: &image, filterName: "CIColorControls", filterKey: "inputContrast", value: 1.5)
         filterImage(image: &image, filterName: "CISharpenLuminance", filterKey: "inputSharpness", value: 1)
         return image
     }
@@ -28,17 +32,21 @@ class CoreMLService {
         let filter = CIFilter(name: filterName)!
         filter.setValue(image, forKey: kCIInputImageKey)
         filter.setValue(value, forKey: filterKey)
+        image = filter.outputImage!
     }
 
-    private func saveImage(_ image: CIImage?) {
-        frameCounter += 1
-            guard let image = image else {
-                return
-            }
-            let newUIImage = UIImage(ciImage: image)
+    private func saveImage(_ image: UIImage) {
             PHPhotoLibrary.shared().performChanges({
-                PHAssetChangeRequest.creationRequestForAsset(from: newUIImage)
-            }, completionHandler: nil)
+                PHAssetChangeRequest.creationRequestForAsset(from: image)
+            }, completionHandler:{ success, error in
+                if success {
+                    log.debug("success")
+                } else if let error = error {
+                    log.debug(error)
+                } else {
+                    log.debug("no error")
+                }
+            })
     }
     
     func pageRecognitionHandler(request: VNRequest, error: Error?) {
