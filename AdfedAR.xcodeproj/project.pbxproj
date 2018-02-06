@@ -29,7 +29,7 @@
 		69D121192016877800B39411 /* CoreMLServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121182016877800B39411 /* CoreMLServiceDelegate.swift */; };
 		69D617F3200EB4D40067FC36 /* 3dAssets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 69D617F2200EB4D40067FC36 /* 3dAssets.scnassets */; };
 		69EEAF6F2024DB72009E9D4E /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EEAF6E2024DB72009E9D4E /* UIImageExtension.swift */; };
-		69EEAF7C2028E4AE009E9D4E /* AdFed.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 69EEAF7B2028E4AE009E9D4E /* AdFed.mlmodel */; };
+		69EEAF7E202903C9009E9D4E /* AdFed.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 69EEAF7D202903C9009E9D4E /* AdFed.mlmodel */; };
 		9816AB41C660356A4A94F75D /* Pods_AdfedARUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5D15C24C3C493A3E5D0D87A /* Pods_AdfedARUITests.framework */; };
 		E800A42CEC8EF0EA8EE98283 /* Pods_AdfedARTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660BC9C20DDA71A324F106BE /* Pods_AdfedARTests.framework */; };
 		EE25FD5D9C4A774EDBBB5FA6 /* Pods_AdfedAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 599BB549AA4BDC6196DEE851 /* Pods_AdfedAR.framework */; };
@@ -87,7 +87,7 @@
 		69D121182016877800B39411 /* CoreMLServiceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLServiceDelegate.swift; sourceTree = "<group>"; };
 		69D617F2200EB4D40067FC36 /* 3dAssets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = 3dAssets.scnassets; sourceTree = "<group>"; };
 		69EEAF6E2024DB72009E9D4E /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
-		69EEAF7B2028E4AE009E9D4E /* AdFed.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AdFed.mlmodel; sourceTree = "<group>"; };
+		69EEAF7D202903C9009E9D4E /* AdFed.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AdFed.mlmodel; sourceTree = "<group>"; };
 		8B17EF5604D866D7559D229D /* Pods-AdfedARTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedARTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedARTests/Pods-AdfedARTests.release.xcconfig"; sourceTree = "<group>"; };
 		B4B3E575B685449E3A1EE296 /* Pods-AdfedARUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedARUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedARUITests/Pods-AdfedARUITests.release.xcconfig"; sourceTree = "<group>"; };
 		C5D15C24C3C493A3E5D0D87A /* Pods_AdfedARUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdfedARUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -250,7 +250,7 @@
 		699A3C82201A775C00FFB5F6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				69EEAF7B2028E4AE009E9D4E /* AdFed.mlmodel */,
+				69EEAF7D202903C9009E9D4E /* AdFed.mlmodel */,
 			);
 			name = Model;
 			path = "New Group2";
@@ -602,7 +602,7 @@
 				6927A3D7201F752D00A089E0 /* MainARSCNView.swift in Sources */,
 				69297982200CF4120019A0B9 /* HomeViewController.swift in Sources */,
 				69074D092020EA7500FEC5EB /* UserInstructionsEnum.swift in Sources */,
-				69EEAF7C2028E4AE009E9D4E /* AdFed.mlmodel in Sources */,
+				69EEAF7E202903C9009E9D4E /* AdFed.mlmodel in Sources */,
 				69074D072020EA3000FEC5EB /* UserInstructionLabel.swift in Sources */,
 				69355CAB201A352B00241310 /* DebugPolygon.swift in Sources */,
 				69D121192016877800B39411 /* CoreMLServiceDelegate.swift in Sources */,
