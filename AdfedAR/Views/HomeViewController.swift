@@ -79,8 +79,6 @@ class HomeViewController: UIViewController {
         sceneView.delegate  = self
     }
     
-    
-    
     // MARK: - RESET
     private func removeAllNodes() {
         for node in sceneView.scene.rootNode.childNodes {
@@ -91,11 +89,12 @@ class HomeViewController: UIViewController {
     // MARK: Methods
     private func pageDetected() {
         userInstructionLabel.updateText(.none)
+        log.debug(detectedPage!)
         switch detectedPage! {
         case .judgesChoice:
-            playAnimation(key: "grandma")
+            loadAndPlayAnimation(key: "grandma")
         case .bestOfShow:
-            playAnimation(key: "bellyDancing")
+            loadAndPlayAnimation(key: "bellyDancing")
         }
     }
     
@@ -132,12 +131,23 @@ class HomeViewController: UIViewController {
         return animationObject
     }
     
-    func playAnimation(key: String) {
-        let node = animationNodes[key]!["node"] as! SCNNode
+    func loadAndPlayAnimation(key: String) {
         removeAllNodes()
+        let node = animationNodes[key]!["node"] as! SCNNode
         add(node: node, to: sceneView.scene.rootNode)
         sceneView.scene.rootNode.scale = SCNVector3(0.0008, 0.0008, 0.0008)
-        sceneView.scene.rootNode.addAnimation(animationNodes[key]!["animation"] as! CAAnimation, forKey: key)
+        playAnimation(key)
+    }
+    
+    private func playAnimation(_ key: String) {
+        if !sceneView.scene.rootNode.animationKeys.contains(key) {
+            let animation = animationNodes[key]!["animation"] as! CAAnimation
+            sceneView.scene.rootNode.addAnimation(animation, forKey: key)
+        } else {
+            log.debug("animation already exists")
+            let animationPlayer = sceneView.scene.rootNode.animationPlayer(forKey: key)
+            animationPlayer?.play()
+        }
     }
     
     private func add(node: SCNNode, to parentNode: SCNNode) {

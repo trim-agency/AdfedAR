@@ -33,7 +33,7 @@ class RectangleDetectionService {
         let center          = getBoxCenter(highConfidenceObservation)
         let hitTestResults  = self.sceneView.hitTest(center, types: [.existingPlaneUsingExtent, .featurePoint])
         guard let result    = hitTestResults.first else {
-            log.debug("no hit test results")
+            delegate?.rectangleDetectionError(sender: self)
             return
         }
 
