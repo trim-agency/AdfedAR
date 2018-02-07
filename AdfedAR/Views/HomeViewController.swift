@@ -22,8 +22,6 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
     @IBAction func didTapDebug(_ sender: Any) { reset() }
     
-    var animationNode: SCNNode?
-    var animationScene: SCNScene!
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
     var debugLayer: CAShapeLayer?
@@ -109,18 +107,13 @@ class HomeViewController: UIViewController {
     }
     
     private func loadAnimationFile(key: String, for filePath: String, animationID: String) {
-        let scene    = SCNScene(named: filePath + ".dae")!
-        let parentNode = SCNNode()
+        let scene       = SCNScene(named: filePath + ".dae")!
+        let parentNode  = SCNNode()
         parentNode.name = key
-        scene.rootNode.childNodes.forEach { (node) in
-            parentNode.addChildNode(node)
-        }
-        parentNode.scale = SCNVector3(0.0008, 0.0008, 0.0008)
+        add(node: scene.rootNode, to: parentNode)
         let animation: CAAnimation = loadAnimation(withKey: key, sceneName: filePath, animationIdentifier: animationID)!
-        let animationDetails = ["scene": scene,
-                                "node": parentNode,
-                                "animation": animation]
-        
+        let animationDetails = [ "node": parentNode,
+                                 "animation": animation ]
         animationNodes[key] = animationDetails
     }
     
@@ -140,16 +133,17 @@ class HomeViewController: UIViewController {
     }
     
     func playAnimation(key: String) {
-        animationScene = animationNodes[key]!["scene"] as! SCNScene
-        animationNode = animationNodes[key]!["node"] as! SCNNode
-
-//        animationNode?.scale = SCNVector3(0.0008, 0.0008, 0.0008)
-        sceneView.scene = animationScene
-        animationNode?.childNodes.forEach({ (node) in
-            sceneView.scene.rootNode.addChildNode(node)
-        })
-        
+        let node = animationNodes[key]!["node"] as! SCNNode
+        removeAllNodes()
+        add(node: node, to: sceneView.scene.rootNode)
+        sceneView.scene.rootNode.scale = SCNVector3(0.0008, 0.0008, 0.0008)
         sceneView.scene.rootNode.addAnimation(animationNodes[key]!["animation"] as! CAAnimation, forKey: key)
+    }
+    
+    private func add(node: SCNNode, to parentNode: SCNNode) {
+        node.childNodes.forEach { (node) in
+            parentNode.addChildNode(node)
+        }
     }
 
     func stopAnimation(key: String) {
@@ -230,7 +224,8 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         let node                = SCNNode()
         rootAnchor              = anchor
         node.transform          = SCNMatrix4(anchor.transform)
-        animationNode?.position = node.worldPosition
+        sceneView.scene.rootNode.worldPosition = node.worldPosition
+//        animationNode?.position = node.worldPosition
         appendToDebugLabel("\n✅ Root Anchor Set")
         return node
     }
