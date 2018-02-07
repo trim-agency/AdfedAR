@@ -132,20 +132,28 @@ class HomeViewController: UIViewController {
     }
     
     func loadAndPlayAnimation(key: String) {
-        removeAllNodes()
-        let node = animationNodes[key]!["node"] as! SCNNode
-        add(node: node, to: sceneView.scene.rootNode)
-        sceneView.scene.rootNode.scale = SCNVector3(0.0008, 0.0008, 0.0008)
-        playAnimation(key)
+        DispatchQueue.main.async {
+            self.removeAllNodes()
+            self.sceneView.scene.rootNode.removeAllAnimations()
+            let node = self.animationNodes[key]!["node"] as! SCNNode
+            self.add(node: node, to: self.sceneView.scene.rootNode)
+            log.debug("ScenviewNodes")
+            log.debug(self.sceneView.scene.rootNode.childNodes)
+            log.debug("Local Nodes")
+            log.debug(node.childNodes)
+            log.debug(self.animationNodes)
+            self.sceneView.scene.rootNode.scale = SCNVector3(0.0008, 0.0008, 0.0008)
+            self.playAnimation(key)
+        }
     }
     
     private func playAnimation(_ key: String) {
-        if !sceneView.scene.rootNode.animationKeys.contains(key) {
-            let animation = animationNodes[key]!["animation"] as! CAAnimation
-            sceneView.scene.rootNode.addAnimation(animation, forKey: key)
+        if !self.sceneView.scene.rootNode.animationKeys.contains(key) {
+            let animation = self.animationNodes[key]!["animation"] as! CAAnimation
+            self.sceneView.scene.rootNode.addAnimation(animation, forKey: key)
         } else {
             log.debug("animation already exists")
-            let animationPlayer = sceneView.scene.rootNode.animationPlayer(forKey: key)
+            let animationPlayer = self.sceneView.scene.rootNode.animationPlayer(forKey: key)
             animationPlayer?.play()
         }
     }
