@@ -35,9 +35,8 @@ class RectangleDetectionService {
         guard let result    = hitTestResults.first else {
             log.debug("no hit test results")
             return
-            
         }
-        
+
         if let rootAnchor = self.rootAnchor,
             let node = self.sceneView.node(for: rootAnchor) {
                 node.transform = SCNMatrix4(result.worldTransform)

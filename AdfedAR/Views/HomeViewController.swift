@@ -1,4 +1,4 @@
-import UIKit
+emport UIKit
 import SceneKit
 import ARKit
 import Vision
@@ -12,7 +12,6 @@ class HomeViewController: UIViewController {
     let scene                   = SCNScene()
     var animations              = [String: CAAnimation]()
     var animationNodes          = [String: [String:Any]]()
-    var animationScene          = SCNScene(named: "3dAssets.scnassets/IdleFormatted.dae")!
     var waitingOnPlane          = true
     var didTapReset             = false
 
@@ -24,6 +23,7 @@ class HomeViewController: UIViewController {
     @IBAction func didTapDebug(_ sender: Any) { reset() }
     
     var animationNode: SCNNode?
+    var animationScene: SCNScene!
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
     var debugLayer: CAShapeLayer?
@@ -93,7 +93,6 @@ class HomeViewController: UIViewController {
     // MARK: Methods
     private func pageDetected() {
         userInstructionLabel.updateText(.none)
-//        sceneView.scene.rootNode.addChildNode(animationNode!)
         switch detectedPage! {
         case .judgesChoice:
             playAnimation(key: "grandma")
@@ -104,34 +103,19 @@ class HomeViewController: UIViewController {
     
     // MARK: - Custom Animations
     private func loadAllAnimations() {
-//        let scene       = animationScene
-//        animationNode   = SCNNode()
-//
-//        for child in scene.rootNode.childNodes {
-//            animationNode?.addChildNode(child)
-//        }
-
-//        animationNode?.scale = SCNVector3(0.0008, 0.0008, 0.0008)
-
         loadAnimationFile(key: "grandma", for: "3dAssets.scnassets/hipHopFormatted", animationID:  "hipHopFormatted-1")
         loadAnimationFile(key: "bellyDancing", for: "3dAssets.scnassets/BellydancingFormatted", animationID: "BellydancingFormatted-1")
 
     }
     
     private func loadAnimationFile(key: String, for filePath: String, animationID: String) {
-        let node = SCNNode()
-        let scene = SCNScene(named: filePath + ".dae")
-        let nodeArray = scene!.rootNode.childNodes
+        let subScene    = SCNScene(named: filePath + ".dae")!
         
-        for childNode in nodeArray {
-            node.addChildNode(childNode as SCNNode)
-        }
+        
         let animation: CAAnimation = loadAnimation(withKey: key, sceneName: filePath, animationIdentifier: animationID)!
-        let animationDetails = [
-            "scene": scene,
-            "node": node,
-            "animation": animation
-        ]
+        let animationDetails = ["scene": scene,
+//                                "node": node!,
+                                "animation": animation]
         
         animationNodes[key] = animationDetails
     }
@@ -154,17 +138,13 @@ class HomeViewController: UIViewController {
     func playAnimation(key: String) {
         animationScene = animationNodes[key]!["scene"] as! SCNScene
         animationNode = animationNodes[key]!["node"] as! SCNNode
-        for child in scene.rootNode.childNodes {
-            animationNode?.addChildNode(child)
-        }
-        
-//        animationNode?.scale = SCNVector3(0.0008, 0.0008, 0.0008)
+
+        animationNode?.scale = SCNVector3(0.0008, 0.0008, 0.0008)
+        sceneView.scene.rootNode.childNodes.forEach({ $0.removeFromParentNode() })
         sceneView.scene.rootNode.addChildNode(animationNode!)
         sceneView.scene.rootNode.addAnimation(animationNodes[key]!["animation"] as! CAAnimation, forKey: key)
     }
-    
-    
-    
+
     func stopAnimation(key: String) {
         sceneView.scene.rootNode.removeAnimation(forKey: key, blendOutDuration: CGFloat(0.5))
     }
