@@ -1,4 +1,4 @@
-emport UIKit
+import UIKit
 import SceneKit
 import ARKit
 import Vision
@@ -109,12 +109,16 @@ class HomeViewController: UIViewController {
     }
     
     private func loadAnimationFile(key: String, for filePath: String, animationID: String) {
-        let subScene    = SCNScene(named: filePath + ".dae")!
-        
-        
+        let scene    = SCNScene(named: filePath + ".dae")!
+        let parentNode = SCNNode()
+        parentNode.name = key
+        scene.rootNode.childNodes.forEach { (node) in
+            parentNode.addChildNode(node)
+        }
+        parentNode.scale = SCNVector3(0.0008, 0.0008, 0.0008)
         let animation: CAAnimation = loadAnimation(withKey: key, sceneName: filePath, animationIdentifier: animationID)!
         let animationDetails = ["scene": scene,
-//                                "node": node!,
+                                "node": parentNode,
                                 "animation": animation]
         
         animationNodes[key] = animationDetails
@@ -139,9 +143,12 @@ class HomeViewController: UIViewController {
         animationScene = animationNodes[key]!["scene"] as! SCNScene
         animationNode = animationNodes[key]!["node"] as! SCNNode
 
-        animationNode?.scale = SCNVector3(0.0008, 0.0008, 0.0008)
-        sceneView.scene.rootNode.childNodes.forEach({ $0.removeFromParentNode() })
-        sceneView.scene.rootNode.addChildNode(animationNode!)
+//        animationNode?.scale = SCNVector3(0.0008, 0.0008, 0.0008)
+        sceneView.scene = animationScene
+        animationNode?.childNodes.forEach({ (node) in
+            sceneView.scene.rootNode.addChildNode(node)
+        })
+        
         sceneView.scene.rootNode.addAnimation(animationNodes[key]!["animation"] as! CAAnimation, forKey: key)
     }
 
