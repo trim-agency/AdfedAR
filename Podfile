@@ -7,6 +7,8 @@ target 'AdfedAR' do
   
   pod 'SwiftyBeaver'
   pod 'SnapKit'
+  pod 'Fabric'
+  pod 'Crashlytics'
 
   target 'AdfedARTests' do
     inherit! :search_paths
