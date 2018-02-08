@@ -100,11 +100,11 @@ class HomeViewController: UIViewController {
     
     // MARK: - Custom Animations
     private func loadAllAnimations() {
-        loadAnimationFile(key: "grandma", for: "3dAssets.scnassets/hipHopFormatted", animationID:  "hipHopFormatted-1")
-        loadAnimationFile(key: "bellyDancing", for: "3dAssets.scnassets/BellydancingFormatted", animationID: "BellydancingFormatted-1")
+        loadColladaAsset(key: "grandma", for: "3dAssets.scnassets/hipHopFormatted", animationID:  "hipHopFormatted-1")
+        loadColladaAsset(key: "bellyDancing", for: "3dAssets.scnassets/BellydancingFormatted", animationID: "BellydancingFormatted-1")
     }
     
-    private func loadAnimationFile(key: String, for filePath: String, animationID: String) {
+    private func loadColladaAsset(key: String, for filePath: String, animationID: String) {
         let scene       = SCNScene(named: filePath + ".dae")!
         let parentNode  = SCNNode()
         parentNode.name = key
@@ -136,20 +136,14 @@ class HomeViewController: UIViewController {
             self.sceneView.scene.rootNode.removeAllAnimations()
             let node = self.animationNodes[key]!["node"] as! SCNNode
             self.add(node: node, to: self.sceneView.scene.rootNode)
-            self.sceneView.scene.rootNode.scale = SCNVector3(0.0008, 0.0008, 0.0008)
+            self.sceneView.scene.rootNode.scale = SCNVector3(0.001, 0.001, 0.001)
             self.playAnimation(key)
         }
     }
     
     private func playAnimation(_ key: String) {
-        if !self.sceneView.scene.rootNode.animationKeys.contains(key) {
-            let animation = self.animationNodes[key]!["animation"] as! CAAnimation
-            self.sceneView.scene.rootNode.addAnimation(animation, forKey: key)
-        } else {
-            log.debug("animation already exists")
-            let animationPlayer = self.sceneView.scene.rootNode.animationPlayer(forKey: key)
-            animationPlayer?.play()
-        }
+        let animation = self.animationNodes[key]!["animation"] as! CAAnimation
+        sceneView.scene.rootNode.addAnimation(animation, forKey: key)
     }
     
     private func add(node: SCNNode, to parentNode: SCNNode) {
