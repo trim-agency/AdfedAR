@@ -47,7 +47,7 @@
                                 <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <size key="shadowOffset" width="-1" height="1"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nih-WI-hAp">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nih-WI-hAp">
                                 <rect key="frame" x="0.0" y="597" width="375" height="70"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.6894036091549296" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
@@ -84,9 +84,9 @@
                         <viewLayoutGuide key="safeArea" id="XkV-5f-4kR"/>
                     </view>
                     <connections>
-                        <outlet property="debugButton" destination="nih-WI-hAp" id="bF1-lW-ldo"/>
                         <outlet property="debugLabel" destination="0ZJ-TJ-W7j" id="4Hr-E7-g9B"/>
                         <outlet property="logoHintOverlay" destination="hYQ-OD-6qX" id="uvc-uF-yb7"/>
+                        <outlet property="resetButton" destination="nih-WI-hAp" id="bF1-lW-ldo"/>
                         <outlet property="sceneView" destination="U7P-0S-NKa" id="wuf-f7-Km6"/>
                         <outlet property="userInstructionLabel" destination="lPY-XG-4EC" id="TK0-h0-dMh"/>
                         <segue destination="bHS-sQ-SO5" kind="show" identifier="segueToVideoVC" id="3dx-2h-Dw7"/>

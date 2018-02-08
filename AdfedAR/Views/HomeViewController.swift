@@ -17,7 +17,7 @@ class HomeViewController: UIViewController {
     var isPlayingAnimation      = false
 
     @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
-    @IBOutlet weak var debugButton: UIButton!
+    @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet weak var sceneView: MainARSCNView!
     @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
@@ -81,6 +81,7 @@ class HomeViewController: UIViewController {
         for node in sceneView.scene.rootNode.childNodes {
             node.removeFromParentNode()
         }
+        resetButton.isHidden = true
     }
     
     // MARK: Methods
@@ -140,6 +141,7 @@ class HomeViewController: UIViewController {
     
     private func playAnimation(_ key: String) {
         isPlayingAnimation = true
+        resetButton.isHidden = false
         let animation = self.animationNodes[key]!["animation"] as! CAAnimation
         sceneView.scene.rootNode.addAnimation(animation, forKey: key)
     }
@@ -150,6 +152,7 @@ class HomeViewController: UIViewController {
 
     func stopAnimation(key: String) {
         isPlayingAnimation = false
+        resetButton.isHidden = true
         sceneView.scene.rootNode.removeAnimation(forKey: key, blendOutDuration: CGFloat(0.5))
     }
     
