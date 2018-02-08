@@ -135,13 +135,15 @@ class HomeViewController: UIViewController {
         DispatchQueue.main.async {
             self.removeAllNodes()
             self.sceneView.scene.rootNode.removeAllAnimations()
+//            log.debug("ScenviewNodes")
+//            log.debug(self.sceneView.scene.rootNode.childNodes)
             let node = self.animationNodes[key]!["node"] as! SCNNode
             self.add(node: node, to: self.sceneView.scene.rootNode)
-            log.debug("ScenviewNodes")
-            log.debug(self.sceneView.scene.rootNode.childNodes)
-            log.debug("Local Nodes")
-            log.debug(node.childNodes)
-            log.debug(self.animationNodes)
+//            log.debug("ScenviewNodes")
+//            log.debug(self.sceneView.scene.rootNode.childNodes)
+//            log.debug("Local Nodes")
+//            log.debug(node.childNodes)
+//            log.debug(self.animationNodes)
             self.sceneView.scene.rootNode.scale = SCNVector3(0.0008, 0.0008, 0.0008)
             self.playAnimation(key)
         }
@@ -160,6 +162,7 @@ class HomeViewController: UIViewController {
     
     private func add(node: SCNNode, to parentNode: SCNNode) {
         node.childNodes.forEach { (node) in
+            log.debug(node)
             parentNode.addChildNode(node)
         }
     }
