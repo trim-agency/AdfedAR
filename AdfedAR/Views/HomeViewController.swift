@@ -102,7 +102,6 @@ class HomeViewController: UIViewController {
     private func loadAllAnimations() {
         loadAnimationFile(key: "grandma", for: "3dAssets.scnassets/hipHopFormatted", animationID:  "hipHopFormatted-1")
         loadAnimationFile(key: "bellyDancing", for: "3dAssets.scnassets/BellydancingFormatted", animationID: "BellydancingFormatted-1")
-
     }
     
     private func loadAnimationFile(key: String, for filePath: String, animationID: String) {
@@ -125,7 +124,7 @@ class HomeViewController: UIViewController {
             return nil
         }
        
-        animationObject.fadeInDuration = CGFloat(1)
+        animationObject.fadeInDuration = CGFloat(3)
         animationObject.fadeOutDuration = CGFloat(0.5)
         
         return animationObject
@@ -135,15 +134,8 @@ class HomeViewController: UIViewController {
         DispatchQueue.main.async {
             self.removeAllNodes()
             self.sceneView.scene.rootNode.removeAllAnimations()
-//            log.debug("ScenviewNodes")
-//            log.debug(self.sceneView.scene.rootNode.childNodes)
             let node = self.animationNodes[key]!["node"] as! SCNNode
             self.add(node: node, to: self.sceneView.scene.rootNode)
-//            log.debug("ScenviewNodes")
-//            log.debug(self.sceneView.scene.rootNode.childNodes)
-//            log.debug("Local Nodes")
-//            log.debug(node.childNodes)
-//            log.debug(self.animationNodes)
             self.sceneView.scene.rootNode.scale = SCNVector3(0.0008, 0.0008, 0.0008)
             self.playAnimation(key)
         }
@@ -161,10 +153,7 @@ class HomeViewController: UIViewController {
     }
     
     private func add(node: SCNNode, to parentNode: SCNNode) {
-        node.childNodes.forEach { (node) in
-            log.debug(node)
-            parentNode.addChildNode(node)
-        }
+        parentNode.addChildNode(node)
     }
 
     func stopAnimation(key: String) {
