@@ -14,9 +14,10 @@ class HomeViewController: UIViewController {
     var animationNodes          = [String: [String:Any]]()
     var waitingOnPlane          = true
     var didTapReset             = false
+    var isPlayingAnimation      = false
 
     @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
-    @IBOutlet weak var debugButton: UIButton!
+    @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet weak var sceneView: MainARSCNView!
     @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
@@ -38,10 +39,6 @@ class HomeViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         start()
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
     }
 
     // MARK: - Setup, Layout & ARKIT Start
@@ -84,6 +81,7 @@ class HomeViewController: UIViewController {
         for node in sceneView.scene.rootNode.childNodes {
             node.removeFromParentNode()
         }
+        resetButton.isHidden = true
     }
     
     // MARK: Methods
@@ -142,6 +140,8 @@ class HomeViewController: UIViewController {
     }
     
     private func playAnimation(_ key: String) {
+        isPlayingAnimation = true
+        resetButton.isHidden = false
         let animation = self.animationNodes[key]!["animation"] as! CAAnimation
         sceneView.scene.rootNode.addAnimation(animation, forKey: key)
     }
@@ -151,11 +151,14 @@ class HomeViewController: UIViewController {
     }
 
     func stopAnimation(key: String) {
+        isPlayingAnimation = false
+        resetButton.isHidden = true
         sceneView.scene.rootNode.removeAnimation(forKey: key, blendOutDuration: CGFloat(0.5))
     }
     
     // MARK: - Core ML
     private func loadCoreMLService() {
+        if isPlayingAnimation { return } // to keep coreml from triggering when transitioning back from video view
         appendToDebugLabel("\n✅ CoreML Waiting for Init")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
             self.coreMLService          = CoreMLService()
@@ -217,11 +220,9 @@ class HomeViewController: UIViewController {
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         appendToDebugLabel("\n✅ Plane Detected")
-//        if waitingOnPlane {
             appendToDebugLabel("\n✅ Rectangle Detection Running")
             loadRectangleDetection()
             waitingOnPlane = false
-//        }
     }
     
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
@@ -229,9 +230,29 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         rootAnchor              = anchor
         node.transform          = SCNMatrix4(anchor.transform)
         sceneView.scene.rootNode.worldPosition = node.worldPosition
-//        animationNode?.position = node.worldPosition
         appendToDebugLabel("\n✅ Root Anchor Set")
         return node
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first,
+            let event = event else {
+                log.error("Touch or Event nil")
+                return
+        }
+        let touchPoint = touch.preciseLocation(in: sceneView)
+        let hitTestResults = sceneView.hitTest(touchPoint, options: nil)
+        if let tappedNode = hitTestResults.first?.node {
+            performSegue(withIdentifier: "segueToVideoVC", sender: self)
+        }
+    }
+    
+    // MARK: - Segue Methods
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segueToVideoVC" {
+            let viewController = segue.destination as! VideoViewController
+            viewController.page = detectedPage!
+        }
     }
 }
 
@@ -291,8 +312,6 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
         loadRectangleDetection()
     }
 }
-
-
 
 
 

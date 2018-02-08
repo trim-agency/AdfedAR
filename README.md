@@ -15,11 +15,11 @@
 
 #### v.2
 - [x] Train Caffe Digits model to detect different pages of handout
-- [ ] Train Caffe Digits model to detect different symbols on handout
+- [x] Train Caffe Digits model to detect different symbols on handout
 - [x] Setup app to detect pages with exported Caffe DIGITS model
 
 #### v.3
-- [ ] Display instructions to user giving feedback (errors and hints for better experience)
-- [ ] Add Launch screen
-- [ ] 70% (?) successful recognition
+- [x] Display instructions to user giving feedback (errors and hints for better experience)
+- [x] Add Launch screen
+- [x] 70% (?) successful recognition
  

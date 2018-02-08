@@ -24,6 +24,7 @@
 		69355CAB201A352B00241310 /* DebugPolygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69355CAA201A352B00241310 /* DebugPolygon.swift */; };
 		6937D8AA200E7ED70024AC33 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D8A9200E7ED70024AC33 /* UIViewExtension.swift */; };
 		69B037A32020CB7C00906004 /* CoreMLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B037A22020CB7C00906004 /* CoreMLError.swift */; };
+		69D0CD20202CBED200151EBC /* VideoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D0CD1F202CBED200151EBC /* VideoViewController.swift */; };
 		69D121122016715B00B39411 /* CoreMLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121112016715B00B39411 /* CoreMLService.swift */; };
 		69D121162016727E00B39411 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121152016727E00B39411 /* Page.swift */; };
 		69D121192016877800B39411 /* CoreMLServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121182016877800B39411 /* CoreMLServiceDelegate.swift */; };
@@ -82,6 +83,7 @@
 		69355CAA201A352B00241310 /* DebugPolygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugPolygon.swift; sourceTree = "<group>"; };
 		6937D8A9200E7ED70024AC33 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		69B037A22020CB7C00906004 /* CoreMLError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLError.swift; sourceTree = "<group>"; };
+		69D0CD1F202CBED200151EBC /* VideoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoViewController.swift; sourceTree = "<group>"; };
 		69D121112016715B00B39411 /* CoreMLService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLService.swift; sourceTree = "<group>"; };
 		69D121152016727E00B39411 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
 		69D121182016877800B39411 /* CoreMLServiceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLServiceDelegate.swift; sourceTree = "<group>"; };
@@ -234,6 +236,7 @@
 			children = (
 				69355CA9201A351200241310 /* Element Subclasses */,
 				69297981200CF4120019A0B9 /* HomeViewController.swift */,
+				69D0CD1F202CBED200151EBC /* VideoViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -611,6 +614,7 @@
 				69D121162016727E00B39411 /* Page.swift in Sources */,
 				6927A3D4201F709C00A089E0 /* VNRectangleObservationExtension.swift in Sources */,
 				6927A3D9201F76DB00A089E0 /* RectangleDetectionService.swift in Sources */,
+				69D0CD20202CBED200151EBC /* VideoViewController.swift in Sources */,
 				69D121122016715B00B39411 /* CoreMLService.swift in Sources */,
 				691BFB8E202226C50086FD13 /* LogoHintOverlay.swift in Sources */,
 				69EEAF6F2024DB72009E9D4E /* UIImageExtension.swift in Sources */,
@@ -792,6 +796,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 17;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = ZVRNHU225Q;
 				DISPLAY_NAME = "Adfed-debug";
 				INFOPLIST_FILE = AdfedAR/Info.plist;
