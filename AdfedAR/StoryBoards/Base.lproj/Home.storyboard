@@ -89,10 +89,41 @@
                         <outlet property="logoHintOverlay" destination="hYQ-OD-6qX" id="uvc-uF-yb7"/>
                         <outlet property="sceneView" destination="U7P-0S-NKa" id="wuf-f7-Km6"/>
                         <outlet property="userInstructionLabel" destination="lPY-XG-4EC" id="TK0-h0-dMh"/>
+                        <segue destination="bHS-sQ-SO5" kind="show" identifier="segueToVideoVC" id="3dx-2h-Dw7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
+        </scene>
+        <!--Video View Controller-->
+        <scene sceneID="QC6-QF-gqW">
+            <objects>
+                <viewController id="bHS-sQ-SO5" customClass="VideoViewController" customModule="AdfedAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Hau-LZ-6TV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This will be a video" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ium-g7-8g4">
+                                <rect key="frame" x="112" y="323" width="150" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="150" id="MQ5-Nz-fHz"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="ium-g7-8g4" firstAttribute="centerY" secondItem="Hau-LZ-6TV" secondAttribute="centerY" id="CHn-eI-vdQ"/>
+                            <constraint firstItem="ium-g7-8g4" firstAttribute="centerX" secondItem="Hau-LZ-6TV" secondAttribute="centerX" id="RQx-6w-Fk9"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="t9q-gt-W1Q"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="tOA-bb-tUA" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1612" y="34"/>
         </scene>
     </scenes>
 </document>

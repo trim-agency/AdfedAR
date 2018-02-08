@@ -40,10 +40,6 @@ class HomeViewController: UIViewController {
         start()
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-
     // MARK: - Setup, Layout & ARKIT Start
     private func setup() {
         defineSceneView()
@@ -217,11 +213,9 @@ class HomeViewController: UIViewController {
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         appendToDebugLabel("\n✅ Plane Detected")
-//        if waitingOnPlane {
             appendToDebugLabel("\n✅ Rectangle Detection Running")
             loadRectangleDetection()
             waitingOnPlane = false
-//        }
     }
     
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
@@ -229,9 +223,21 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         rootAnchor              = anchor
         node.transform          = SCNMatrix4(anchor.transform)
         sceneView.scene.rootNode.worldPosition = node.worldPosition
-//        animationNode?.position = node.worldPosition
         appendToDebugLabel("\n✅ Root Anchor Set")
         return node
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first,
+            let event = event else {
+                log.error("Touch or Event nil")
+                return
+        }
+        let touchPoint = touch.preciseLocation(in: sceneView)
+        let hitTestResults = sceneView.hitTest(touchPoint, options: nil)
+        if let tappedNode = hitTestResults.first?.node {
+            performSegue(withIdentifier: "segueToVideoVC", sender: self)
+        }
     }
 }
 
@@ -291,8 +297,6 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
         loadRectangleDetection()
     }
 }
-
-
 
 
 
