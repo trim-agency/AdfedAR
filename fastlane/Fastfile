@@ -31,8 +31,14 @@ platform :ios do
   lane :beta do
     increment_build_number
     build_app(scheme: "Adfed AR") # more options available
+
+    crashlytics(
+      api_token: "b32d95b3f21359a6a5c4fa40489be92b625bfc7d",
+      build_secret: "ca23970ce5b3f619752fdc0269ba623824cfeb3edf8681905aab8491bdd33076bB"
+    )
+
     upload_to_testflight
-    pilot(skip_waiting_for_build_processing: true)
+    pilot(skip_waiting_for_build_processing:true)
   end
 
   desc "Deploy a new version to the App Store"
