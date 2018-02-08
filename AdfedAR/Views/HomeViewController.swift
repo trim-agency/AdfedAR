@@ -11,7 +11,7 @@ class HomeViewController: UIViewController {
     let visionHandler           = VNSequenceRequestHandler()
     let scene                   = SCNScene()
     var animations              = [String: CAAnimation]()
-    let animationScene          = SCNScene(named: "3dAssets.scnassets/IdleFormatted.dae")!
+    var animationNodes          = [String: [String:Any]]()
     var waitingOnPlane          = true
     var didTapReset             = false
 
@@ -22,7 +22,6 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
     @IBAction func didTapDebug(_ sender: Any) { reset() }
     
-    var animationNode: SCNNode?
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
     var debugLayer: CAShapeLayer?
@@ -80,8 +79,6 @@ class HomeViewController: UIViewController {
         sceneView.delegate  = self
     }
     
-    
-    
     // MARK: - RESET
     private func removeAllNodes() {
         for node in sceneView.scene.rootNode.childNodes {
@@ -92,44 +89,73 @@ class HomeViewController: UIViewController {
     // MARK: Methods
     private func pageDetected() {
         userInstructionLabel.updateText(.none)
-        sceneView.scene.rootNode.addChildNode(animationNode!)
+        log.debug(detectedPage!)
         switch detectedPage! {
         case .judgesChoice:
-            playAnimation(key: "punching")
+            loadAndPlayAnimation(key: "grandma")
         case .bestOfShow:
-            playAnimation(key: "bellyDancing")
+            loadAndPlayAnimation(key: "bellyDancing")
         }
     }
     
     // MARK: - Custom Animations
     private func loadAllAnimations() {
-        let scene       = animationScene
-        animationNode   = SCNNode()
+        loadAnimationFile(key: "grandma", for: "3dAssets.scnassets/hipHopFormatted", animationID:  "hipHopFormatted-1")
+        loadAnimationFile(key: "bellyDancing", for: "3dAssets.scnassets/BellydancingFormatted", animationID: "BellydancingFormatted-1")
 
-        for child in scene.rootNode.childNodes {
-            animationNode?.addChildNode(child)
-        }
-
-        animationNode?.scale = SCNVector3(0.0008, 0.0008, 0.0008)
-        loadAnimation(withKey: "bellyDancing", sceneName: "3dAssets.scnassets/BellydancingFormatted", animationIdentifier: "BellydancingFormatted-1")
-        loadAnimation(withKey: "punching", sceneName: "3dAssets.scnassets/PunchingFormatted", animationIdentifier: "PunchingFormatted-1")
     }
     
-    func loadAnimation(withKey: String, sceneName:String, animationIdentifier:String) {
+    private func loadAnimationFile(key: String, for filePath: String, animationID: String) {
+        let scene       = SCNScene(named: filePath + ".dae")!
+        let parentNode  = SCNNode()
+        parentNode.name = key
+        add(node: scene.rootNode, to: parentNode)
+        let animation: CAAnimation = loadAnimation(withKey: key, sceneName: filePath, animationIdentifier: animationID)!
+        let animationDetails = [ "node": parentNode,
+                                 "animation": animation ]
+        animationNodes[key] = animationDetails
+    }
+    
+    func loadAnimation(withKey: String, sceneName:String, animationIdentifier:String) -> CAAnimation? {
         let sceneURL    = Bundle.main.url(forResource: sceneName, withExtension: "dae")
         let sceneSource = SCNSceneSource(url: sceneURL!, options: nil)
         
-        if let animationObject = sceneSource?.entryWithIdentifier(animationIdentifier, withClass: CAAnimation.self) {
-            animationObject.fadeInDuration = CGFloat(1)
-            animationObject.fadeOutDuration = CGFloat(0.5)
-            animations[withKey] = animationObject
+        guard let animationObject = sceneSource?.entryWithIdentifier(animationIdentifier, withClass: CAAnimation.self) else {
+            log.error("animation nil")
+            return nil
+        }
+       
+        animationObject.fadeInDuration = CGFloat(1)
+        animationObject.fadeOutDuration = CGFloat(0.5)
+        
+        return animationObject
+    }
+    
+    func loadAndPlayAnimation(key: String) {
+        removeAllNodes()
+        let node = animationNodes[key]!["node"] as! SCNNode
+        add(node: node, to: sceneView.scene.rootNode)
+        sceneView.scene.rootNode.scale = SCNVector3(0.0008, 0.0008, 0.0008)
+        playAnimation(key)
+    }
+    
+    private func playAnimation(_ key: String) {
+        if !sceneView.scene.rootNode.animationKeys.contains(key) {
+            let animation = animationNodes[key]!["animation"] as! CAAnimation
+            sceneView.scene.rootNode.addAnimation(animation, forKey: key)
+        } else {
+            log.debug("animation already exists")
+            let animationPlayer = sceneView.scene.rootNode.animationPlayer(forKey: key)
+            animationPlayer?.play()
         }
     }
     
-    func playAnimation(key: String) {
-        sceneView.scene.rootNode.addAnimation(animations[key]!, forKey: key)
+    private func add(node: SCNNode, to parentNode: SCNNode) {
+        node.childNodes.forEach { (node) in
+            parentNode.addChildNode(node)
+        }
     }
-    
+
     func stopAnimation(key: String) {
         sceneView.scene.rootNode.removeAnimation(forKey: key, blendOutDuration: CGFloat(0.5))
     }
@@ -150,7 +176,7 @@ class HomeViewController: UIViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             if self.sceneView.session.currentFrame != nil {
                 do {
-                    try self.coreMLService.getPageType((self.sceneView.session.currentFrame?.capturedImage)!)
+                    try self.coreMLService.getPageType(self.sceneView.session.currentFrame!)
                 } catch {
                     self.appendToDebugLabel("\n💥 Page Detection Error")
                 }
@@ -208,7 +234,8 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         let node                = SCNNode()
         rootAnchor              = anchor
         node.transform          = SCNMatrix4(anchor.transform)
-        animationNode?.position = node.worldPosition
+        sceneView.scene.rootNode.worldPosition = node.worldPosition
+//        animationNode?.position = node.worldPosition
         appendToDebugLabel("\n✅ Root Anchor Set")
         return node
     }

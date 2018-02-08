@@ -33,11 +33,10 @@ class RectangleDetectionService {
         let center          = getBoxCenter(highConfidenceObservation)
         let hitTestResults  = self.sceneView.hitTest(center, types: [.existingPlaneUsingExtent, .featurePoint])
         guard let result    = hitTestResults.first else {
-            log.debug("no hit test results")
+            delegate?.rectangleDetectionError(sender: self)
             return
-            
         }
-        
+
         if let rootAnchor = self.rootAnchor,
             let node = self.sceneView.node(for: rootAnchor) {
                 node.transform = SCNMatrix4(result.worldTransform)
