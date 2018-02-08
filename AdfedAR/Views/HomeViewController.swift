@@ -239,6 +239,14 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
             performSegue(withIdentifier: "segueToVideoVC", sender: self)
         }
     }
+    
+    // MARK: - Segue Methods
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "segueToVideoVC" {
+            let viewController = segue.destination as! VideoViewController
+            viewController.page = detectedPage!
+        }
+    }
 }
 
 // MARK: - CoreMLService Delegate

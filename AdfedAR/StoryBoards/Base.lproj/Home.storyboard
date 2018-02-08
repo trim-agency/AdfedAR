@@ -103,23 +103,30 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This will be a video" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ium-g7-8g4">
-                                <rect key="frame" x="112" y="323" width="150" height="21"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Yu2-RK-uaY">
+                                <rect key="frame" x="62" y="308" width="250" height="50"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="150" id="MQ5-Nz-fHz"/>
+                                    <constraint firstAttribute="height" constant="50" id="KZa-1k-4Tb"/>
+                                    <constraint firstAttribute="width" constant="250" id="Odu-51-uCn"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <state key="normal">
+                                    <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="didTapTestButton:" destination="bHS-sQ-SO5" eventType="touchUpInside" id="Lwg-fT-lay"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="ium-g7-8g4" firstAttribute="centerY" secondItem="Hau-LZ-6TV" secondAttribute="centerY" id="CHn-eI-vdQ"/>
-                            <constraint firstItem="ium-g7-8g4" firstAttribute="centerX" secondItem="Hau-LZ-6TV" secondAttribute="centerX" id="RQx-6w-Fk9"/>
+                            <constraint firstItem="Yu2-RK-uaY" firstAttribute="centerY" secondItem="Hau-LZ-6TV" secondAttribute="centerY" id="mWH-vj-RRd"/>
+                            <constraint firstItem="Yu2-RK-uaY" firstAttribute="centerX" secondItem="Hau-LZ-6TV" secondAttribute="centerX" id="nCY-8O-xJK"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="t9q-gt-W1Q"/>
                     </view>
+                    <connections>
+                        <outlet property="testLabel" destination="Yu2-RK-uaY" id="JMV-C8-zy3"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tOA-bb-tUA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
