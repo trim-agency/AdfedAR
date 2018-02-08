@@ -100,12 +100,11 @@ class HomeViewController: UIViewController {
     
     // MARK: - Custom Animations
     private func loadAllAnimations() {
-        loadAnimationFile(key: "grandma", for: "3dAssets.scnassets/hipHopFormatted", animationID:  "hipHopFormatted-1")
-        loadAnimationFile(key: "bellyDancing", for: "3dAssets.scnassets/BellydancingFormatted", animationID: "BellydancingFormatted-1")
-
+        loadColladaAsset(key: "grandma", for: "3dAssets.scnassets/hipHopFormatted", animationID:  "hipHopFormatted-1")
+        loadColladaAsset(key: "bellyDancing", for: "3dAssets.scnassets/BellydancingFormatted", animationID: "BellydancingFormatted-1")
     }
     
-    private func loadAnimationFile(key: String, for filePath: String, animationID: String) {
+    private func loadColladaAsset(key: String, for filePath: String, animationID: String) {
         let scene       = SCNScene(named: filePath + ".dae")!
         let parentNode  = SCNNode()
         parentNode.name = key
@@ -125,35 +124,30 @@ class HomeViewController: UIViewController {
             return nil
         }
        
-        animationObject.fadeInDuration = CGFloat(1)
+        animationObject.fadeInDuration = CGFloat(3)
         animationObject.fadeOutDuration = CGFloat(0.5)
         
         return animationObject
     }
     
     func loadAndPlayAnimation(key: String) {
-        removeAllNodes()
-        let node = animationNodes[key]!["node"] as! SCNNode
-        add(node: node, to: sceneView.scene.rootNode)
-        sceneView.scene.rootNode.scale = SCNVector3(0.0008, 0.0008, 0.0008)
-        playAnimation(key)
+        DispatchQueue.main.async {
+            self.removeAllNodes()
+            self.sceneView.scene.rootNode.removeAllAnimations()
+            let node = self.animationNodes[key]!["node"] as! SCNNode
+            self.add(node: node, to: self.sceneView.scene.rootNode)
+            self.sceneView.scene.rootNode.scale = SCNVector3(0.001, 0.001, 0.001)
+            self.playAnimation(key)
+        }
     }
     
     private func playAnimation(_ key: String) {
-        if !sceneView.scene.rootNode.animationKeys.contains(key) {
-            let animation = animationNodes[key]!["animation"] as! CAAnimation
-            sceneView.scene.rootNode.addAnimation(animation, forKey: key)
-        } else {
-            log.debug("animation already exists")
-            let animationPlayer = sceneView.scene.rootNode.animationPlayer(forKey: key)
-            animationPlayer?.play()
-        }
+        let animation = self.animationNodes[key]!["animation"] as! CAAnimation
+        sceneView.scene.rootNode.addAnimation(animation, forKey: key)
     }
     
     private func add(node: SCNNode, to parentNode: SCNNode) {
-        node.childNodes.forEach { (node) in
-            parentNode.addChildNode(node)
-        }
+        parentNode.addChildNode(node)
     }
 
     func stopAnimation(key: String) {
