@@ -1,5 +1,7 @@
 import UIKit
 import SwiftyBeaver
+import Fabric
+import Crashlytics
 
 let log = SwiftyBeaver.self
 
@@ -10,7 +12,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-       setupSwiftyBeaver()
+        Fabric.with([Crashlytics.self])
+        setupSwiftyBeaver()
         return true
     }
 
