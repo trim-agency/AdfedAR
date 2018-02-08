@@ -14,6 +14,7 @@ class HomeViewController: UIViewController {
     var animationNodes          = [String: [String:Any]]()
     var waitingOnPlane          = true
     var didTapReset             = false
+    var isPlayingAnimation      = false
 
     @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
     @IBOutlet weak var debugButton: UIButton!
@@ -138,6 +139,7 @@ class HomeViewController: UIViewController {
     }
     
     private func playAnimation(_ key: String) {
+        isPlayingAnimation = true
         let animation = self.animationNodes[key]!["animation"] as! CAAnimation
         sceneView.scene.rootNode.addAnimation(animation, forKey: key)
     }
@@ -147,11 +149,13 @@ class HomeViewController: UIViewController {
     }
 
     func stopAnimation(key: String) {
+        isPlayingAnimation = false
         sceneView.scene.rootNode.removeAnimation(forKey: key, blendOutDuration: CGFloat(0.5))
     }
     
     // MARK: - Core ML
     private func loadCoreMLService() {
+        if isPlayingAnimation { return } // to keep coreml from triggering when transitioning back from video view
         appendToDebugLabel("\n✅ CoreML Waiting for Init")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
             self.coreMLService          = CoreMLService()
