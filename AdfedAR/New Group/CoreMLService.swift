@@ -6,8 +6,11 @@ import ARKit
 
 class CoreMLService {
     var delegate: CoreMLServiceDelegate?
-    
+    var hasFoundPage = false
+    static let instance = CoreMLService()
+
     func getPageType(_ arFrame: ARFrame) throws {
+        hasFoundPage        = false
         let image           = arFrame.capturedImage
         let transformedImage = transformBuffer(image, arFrame.lightEstimate?.ambientIntensity)
         let context         = CIContext()
@@ -55,7 +58,6 @@ class CoreMLService {
                 log.error("Classification downcast error")
                 return
             }
-            logResults(results)
             parseResults(results)
         } else {
             log.debug(error!)
@@ -82,7 +84,9 @@ class CoreMLService {
         
         if highConfidenceObservation.confidence > 0.90 {
             if let page = Page(rawValue: highConfidenceObservation.identifier)  {
+                if hasFoundPage { return }
                 delegate?.didRecognizePage(sender: self, page: page)
+                hasFoundPage = true
             } else {
                 delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.observationError)
                 log.error("Page not created")
