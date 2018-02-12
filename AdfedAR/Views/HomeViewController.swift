@@ -133,17 +133,26 @@ class HomeViewController: UIViewController {
             self.removeAllNodes()
             self.sceneView.scene.rootNode.removeAllAnimations()
             let node = self.animationNodes[key]!["node"] as! SCNNode
+            node.opacity = 0.0
             self.add(node: node, to: self.sceneView.scene.rootNode)
             self.sceneView.scene.rootNode.scale = SCNVector3(0.001, 0.001, 0.001)
-            self.playAnimation(key)
+            self.playAnimation(key: key, for: node)
         }
     }
     
-    private func playAnimation(_ key: String) {
+    private func playAnimation(key: String, for node: SCNNode) {
         isPlayingAnimation = true
         resetButton.isHidden = false
         let animation = self.animationNodes[key]!["animation"] as! CAAnimation
         sceneView.scene.rootNode.addAnimation(animation, forKey: key)
+        fadeIn(node)
+    }
+    
+    private func fadeIn(_ node: SCNNode) {
+        DispatchQueue.main.async {
+            let action = SCNAction.fadeIn(duration: 1.0)
+            node.runAction(action)
+        }
     }
     
     private func add(node: SCNNode, to parentNode: SCNNode) {

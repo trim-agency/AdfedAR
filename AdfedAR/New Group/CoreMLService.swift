@@ -13,7 +13,6 @@ class CoreMLService {
         let context         = CIContext()
         let cgImage         = context.createCGImage(transformedImage, from: transformedImage.extent)
         let croppedImage    = UIImage(cgImage: cgImage!).cropToCenter(to: CGSize(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.width * 0.6))
-//        UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil)
         let ciImage         = CIImage(image: croppedImage)
         let model           = try VNCoreMLModel(for: AdFed().model)
         let request         = VNCoreMLRequest(model: model, completionHandler: pageRecognitionHandler)
@@ -26,7 +25,7 @@ class CoreMLService {
         if let exposure = exposure {
             modifyExposure(exposure: exposure, for: &image)
         }
-//        filterImage(image: &image, filterName: "CIExposureAdjust", filterKey: "inputEV", value: 0.8)
+        
         filterImage(image: &image, filterName: "CIColorControls", filterKey: "inputContrast", value: 1.2)
         filterImage(image: &image, filterName: "CISharpenLuminance", filterKey: "inputSharpness", value: 1)
         return image
@@ -50,20 +49,6 @@ class CoreMLService {
         image = filter.outputImage!
     }
 
-    private func saveImage(_ image: UIImage) {
-            PHPhotoLibrary.shared().performChanges({
-                PHAssetChangeRequest.creationRequestForAsset(from: image)
-            }, completionHandler:{ success, error in
-                if success {
-                    log.debug("success")
-                } else if let error = error {
-                    log.debug(error)
-                } else {
-                    log.debug("no error")
-                }
-            })
-    }
-    
     func pageRecognitionHandler(request: VNRequest, error: Error?) {
         if error == nil {
             guard let results = request.results as? [VNClassificationObservation] else {

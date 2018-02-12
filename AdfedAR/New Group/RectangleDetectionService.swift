@@ -26,7 +26,7 @@ class RectangleDetectionService {
         }
         
         let points = (highConfidenceObservation?.corners())!
-        
+
         highestConfidenceObservation.boundingBox.applying(CGAffineTransform(scaleX: 1, y: -1))
         highestConfidenceObservation.boundingBox.applying(CGAffineTransform(translationX: 0, y: 1))
         
