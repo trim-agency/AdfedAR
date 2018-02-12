@@ -40,7 +40,12 @@ class HomeViewController: UIViewController {
         super.viewWillAppear(animated)
         start()
     }
-
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        performSegue(withIdentifier: "segueToWalkthrough", sender: self)
+    }
+    
     // MARK: - Setup, Layout & ARKIT Start
     private func setup() {
         defineSceneView()
@@ -50,7 +55,7 @@ class HomeViewController: UIViewController {
     private func start() {
         configureAR()
         loadAllAnimations()
-        loadCoreMLService()
+//        loadCoreMLService()
     }
     private func reset() {
         removeAllNodes()
