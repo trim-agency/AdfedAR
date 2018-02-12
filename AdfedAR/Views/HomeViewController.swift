@@ -53,12 +53,13 @@ class HomeViewController: UIViewController {
         loadCoreMLService()
     }
     private func reset() {
-        removeAllNodes()
-        logoHintOverlay.fadeIn()
-        startPageDetection()
-        debugLabel.text = ""
-        didTapReset     = true
-        detectedPage    = nil
+        removeAllNodes(completion: {
+            self.logoHintOverlay.fadeIn()
+            self.startPageDetection()
+            self.debugLabel.text = ""
+            self.didTapReset     = true
+            self.detectedPage    = nil
+        })
     }
     
 
@@ -77,9 +78,17 @@ class HomeViewController: UIViewController {
     }
     
     // MARK: - RESET
-    private func removeAllNodes() {
+    private func removeAllNodes(completion: (() -> ())?) {
         for node in sceneView.scene.rootNode.childNodes {
-            node.removeFromParentNode()
+            if isPlayingAnimation {
+                let action = SCNAction.fadeOut(duration: 2.0)
+                node.runAction(action){
+                    node.removeFromParentNode()
+                    completion!()
+                }
+            } else {
+                node.removeFromParentNode()
+            }
         }
         resetButton.isHidden = true
     }
@@ -130,10 +139,10 @@ class HomeViewController: UIViewController {
     
     func loadAndPlayAnimation(key: String) {
         DispatchQueue.main.async {
-            self.removeAllNodes()
+            self.removeAllNodes(completion: nil)
             self.sceneView.scene.rootNode.removeAllAnimations()
-            let node = self.animationNodes[key]!["node"] as! SCNNode
-            node.opacity = 0.0
+            let node        = self.animationNodes[key]!["node"] as! SCNNode
+            node.opacity    = 0.0
             self.add(node: node, to: self.sceneView.scene.rootNode)
             self.sceneView.scene.rootNode.scale = SCNVector3(0.001, 0.001, 0.001)
             self.playAnimation(key: key, for: node)
@@ -141,18 +150,21 @@ class HomeViewController: UIViewController {
     }
     
     private func playAnimation(key: String, for node: SCNNode) {
-        isPlayingAnimation = true
-        resetButton.isHidden = false
-        let animation = self.animationNodes[key]!["animation"] as! CAAnimation
+        isPlayingAnimation      = true
+        resetButton.isHidden    = false
+        let animation           = self.animationNodes[key]!["animation"] as! CAAnimation
         sceneView.scene.rootNode.addAnimation(animation, forKey: key)
         fadeIn(node)
     }
     
     private func fadeIn(_ node: SCNNode) {
-        DispatchQueue.main.async {
-            let action = SCNAction.fadeIn(duration: 1.0)
-            node.runAction(action)
-        }
+        let action = SCNAction.fadeIn(duration: 1.0)
+        node.runAction(action)
+    }
+    
+    private func fadeOut(_ node: SCNNode) {
+        let action = SCNAction.fadeOut(duration: 1.5)
+        node.runAction(action)
     }
     
     private func add(node: SCNNode, to parentNode: SCNNode) {
