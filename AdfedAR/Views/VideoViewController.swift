@@ -1,4 +1,6 @@
 import UIKit
+import XCDYouTubeKit
+
 
 class VideoViewController: UIViewController {
     var page: Page?
@@ -8,7 +10,15 @@ class VideoViewController: UIViewController {
     }
     
     override func viewDidLoad() {
-        setButtonText()
+        setupVideo()
+//        setButtonText()
+    }
+    
+    private func setupVideo() {
+        let playerView = XCDYouTubeVideoPlayerViewController.init(videoIdentifier: "YE7VzlLtp-4")
+        playerView.present(in: self.view)
+        playerView.moviePlayer.controlStyle = .fullscreen
+        playerView.moviePlayer.play()
     }
     
     private func setButtonText(){
@@ -16,3 +26,4 @@ class VideoViewController: UIViewController {
         testLabel.setTitle(labelText, for: .normal)
     }
 }
+
