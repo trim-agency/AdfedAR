@@ -140,10 +140,10 @@
             </objects>
             <point key="canvasLocation" x="962" y="263"/>
         </scene>
-        <!--View Controller-->
+        <!--Walkthrough1-->
         <scene sceneID="5Is-Ie-iOl">
             <objects>
-                <viewController storyboardIdentifier="walkthrough1" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7rW-dh-Bjz" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="walkthrough1" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7rW-dh-Bjz" userLabel="Walkthrough1" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dYo-DL-kH4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -167,10 +167,10 @@
             </objects>
             <point key="canvasLocation" x="-806" y="1737"/>
         </scene>
-        <!--View Controller-->
+        <!--Walkthrough2-->
         <scene sceneID="HYd-qg-DoS">
             <objects>
-                <viewController storyboardIdentifier="walkthrough2" id="jE7-gy-UNC" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="walkthrough2" id="jE7-gy-UNC" userLabel="Walkthrough2" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="HdA-x8-9D6">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -198,10 +198,10 @@
             </objects>
             <point key="canvasLocation" x="142" y="1739"/>
         </scene>
-        <!--View Controller-->
+        <!--Walkthrough3-->
         <scene sceneID="C7T-P7-6n6">
             <objects>
-                <viewController storyboardIdentifier="walkthrough3" id="1OS-ST-m6M" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="walkthrough3" id="1OS-ST-m6M" userLabel="Walkthrough3" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="lJf-85-dmQ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -229,10 +229,10 @@
             </objects>
             <point key="canvasLocation" x="1014" y="1738"/>
         </scene>
-        <!--View Controller-->
+        <!--Modal Container View-->
         <scene sceneID="SJX-N5-gkr">
             <objects>
-                <viewController definesPresentationContext="YES" providesPresentationContextTransitionStyle="YES" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="uaY-LH-men" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="walkthroughModal" definesPresentationContext="YES" providesPresentationContextTransitionStyle="YES" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="uaY-LH-men" userLabel="Modal Container View" customClass="WalkthroughModalViewController" customModule="AdfedAR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="CoF-d9-8dk">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -247,25 +247,42 @@
                                     <segue destination="rwK-Bz-UsQ" kind="embed" id="y7q-Ck-zUo"/>
                                 </connections>
                             </containerView>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tzm-3b-J86">
+                                <rect key="frame" x="164" y="553" width="46" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="ORy-fS-oxr"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="didTapDismiss:" destination="uaY-LH-men" eventType="touchUpInside" id="xGb-j9-EUv"/>
+                                    <segue destination="x1d-NT-Pc9" kind="unwind" unwindAction="returnToHomeWithSegue:" id="l2B-M2-VDX"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="NxM-vB-CML" firstAttribute="centerX" secondItem="CoF-d9-8dk" secondAttribute="centerX" id="LPB-i4-Mym"/>
                             <constraint firstItem="NxM-vB-CML" firstAttribute="centerY" secondItem="CoF-d9-8dk" secondAttribute="centerY" id="Lav-HZ-mnR"/>
+                            <constraint firstItem="tzm-3b-J86" firstAttribute="top" secondItem="NxM-vB-CML" secondAttribute="bottom" constant="20" id="Uq5-HD-PKn"/>
                         </constraints>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
                     <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="dismissButton" destination="tzm-3b-J86" id="u5m-g9-hYu"/>
+                        <outlet property="walkthroughContainerView" destination="NxM-vB-CML" id="Epo-UQ-uki"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Egk-ay-ETQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="x1d-NT-Pc9" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="-551" y="1009"/>
         </scene>
-        <!--Walkthrough View Controller-->
+        <!--Walkthrough Page View Controller-->
         <scene sceneID="7gf-Sa-efD">
             <objects>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VKX-j1-Mw9" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <viewController id="rwK-Bz-UsQ" customClass="WalkthroughViewController" customModule="AdfedAR" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController modalTransitionStyle="crossDissolve" id="rwK-Bz-UsQ" customClass="WalkthroughPageViewController" customModule="AdfedAR" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="efQ-3M-YEf">
                         <rect key="frame" x="0.0" y="0.0" width="300" height="400"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

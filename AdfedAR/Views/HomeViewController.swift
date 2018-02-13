@@ -22,6 +22,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var sceneView: MainARSCNView!
     @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
     @IBAction func didTapDebug(_ sender: Any) { reset() }
+
     
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
@@ -258,6 +259,13 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
             let viewController = segue.destination as! VideoViewController
             viewController.page = detectedPage!
         }
+    }
+    
+    // MARK: - Walkthrough modal
+    public func didDismissWalkthrough() {
+        presentedViewController?.dismiss(animated: true, completion: {
+            self.loadCoreMLService()
+        })
     }
 }
 

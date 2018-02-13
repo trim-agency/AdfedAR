@@ -1,6 +1,6 @@
 import UIKit
 
-class WalkthroughViewController: UIPageViewController {
+class WalkthroughPageViewController: UIPageViewController {
 
     private(set) lazy var walkthroughViewControllers: [UIViewController] = {
         return [
@@ -9,21 +9,20 @@ class WalkthroughViewController: UIPageViewController {
             self.getVC(3)
         ]
     }()
-    
+    required init?(coder: NSCoder) {
+        super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         dataSource = self
-        defineSize()
         defineLook()
         display()
     }
-    
-    private func defineSize() {
-        let width = UIScreen.main.bounds.width * 0.8
-        self.preferredContentSize = CGSize(width: width, height: width * 1.3)
-    }
+   
     
     private func defineLook() {
+        view.layer.backgroundColor  = UIColor.white.cgColor
         view.layer.cornerRadius     = 5.0
         view.backgroundColor        = UIColor.white
         view.layer.borderColor      = UIColor.black.cgColor
@@ -38,12 +37,13 @@ class WalkthroughViewController: UIPageViewController {
         if let firstVC = walkthroughViewControllers.first {
             setViewControllers([firstVC],
                                direction: .forward,
-                               animated: true, completion: nil)
+                               animated: true,
+                               completion: nil)
         }
     }
 }
 
-extension WalkthroughViewController: UIPageViewControllerDataSource {
+extension WalkthroughPageViewController: UIPageViewControllerDataSource {
     func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
         guard let vcIndex = walkthroughViewControllers.index(of: viewController) else {
             return nil
