@@ -15,6 +15,7 @@ class HomeViewController: UIViewController {
     var waitingOnPlane          = true
     var didTapReset             = false
     var isPlayingAnimation      = false
+    var didShowWalkthrough      = false
 
     @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
     @IBOutlet weak var resetButton: UIButton!
@@ -44,7 +45,8 @@ class HomeViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        performSegue(withIdentifier: "segueToWalkthrough", sender: self)
+        displayWalkthrough()
+        
     }
     
     // MARK: - Setup, Layout & ARKIT Start
@@ -266,6 +268,12 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         presentedViewController?.dismiss(animated: true, completion: {
             self.loadCoreMLService()
         })
+    }
+    
+    private func displayWalkthrough() {
+        if didShowWalkthrough { return }
+        performSegue(withIdentifier: "segueToWalkthrough", sender: self)
+        didShowWalkthrough = true
     }
 }
 
