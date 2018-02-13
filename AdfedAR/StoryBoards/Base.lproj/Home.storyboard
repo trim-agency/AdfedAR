@@ -237,33 +237,40 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NxM-vB-CML">
-                                <rect key="frame" x="37" y="133" width="300" height="400"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="CnQ-OU-awE"/>
-                                    <constraint firstAttribute="height" constant="400" id="M6r-9I-jLG"/>
-                                </constraints>
-                                <connections>
-                                    <segue destination="rwK-Bz-UsQ" kind="embed" id="y7q-Ck-zUo"/>
-                                </connections>
-                            </containerView>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tzm-3b-J86">
-                                <rect key="frame" x="164" y="553" width="46" height="30"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="30" id="ORy-fS-oxr"/>
-                                </constraints>
-                                <state key="normal" title="Button"/>
-                                <connections>
-                                    <action selector="didTapDismiss:" destination="uaY-LH-men" eventType="touchUpInside" id="xGb-j9-EUv"/>
-                                    <segue destination="x1d-NT-Pc9" kind="unwind" unwindAction="returnToHomeWithSegue:" id="l2B-M2-VDX"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Htt-es-2DN">
+                                <rect key="frame" x="37" y="96" width="300" height="475"/>
+                                <subviews>
+                                    <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NxM-vB-CML">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="400"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="300" id="CnQ-OU-awE"/>
+                                            <constraint firstAttribute="height" constant="400" id="M6r-9I-jLG"/>
+                                        </constraints>
+                                        <connections>
+                                            <segue destination="rwK-Bz-UsQ" kind="embed" id="y7q-Ck-zUo"/>
+                                        </connections>
+                                    </containerView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tzm-3b-J86">
+                                        <rect key="frame" x="0.0" y="415" width="300" height="60"/>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="ORy-fS-oxr"/>
+                                        </constraints>
+                                        <state key="normal" title="Button">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didTapDismiss:" destination="uaY-LH-men" eventType="touchUpInside" id="xGb-j9-EUv"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="NxM-vB-CML" firstAttribute="centerX" secondItem="CoF-d9-8dk" secondAttribute="centerX" id="LPB-i4-Mym"/>
-                            <constraint firstItem="NxM-vB-CML" firstAttribute="centerY" secondItem="CoF-d9-8dk" secondAttribute="centerY" id="Lav-HZ-mnR"/>
-                            <constraint firstItem="tzm-3b-J86" firstAttribute="top" secondItem="NxM-vB-CML" secondAttribute="bottom" constant="20" id="Uq5-HD-PKn"/>
+                            <constraint firstItem="Htt-es-2DN" firstAttribute="centerX" secondItem="CoF-d9-8dk" secondAttribute="centerX" id="0n9-sq-mbz"/>
+                            <constraint firstItem="Htt-es-2DN" firstAttribute="centerY" secondItem="CoF-d9-8dk" secondAttribute="centerY" id="LcQ-6D-Lj4"/>
+                            <constraint firstItem="Htt-es-2DN" firstAttribute="centerX" secondItem="CoF-d9-8dk" secondAttribute="centerX" id="UWj-O5-k8x"/>
                         </constraints>
                     </view>
                     <nil key="simulatedTopBarMetrics"/>
@@ -274,9 +281,8 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Egk-ay-ETQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <exit id="x1d-NT-Pc9" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="-551" y="1009"/>
+            <point key="canvasLocation" x="-807" y="1052"/>
         </scene>
         <!--Walkthrough Page View Controller-->
         <scene sceneID="7gf-Sa-efD">
@@ -290,7 +296,7 @@
                     </view>
                 </viewController>
             </objects>
-            <point key="canvasLocation" x="250" y="1008"/>
+            <point key="canvasLocation" x="141" y="1052"/>
         </scene>
     </scenes>
 </document>

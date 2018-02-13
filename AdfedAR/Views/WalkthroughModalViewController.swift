@@ -10,5 +10,5 @@ class WalkthroughModalViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    'm}
+    }
 }

@@ -2,6 +2,7 @@ import UIKit
 
 class WalkthroughPageViewController: UIPageViewController {
 
+    @IBOutlet weak var pageViewControls: UIPageControl!
     private(set) lazy var walkthroughViewControllers: [UIViewController] = {
         return [
             self.getVC(1),
@@ -9,8 +10,10 @@ class WalkthroughPageViewController: UIPageViewController {
             self.getVC(3)
         ]
     }()
+    
     required init?(coder: NSCoder) {
         super.init(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        dataSource = self
     }
 
     override func viewDidLoad() {
@@ -20,7 +23,6 @@ class WalkthroughPageViewController: UIPageViewController {
         display()
     }
    
-    
     private func defineLook() {
         view.layer.backgroundColor  = UIColor.white.cgColor
         view.layer.cornerRadius     = 5.0
@@ -66,5 +68,16 @@ extension WalkthroughPageViewController: UIPageViewControllerDataSource {
         return walkthroughViewControllers[nextIndex]
     }
     
+    func presentationCount(for pageViewController: UIPageViewController) -> Int {
+        return walkthroughViewControllers.count
+    }
     
+    func presentationIndex(for pageViewController: UIPageViewController) -> Int {
+        guard let firstVC = walkthroughViewControllers.first,
+            let firstVCIndex = walkthroughViewControllers.index(of: firstVC) else {
+                return 0
+        }
+        return firstVCIndex
+    }
 }
+
