@@ -2,6 +2,8 @@ import UIKit
 import SceneKit
 import ARKit
 import Vision
+import Alamofire
+import SwiftyJSON
 
 class HomeViewController: UIViewController {
    
@@ -29,6 +31,7 @@ class HomeViewController: UIViewController {
     var rootAnchor: ARAnchor?
     var detectedPage: Page?
     var coreMLService: CoreMLService!
+    var videos: Videos?
     
     // MARK: - Protocol Methods
     override func viewDidLoad() {
@@ -45,6 +48,7 @@ class HomeViewController: UIViewController {
     private func setup() {
         defineSceneView()
         setupDebug()
+        getVideoIds()
     }
     
     private func start() {
@@ -250,9 +254,34 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     // MARK: - Segue Methods
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "segueToVideoVC" {
+            // TODO: Add some kind of method to notify user that videos are unavailable
             let viewController = segue.destination as! VideoViewController
             viewController.page = detectedPage!
+            viewController.videos = videos
         }
+    }
+    
+    // MARK: - Get Video Id's
+    private func getVideoIds(){
+        Alamofire.request("https://r5bgtuldo1.execute-api.us-west-2.amazonaws.com/development/adfed-ar-video")
+            .responseJSON(completionHandler: { (response) in
+                switch response.result{
+                case .success(_):
+                    do {
+                        let jsonResponse = try JSON(data: response.data!)
+                        
+                        if let judgesChoice = jsonResponse["judgesChoice"].string,
+                            let bestOfShow = jsonResponse["bestOfShow"].string {
+                            self.videos = Videos(bestOfShow: bestOfShow,
+                                                 judgesChoice: judgesChoice)
+                        }
+                    } catch {
+                        log.error("json deserialization error")
+                    }
+                case .failure(let error):
+                    log.debug(error)
+                }
+            })
     }
 }
 

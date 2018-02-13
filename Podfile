@@ -11,6 +11,8 @@ target 'AdfedAR' do
   pod 'Fabric'
   pod 'Crashlytics'
   pod "XCDYouTubeKit", "~> 2.5"
+  pod 'Alamofire', '~> 4.6'
+  pod 'SwiftyJSON'
 
   target 'AdfedARTests' do
     inherit! :search_paths
