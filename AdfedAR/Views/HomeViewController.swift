@@ -15,6 +15,7 @@ class HomeViewController: UIViewController {
     var waitingOnPlane          = true
     var didTapReset             = false
     var isPlayingAnimation      = false
+    var didShowWalkthrough      = false
 
     @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
     @IBOutlet weak var resetButton: UIButton!
@@ -22,6 +23,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var sceneView: MainARSCNView!
     @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
     @IBAction func didTapDebug(_ sender: Any) { reset() }
+
     
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
@@ -40,7 +42,13 @@ class HomeViewController: UIViewController {
         super.viewWillAppear(animated)
         start()
     }
-
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        displayWalkthrough()
+        
+    }
+    
     // MARK: - Setup, Layout & ARKIT Start
     private func setup() {
         defineSceneView()
@@ -50,7 +58,7 @@ class HomeViewController: UIViewController {
     private func start() {
         configureAR()
         loadAllAnimations()
-        loadCoreMLService()
+//        loadCoreMLService()
     }
     private func reset() {
         removeAllNodes()
@@ -253,6 +261,19 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
             let viewController = segue.destination as! VideoViewController
             viewController.page = detectedPage!
         }
+    }
+    
+    // MARK: - Walkthrough modal
+    public func didDismissWalkthrough() {
+        presentedViewController?.dismiss(animated: true, completion: {
+            self.loadCoreMLService()
+        })
+    }
+    
+    private func displayWalkthrough() {
+        if didShowWalkthrough { return }
+        performSegue(withIdentifier: "segueToWalkthrough", sender: self)
+        didShowWalkthrough = true
     }
 }
 

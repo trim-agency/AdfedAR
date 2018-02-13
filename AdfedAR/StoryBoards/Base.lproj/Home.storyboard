@@ -90,10 +90,18 @@
                         <outlet property="sceneView" destination="U7P-0S-NKa" id="wuf-f7-Km6"/>
                         <outlet property="userInstructionLabel" destination="lPY-XG-4EC" id="TK0-h0-dMh"/>
                         <segue destination="bHS-sQ-SO5" kind="show" identifier="segueToVideoVC" id="3dx-2h-Dw7"/>
+                        <segue destination="uaY-LH-men" kind="presentation" identifier="segueToWalkthrough" modalPresentationStyle="overFullScreen" modalTransitionStyle="crossDissolve" id="T9B-PG-p6d"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
+                <view contentMode="scaleToFill" id="452-yR-LAj">
+                    <rect key="frame" x="0.0" y="0.0" width="240" height="128"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <viewLayoutGuide key="safeArea" id="Nv0-Zs-zjd"/>
+                </view>
             </objects>
+            <point key="canvasLocation" x="-199" y="264"/>
         </scene>
         <!--Video View Controller-->
         <scene sceneID="QC6-QF-gqW">
@@ -130,7 +138,165 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tOA-bb-tUA" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1612" y="34"/>
+            <point key="canvasLocation" x="962" y="263"/>
+        </scene>
+        <!--Walkthrough1-->
+        <scene sceneID="5Is-Ie-iOl">
+            <objects>
+                <viewController storyboardIdentifier="walkthrough1" useStoryboardIdentifierAsRestorationIdentifier="YES" id="7rW-dh-Bjz" userLabel="Walkthrough1" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="dYo-DL-kH4">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="1" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gMI-sQ-jp4">
+                                <rect key="frame" x="183" y="323" width="8" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="gMI-sQ-jp4" firstAttribute="centerX" secondItem="dYo-DL-kH4" secondAttribute="centerX" id="AF8-Yg-Cah"/>
+                            <constraint firstItem="gMI-sQ-jp4" firstAttribute="centerY" secondItem="dYo-DL-kH4" secondAttribute="centerY" id="vFN-cH-BfU"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Of8-TH-tdV"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NP5-0w-00P" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-806" y="1737"/>
+        </scene>
+        <!--Walkthrough2-->
+        <scene sceneID="HYd-qg-DoS">
+            <objects>
+                <viewController storyboardIdentifier="walkthrough2" id="jE7-gy-UNC" userLabel="Walkthrough2" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="HdA-x8-9D6">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dg8-HU-doq">
+                                <rect key="frame" x="166" y="323" width="42" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="Bde-3k-RUD"/>
+                                    <constraint firstAttribute="height" constant="21" id="x68-s9-m8z"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="dg8-HU-doq" firstAttribute="centerY" secondItem="HdA-x8-9D6" secondAttribute="centerY" id="SRB-ys-Xlr"/>
+                            <constraint firstItem="dg8-HU-doq" firstAttribute="centerX" secondItem="HdA-x8-9D6" secondAttribute="centerX" id="coc-Nk-I7v"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="n12-oq-hVg"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="PCK-RC-EhV" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="142" y="1739"/>
+        </scene>
+        <!--Walkthrough3-->
+        <scene sceneID="C7T-P7-6n6">
+            <objects>
+                <viewController storyboardIdentifier="walkthrough3" id="1OS-ST-m6M" userLabel="Walkthrough3" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="lJf-85-dmQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="3" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="owl-HB-0s8">
+                                <rect key="frame" x="166" y="323" width="42" height="21"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="42" id="ALY-nz-wxI"/>
+                                    <constraint firstAttribute="height" constant="21" id="Ccl-JK-1dY"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="owl-HB-0s8" firstAttribute="centerY" secondItem="lJf-85-dmQ" secondAttribute="centerY" id="5Hr-0T-2Yh"/>
+                            <constraint firstItem="owl-HB-0s8" firstAttribute="centerX" secondItem="lJf-85-dmQ" secondAttribute="centerX" id="PDA-ug-SLX"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="aMf-aI-Ysu"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="rnp-yp-43u" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1014" y="1738"/>
+        </scene>
+        <!--Modal Container View-->
+        <scene sceneID="SJX-N5-gkr">
+            <objects>
+                <viewController storyboardIdentifier="walkthroughModal" definesPresentationContext="YES" providesPresentationContextTransitionStyle="YES" modalTransitionStyle="crossDissolve" modalPresentationStyle="overCurrentContext" id="uaY-LH-men" userLabel="Modal Container View" customClass="WalkthroughModalViewController" customModule="AdfedAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="CoF-d9-8dk">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="Htt-es-2DN">
+                                <rect key="frame" x="37" y="96" width="300" height="475"/>
+                                <subviews>
+                                    <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NxM-vB-CML">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="400"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="300" id="CnQ-OU-awE"/>
+                                            <constraint firstAttribute="height" constant="400" id="M6r-9I-jLG"/>
+                                        </constraints>
+                                        <connections>
+                                            <segue destination="rwK-Bz-UsQ" kind="embed" id="y7q-Ck-zUo"/>
+                                        </connections>
+                                    </containerView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tzm-3b-J86">
+                                        <rect key="frame" x="0.0" y="415" width="300" height="60"/>
+                                        <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="60" id="ORy-fS-oxr"/>
+                                        </constraints>
+                                        <state key="normal" title="Button">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didTapDismiss:" destination="uaY-LH-men" eventType="touchUpInside" id="xGb-j9-EUv"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Htt-es-2DN" firstAttribute="centerX" secondItem="CoF-d9-8dk" secondAttribute="centerX" id="0n9-sq-mbz"/>
+                            <constraint firstItem="Htt-es-2DN" firstAttribute="centerY" secondItem="CoF-d9-8dk" secondAttribute="centerY" id="LcQ-6D-Lj4"/>
+                            <constraint firstItem="Htt-es-2DN" firstAttribute="centerX" secondItem="CoF-d9-8dk" secondAttribute="centerX" id="UWj-O5-k8x"/>
+                        </constraints>
+                    </view>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <nil key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="dismissButton" destination="tzm-3b-J86" id="u5m-g9-hYu"/>
+                        <outlet property="walkthroughContainerView" destination="NxM-vB-CML" id="Epo-UQ-uki"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Egk-ay-ETQ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-807" y="1052"/>
+        </scene>
+        <!--Walkthrough Page View Controller-->
+        <scene sceneID="7gf-Sa-efD">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VKX-j1-Mw9" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewController modalTransitionStyle="crossDissolve" id="rwK-Bz-UsQ" customClass="WalkthroughPageViewController" customModule="AdfedAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="efQ-3M-YEf">
+                        <rect key="frame" x="0.0" y="0.0" width="300" height="400"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </view>
+                </viewController>
+            </objects>
+            <point key="canvasLocation" x="141" y="1052"/>
         </scene>
     </scenes>
 </document>
