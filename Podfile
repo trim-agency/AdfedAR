@@ -9,6 +9,7 @@ target 'AdfedAR' do
   pod 'SnapKit'
   pod 'Fabric'
   pod 'Crashlytics'
+  pod 'YouTubePlayer'
 
   target 'AdfedARTests' do
     inherit! :search_paths
