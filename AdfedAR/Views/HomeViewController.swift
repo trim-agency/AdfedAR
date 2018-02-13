@@ -254,16 +254,6 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         }
     }
     
-    // MARK: - Segue Methods
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "segueToVideoVC" {
-            // TODO: Add some kind of method to notify user that videos are unavailable
-            let viewController = segue.destination as! VideoViewController
-            viewController.page = detectedPage!
-            viewController.videos = videos
-        }
-    }
-    
     // MARK: - Get Video Id's
     private func getVideoIds(){
         Alamofire.request("https://r5bgtuldo1.execute-api.us-west-2.amazonaws.com/development/adfed-ar-video")
