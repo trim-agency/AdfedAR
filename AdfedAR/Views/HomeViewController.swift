@@ -4,6 +4,8 @@ import ARKit
 import Vision
 import Alamofire
 import SwiftyJSON
+import XCDYouTubeKit
+import AVKit
 
 class HomeViewController: UIViewController {
    
@@ -247,7 +249,8 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         let touchPoint = touch.preciseLocation(in: sceneView)
         let hitTestResults = sceneView.hitTest(touchPoint, options: nil)
         if let tappedNode = hitTestResults.first?.node {
-            performSegue(withIdentifier: "segueToVideoVC", sender: self)
+            playVideo(videoIdentifier: videoId())
+//            performSegue(withIdentifier: "segueToVideoVC", sender: self)
         }
     }
     
@@ -342,7 +345,30 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
     }
 }
 
+// MARK: - Video Player
+extension HomeViewController {
+   
+    private func playVideo(videoIdentifier: String?) {
+        let playerViewController = AVPlayerViewController()
+        self.present(playerViewController, animated: true, completion: nil)
+        
+        XCDYouTubeClient.default().getVideoWithIdentifier(videoIdentifier) { [weak playerViewController] (video: XCDYouTubeVideo?, error: Error?) in
+            if let streamURLs = video?.streamURLs, let streamURL = (streamURLs[XCDYouTubeVideoQualityHTTPLiveStreaming] ?? streamURLs[YouTubeVideoQuality.hd720] ?? streamURLs[YouTubeVideoQuality.medium360] ?? streamURLs[YouTubeVideoQuality.small240]) {
+                playerViewController?.player = AVPlayer(url: streamURL)
+                playerViewController?.player?.play()
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
 
-
+    private func videoId() -> String {
+        if detectedPage == Page.judgesChoice {
+            return (videos?.judgesChoice)!
+        }  else {
+            return (videos?.bestOfShow)!
+        }
+    }
+}
 
 

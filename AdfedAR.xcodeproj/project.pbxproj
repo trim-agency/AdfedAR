@@ -10,6 +10,7 @@
 		69074D072020EA3000FEC5EB /* UserInstructionLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69074D062020EA3000FEC5EB /* UserInstructionLabel.swift */; };
 		69074D092020EA7500FEC5EB /* UserInstructionsEnum.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69074D082020EA7500FEC5EB /* UserInstructionsEnum.swift */; };
 		69170E0420337CFC00740745 /* Videos.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69170E0320337CFC00740745 /* Videos.swift */; };
+		69170E062033947B00740745 /* YoutubeVideoQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69170E052033947B00740745 /* YoutubeVideoQuality.swift */; };
 		691BFB8E202226C50086FD13 /* LogoHintOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691BFB8D202226C50086FD13 /* LogoHintOverlay.swift */; };
 		6927A3D4201F709C00A089E0 /* VNRectangleObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927A3D3201F709C00A089E0 /* VNRectangleObservationExtension.swift */; };
 		6927A3D7201F752D00A089E0 /* MainARSCNView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927A3D6201F752D00A089E0 /* MainARSCNView.swift */; };
@@ -64,6 +65,7 @@
 		69074D062020EA3000FEC5EB /* UserInstructionLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInstructionLabel.swift; sourceTree = "<group>"; };
 		69074D082020EA7500FEC5EB /* UserInstructionsEnum.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserInstructionsEnum.swift; sourceTree = "<group>"; };
 		69170E0320337CFC00740745 /* Videos.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Videos.swift; sourceTree = "<group>"; };
+		69170E052033947B00740745 /* YoutubeVideoQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeVideoQuality.swift; sourceTree = "<group>"; };
 		691BFB8D202226C50086FD13 /* LogoHintOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoHintOverlay.swift; sourceTree = "<group>"; };
 		6927A3D3201F709C00A089E0 /* VNRectangleObservationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VNRectangleObservationExtension.swift; sourceTree = "<group>"; };
 		6927A3D6201F752D00A089E0 /* MainARSCNView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainARSCNView.swift; sourceTree = "<group>"; };
@@ -142,6 +144,7 @@
 			isa = PBXGroup;
 			children = (
 				69170E0320337CFC00740745 /* Videos.swift */,
+				69170E052033947B00740745 /* YoutubeVideoQuality.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -632,6 +635,7 @@
 				6927A3D4201F709C00A089E0 /* VNRectangleObservationExtension.swift in Sources */,
 				6927A3D9201F76DB00A089E0 /* RectangleDetectionService.swift in Sources */,
 				69170E0420337CFC00740745 /* Videos.swift in Sources */,
+				69170E062033947B00740745 /* YoutubeVideoQuality.swift in Sources */,
 				69D0CD20202CBED200151EBC /* VideoViewController.swift in Sources */,
 				69D121122016715B00B39411 /* CoreMLService.swift in Sources */,
 				691BFB8E202226C50086FD13 /* LogoHintOverlay.swift in Sources */,

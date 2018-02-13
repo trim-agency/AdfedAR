@@ -1,6 +1,7 @@
 import UIKit
 import XCDYouTubeKit
 import Alamofire
+import AVKit
 
 class VideoViewController: UIViewController {
     var page: Page?
@@ -11,19 +12,26 @@ class VideoViewController: UIViewController {
         self.dismiss(animated: true, completion: nil)
     }
     
-    override func viewDidLoad() {
-        setupVideo()
-//        setButtonText()
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        playVideo(videoIdentifier: videoId())
+    }
+
+    func playVideo(videoIdentifier: String?) {
+        let playerViewController = AVPlayerViewController()
+        self.present(playerViewController, animated: true, completion: nil)
+    
+        XCDYouTubeClient.default().getVideoWithIdentifier(videoIdentifier) { [weak playerViewController] (video: XCDYouTubeVideo?, error: Error?) in
+            if let streamURLs = video?.streamURLs, let streamURL = (streamURLs[XCDYouTubeVideoQualityHTTPLiveStreaming] ?? streamURLs[YouTubeVideoQuality.hd720] ?? streamURLs[YouTubeVideoQuality.medium360] ?? streamURLs[YouTubeVideoQuality.small240]) {
+                playerViewController?.player = AVPlayer(url: streamURL)
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
     }
     
+
     
-    
-    private func setupVideo() {
-        let playerView = XCDYouTubeVideoPlayerViewController.init(videoIdentifier: videoId())
-        playerView.present(in: self.view)
-        playerView.moviePlayer.controlStyle = .fullscreen
-        playerView.moviePlayer.play()
-    }
     
     private func setButtonText(){
         let labelText = page == Page.judgesChoice ? "Judges Choice" : "Best of Show"
