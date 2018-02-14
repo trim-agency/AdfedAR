@@ -13,7 +13,7 @@ class HomeViewController: UIViewController {
     var planeIdentifiers        = [UUID]()
     var anchors                 = [ARAnchor]()
     let visionHandler           = VNSequenceRequestHandler()
-    let scene                   = SCNScene()
+    let scene                   = Scene()
     var animations              = [String: CAAnimation]()
     var animationNodes          = [String: [String:Any]]()
     var waitingOnPlane          = true
@@ -54,11 +54,11 @@ class HomeViewController: UIViewController {
     
     private func start() {
         configureAR()
-        loadAllAnimations()
+        scene.loadAllAnimations()
         loadCoreMLService()
     }
     private func reset() {
-        removeAllNodes(completion: {
+        scene.removeAllNodes(completion: {
             self.logoHintOverlay.fadeIn()
             self.startPageDetection()
             DispatchQueue.main.async {
@@ -85,22 +85,7 @@ class HomeViewController: UIViewController {
     }
     
     // MARK: - RESET
-    private func removeAllNodes(completion: (() -> ())?) {
-        for node in sceneView.scene.rootNode.childNodes {
-            if isPlayingAnimation {
-                let action = SCNAction.fadeOut(duration: 2.0)
-                node.runAction(action){
-                    node.removeFromParentNode()
-                    self.isPlayingAnimation = false
-                    completion?()
-                }
-            } else {
-                self.isPlayingAnimation = false
-                node.removeFromParentNode()
-            }
-        }
-        resetButton.isHidden = true
-    }
+    
     
     // MARK: Methods
     private func pageDetected() {
@@ -108,84 +93,14 @@ class HomeViewController: UIViewController {
         log.debug(detectedPage!)
         switch detectedPage! {
         case .judgesChoice:
-            loadAndPlayAnimation(key: "grandma")
+            scene.loadAndPlayAnimation(key: "grandma")
         case .bestOfShow:
-            loadAndPlayAnimation(key: "bellyDancing")
+            scene.loadAndPlayAnimation(key: "bellyDancing")
         }
     }
     
     // MARK: - Custom Animations
-    private func loadAllAnimations() {
-        loadColladaAsset(key: "grandma", for: "3dAssets.scnassets/hipHopFormatted", animationID:  "hipHopFormatted-1")
-        loadColladaAsset(key: "bellyDancing", for: "3dAssets.scnassets/BellydancingFormatted", animationID: "BellydancingFormatted-1")
-    }
     
-    private func loadColladaAsset(key: String, for filePath: String, animationID: String) {
-        let scene       = SCNScene(named: filePath + ".dae")!
-        let parentNode  = SCNNode()
-        parentNode.name = key
-        add(node: scene.rootNode, to: parentNode)
-        let animation: CAAnimation = loadAnimation(withKey: key, sceneName: filePath, animationIdentifier: animationID)!
-        let animationDetails = [ "node": parentNode,
-                                 "animation": animation ]
-        animationNodes[key] = animationDetails
-    }
-    
-    func loadAnimation(withKey: String, sceneName:String, animationIdentifier:String) -> CAAnimation? {
-        let sceneURL    = Bundle.main.url(forResource: sceneName, withExtension: "dae")
-        let sceneSource = SCNSceneSource(url: sceneURL!, options: nil)
-        
-        guard let animationObject = sceneSource?.entryWithIdentifier(animationIdentifier, withClass: CAAnimation.self) else {
-            log.error("animation nil")
-            return nil
-        }
-       
-        animationObject.fadeInDuration = CGFloat(3)
-        animationObject.fadeOutDuration = CGFloat(0.5)
-        
-        return animationObject
-    }
-    
-    func loadAndPlayAnimation(key: String) {
-        DispatchQueue.main.async {
-            self.removeAllNodes(completion: nil)
-            self.sceneView.scene.rootNode.removeAllAnimations()
-            let node        = self.animationNodes[key]!["node"] as! SCNNode
-            node.opacity    = 0.0
-            self.add(node: node, to: self.sceneView.scene.rootNode)
-            self.sceneView.scene.rootNode.scale = SCNVector3(0.001, 0.001, 0.001)
-            self.playAnimation(key: key, for: node)
-        }
-    }
-    
-    private func playAnimation(key: String, for node: SCNNode) {
-        isPlayingAnimation      = true
-        resetButton.isHidden    = false
-        let animation           = self.animationNodes[key]!["animation"] as! CAAnimation
-        log.debug(sceneView.scene.rootNode.animationKeys)
-        sceneView.scene.rootNode.addAnimation(animation, forKey: key)
-        fadeIn(node)
-    }
-    
-    private func fadeIn(_ node: SCNNode) {
-        let action = SCNAction.fadeIn(duration: 1.0)
-        node.runAction(action)
-    }
-    
-    private func fadeOut(_ node: SCNNode) {
-        let action = SCNAction.fadeOut(duration: 1.5)
-        node.runAction(action)
-    }
-    
-    private func add(node: SCNNode, to parentNode: SCNNode) {
-        parentNode.addChildNode(node)
-    }
-
-    func stopAnimation(key: String) {
-        isPlayingAnimation      = false
-        resetButton.isHidden    = true
-        sceneView.scene.rootNode.removeAnimation(forKey: key, blendOutDuration: CGFloat(0.5))
-    }
     
     // MARK: - Core ML
     private func loadCoreMLService() {
@@ -277,7 +192,8 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         let hitTestResults = sceneView.hitTest(touchPoint, options: nil)
 
         if let _ = hitTestResults.first?.node {
-            playVideo(videoIdentifier: videoId())
+            scene.loadAndPlayAnimation(key: "grandma")
+//            playVideo(videoIdentifier: videoId())
         }
     }
     
