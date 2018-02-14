@@ -32,7 +32,6 @@ class HomeViewController: UIViewController {
     var debugLayer: CAShapeLayer?
     var rootAnchor: ARAnchor?
     var detectedPage: Page?
-    var coreMLService: CoreMLService!
     var videos: Videos?
     
     // MARK: - Protocol Methods
@@ -59,12 +58,15 @@ class HomeViewController: UIViewController {
         loadCoreMLService()
     }
     private func reset() {
-        removeAllNodes()
-        logoHintOverlay.fadeIn()
-        startPageDetection()
-        debugLabel.text = ""
-        didTapReset     = true
-        detectedPage    = nil
+        removeAllNodes(completion: {
+            self.logoHintOverlay.fadeIn()
+            self.startPageDetection()
+            DispatchQueue.main.async {
+                self.debugLabel.text = ""
+            }
+            self.didTapReset     = true
+            self.detectedPage    = nil
+        })
     }
     
 
@@ -83,9 +85,19 @@ class HomeViewController: UIViewController {
     }
     
     // MARK: - RESET
-    private func removeAllNodes() {
+    private func removeAllNodes(completion: (() -> ())?) {
         for node in sceneView.scene.rootNode.childNodes {
-            node.removeFromParentNode()
+            if isPlayingAnimation {
+                let action = SCNAction.fadeOut(duration: 2.0)
+                node.runAction(action){
+                    node.removeFromParentNode()
+                    self.isPlayingAnimation = false
+                    completion?()
+                }
+            } else {
+                self.isPlayingAnimation = false
+                node.removeFromParentNode()
+            }
         }
         resetButton.isHidden = true
     }
@@ -136,20 +148,33 @@ class HomeViewController: UIViewController {
     
     func loadAndPlayAnimation(key: String) {
         DispatchQueue.main.async {
-            self.removeAllNodes()
+            self.removeAllNodes(completion: nil)
             self.sceneView.scene.rootNode.removeAllAnimations()
-            let node = self.animationNodes[key]!["node"] as! SCNNode
+            let node        = self.animationNodes[key]!["node"] as! SCNNode
+            node.opacity    = 0.0
             self.add(node: node, to: self.sceneView.scene.rootNode)
             self.sceneView.scene.rootNode.scale = SCNVector3(0.001, 0.001, 0.001)
-            self.playAnimation(key)
+            self.playAnimation(key: key, for: node)
         }
     }
     
-    private func playAnimation(_ key: String) {
-        isPlayingAnimation = true
-        resetButton.isHidden = false
-        let animation = self.animationNodes[key]!["animation"] as! CAAnimation
+    private func playAnimation(key: String, for node: SCNNode) {
+        isPlayingAnimation      = true
+        resetButton.isHidden    = false
+        let animation           = self.animationNodes[key]!["animation"] as! CAAnimation
+        log.debug(sceneView.scene.rootNode.animationKeys)
         sceneView.scene.rootNode.addAnimation(animation, forKey: key)
+        fadeIn(node)
+    }
+    
+    private func fadeIn(_ node: SCNNode) {
+        let action = SCNAction.fadeIn(duration: 1.0)
+        node.runAction(action)
+    }
+    
+    private func fadeOut(_ node: SCNNode) {
+        let action = SCNAction.fadeOut(duration: 1.5)
+        node.runAction(action)
     }
     
     private func add(node: SCNNode, to parentNode: SCNNode) {
@@ -157,8 +182,8 @@ class HomeViewController: UIViewController {
     }
 
     func stopAnimation(key: String) {
-        isPlayingAnimation = false
-        resetButton.isHidden = true
+        isPlayingAnimation      = false
+        resetButton.isHidden    = true
         sceneView.scene.rootNode.removeAnimation(forKey: key, blendOutDuration: CGFloat(0.5))
     }
     
@@ -167,8 +192,7 @@ class HomeViewController: UIViewController {
         if isPlayingAnimation { return } // to keep coreml from triggering when transitioning back from video view
         appendToDebugLabel("\n✅ CoreML Waiting for Init")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-            self.coreMLService          = CoreMLService()
-            self.coreMLService.delegate = self
+            CoreMLService.instance.delegate = self
             self.startPageDetection()
             self.userInstructionLabel.updateText(.lookingForSymbol)
         })
@@ -179,7 +203,7 @@ class HomeViewController: UIViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             if self.sceneView.session.currentFrame != nil {
                 do {
-                    try self.coreMLService.getPageType(self.sceneView.session.currentFrame!)
+                    try CoreMLService.instance.getPageType(self.sceneView.session.currentFrame!)
                 } catch {
                     self.appendToDebugLabel("\n💥 Page Detection Error")
                 }
@@ -210,8 +234,11 @@ class HomeViewController: UIViewController {
             let pixelBuffer         = self.sceneView.session.currentFrame?.capturedImage
             let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
             let handler             = VNImageRequestHandler(ciImage: ciImage)
-            let rectService         = RectangleDetectionService(sceneView: self.sceneView, rootAnchor: self.rootAnchor!)
-            rectService.delegate    = self
+            let rectService         = RectangleDetectionService.instance
+            if !(self.didTapReset) { // keeps duplication from occurring after reset
+                rectService.setup(sceneView: self.sceneView, rootAnchor: self.rootAnchor!)
+                rectService.delegate    = self
+            }
             let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: rectService.handleRectangles)
             do {
                 try handler.perform([rectangleRequest])
@@ -242,15 +269,15 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first,
-            let event = event else {
+            let _ = event else {
                 log.error("Touch or Event nil")
                 return
         }
         let touchPoint = touch.preciseLocation(in: sceneView)
         let hitTestResults = sceneView.hitTest(touchPoint, options: nil)
-        if let tappedNode = hitTestResults.first?.node {
+
+        if let _ = hitTestResults.first?.node {
             playVideo(videoIdentifier: videoId())
-//            performSegue(withIdentifier: "segueToVideoVC", sender: self)
         }
     }
     

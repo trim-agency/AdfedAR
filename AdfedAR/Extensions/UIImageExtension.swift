@@ -16,7 +16,7 @@ extension UIImage {
     }
     
     func cropToCenter(to:CGSize) -> UIImage {
-        guard let cgimage = self.cgImage else { return self }
+        guard self.cgImage != nil else { return self }
         
         let contextImage: UIImage = UIImage(cgImage: cgImage!)
         
