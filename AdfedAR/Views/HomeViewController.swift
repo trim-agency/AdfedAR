@@ -90,12 +90,14 @@ class HomeViewController: UIViewController {
     // MARK: Methods
     private func pageDetected() {
         userInstructionLabel.updateText(.none)
-        log.debug(detectedPage!)
-        switch detectedPage! {
-        case .judgesChoice:
-            scene.loadAndPlayAnimation(key: "grandma")
-        case .bestOfShow:
-            scene.loadAndPlayAnimation(key: "bellyDancing")
+        scene.removeAllNodes {
+            self.scene.removeAllAnimations()
+            switch self.detectedPage! {
+            case .judgesChoice:
+                self.scene.loadAndPlayAnimation(key: "grandma")
+            case .bestOfShow:
+                self.scene.loadAndPlayAnimation(key: "bellyDancing")
+            }
         }
     }
     

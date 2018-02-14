@@ -33,6 +33,7 @@ class Scene: SCNScene {
             } else {
                 self.isPlayingAnimation = false
                 node.removeFromParentNode()
+                completion?()
             }
         }
     }
@@ -48,7 +49,9 @@ class Scene: SCNScene {
         let parentNode  = SCNNode()
         parentNode.name = key
         add(node: scene.rootNode, to: parentNode)
-        let animation: CAAnimation = loadAnimation(withKey: key, sceneName: filePath, animationIdentifier: animationID)!
+        let animation: CAAnimation = loadAnimation(withKey: key,
+                                                   sceneName: filePath,
+                                                   animationIdentifier: animationID)!
         let animationDetails = [ "node": parentNode,
                                  "animation": animation ]
         animationNodes[key] = animationDetails
@@ -62,17 +65,12 @@ class Scene: SCNScene {
             log.error("animation nil")
             return nil
         }
-        
-        animationObject.fadeInDuration = CGFloat(3)
-        animationObject.fadeOutDuration = CGFloat(0.5)
-        
+
         return animationObject
     }
     
     func loadAndPlayAnimation(key: String) {
         DispatchQueue.main.async {
-            self.removeAllNodes(completion: nil)
-            self.rootNode.removeAllAnimations()
             let node        = self.animationNodes[key]!["node"] as! SCNNode
             node.opacity    = 0.0
             self.add(node: node, to: self.rootNode)
@@ -108,5 +106,9 @@ class Scene: SCNScene {
     private func fadeOut(_ node: SCNNode) {
         let action = SCNAction.fadeOut(duration: 1.5)
         node.runAction(action)
+    }
+    
+    func removeAllAnimations() {
+        rootNode.removeAllAnimations()
     }
 }
