@@ -83,10 +83,12 @@ class LogoHintOverlay: UIView {
     }
     
     public func fadeIn() {
-        UIView.animate(withDuration: 1.0) {
-            self.setInitialBorder()
-            self.hintWindowBorder.alpha = 1.0
-            self.alpha = 1.0
+        DispatchQueue.main.async {
+            UIView.animate(withDuration: 1.0) {
+                self.setInitialBorder()
+                self.hintWindowBorder.alpha = 1.0
+                self.alpha = 1.0
+            }
         }
     }
 }

@@ -6,14 +6,16 @@ import ARKit
 
 class CoreMLService {
     var delegate: CoreMLServiceDelegate?
-    
+    var hasFoundPage = false
+    static let instance = CoreMLService()
+
     func getPageType(_ arFrame: ARFrame) throws {
+        hasFoundPage        = false
         let image           = arFrame.capturedImage
         let transformedImage = transformBuffer(image, arFrame.lightEstimate?.ambientIntensity)
         let context         = CIContext()
         let cgImage         = context.createCGImage(transformedImage, from: transformedImage.extent)
         let croppedImage    = UIImage(cgImage: cgImage!).cropToCenter(to: CGSize(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.width * 0.6))
-//        UIImageWriteToSavedPhotosAlbum(croppedImage, nil, nil, nil)
         let ciImage         = CIImage(image: croppedImage)
         let model           = try VNCoreMLModel(for: AdFed().model)
         let request         = VNCoreMLRequest(model: model, completionHandler: pageRecognitionHandler)
@@ -26,7 +28,7 @@ class CoreMLService {
         if let exposure = exposure {
             modifyExposure(exposure: exposure, for: &image)
         }
-//        filterImage(image: &image, filterName: "CIExposureAdjust", filterKey: "inputEV", value: 0.8)
+        
         filterImage(image: &image, filterName: "CIColorControls", filterKey: "inputContrast", value: 1.2)
         filterImage(image: &image, filterName: "CISharpenLuminance", filterKey: "inputSharpness", value: 1)
         return image
@@ -50,27 +52,12 @@ class CoreMLService {
         image = filter.outputImage!
     }
 
-    private func saveImage(_ image: UIImage) {
-            PHPhotoLibrary.shared().performChanges({
-                PHAssetChangeRequest.creationRequestForAsset(from: image)
-            }, completionHandler:{ success, error in
-                if success {
-                    log.debug("success")
-                } else if let error = error {
-                    log.debug(error)
-                } else {
-                    log.debug("no error")
-                }
-            })
-    }
-    
     func pageRecognitionHandler(request: VNRequest, error: Error?) {
         if error == nil {
             guard let results = request.results as? [VNClassificationObservation] else {
                 log.error("Classification downcast error")
                 return
             }
-            logResults(results)
             parseResults(results)
         } else {
             log.debug(error!)
@@ -97,7 +84,9 @@ class CoreMLService {
         
         if highConfidenceObservation.confidence > 0.90 {
             if let page = Page(rawValue: highConfidenceObservation.identifier)  {
+                if hasFoundPage { return }
                 delegate?.didRecognizePage(sender: self, page: page)
+                hasFoundPage = true
             } else {
                 delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.observationError)
                 log.error("Page not created")

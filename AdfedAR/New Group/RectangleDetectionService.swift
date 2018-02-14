@@ -3,11 +3,12 @@ import Vision
 import ARKit
 
 class RectangleDetectionService {
-    let sceneView: MainARSCNView!
-    var rootAnchor: ARAnchor!
+    var sceneView: MainARSCNView?
+    var rootAnchor: ARAnchor?
     var delegate: RectangleDetectionServiceDelegate?
+    static let instance = RectangleDetectionService()
     
-    init(sceneView: MainARSCNView, rootAnchor: ARAnchor) {
+    public func setup(sceneView: MainARSCNView, rootAnchor: ARAnchor) {
         self.sceneView = sceneView
         self.rootAnchor = rootAnchor
     }
@@ -26,19 +27,19 @@ class RectangleDetectionService {
         }
         
         let points = (highConfidenceObservation?.corners())!
-        
+
         highestConfidenceObservation.boundingBox.applying(CGAffineTransform(scaleX: 1, y: -1))
         highestConfidenceObservation.boundingBox.applying(CGAffineTransform(translationX: 0, y: 1))
         
         let center          = getBoxCenter(highConfidenceObservation)
-        let hitTestResults  = self.sceneView.hitTest(center, types: [.existingPlaneUsingExtent, .featurePoint])
+        let hitTestResults  = self.sceneView!.hitTest(center, types: [.existingPlaneUsingExtent, .featurePoint])
         guard let result    = hitTestResults.first else {
             delegate?.rectangleDetectionError(sender: self)
             return
         }
 
         if let rootAnchor = self.rootAnchor,
-            let node = self.sceneView.node(for: rootAnchor) {
+            let node = self.sceneView!.node(for: rootAnchor) {
                 node.transform = SCNMatrix4(result.worldTransform)
         } else {
             updateRootAnchor(result)
@@ -49,7 +50,7 @@ class RectangleDetectionService {
   
     private func updateRootAnchor(_ result: ARHitTestResult) {
         self.rootAnchor = ARAnchor(transform: result.worldTransform)
-        self.sceneView.session.add(anchor: self.rootAnchor!)
+        self.sceneView!.session.add(anchor: self.rootAnchor!)
     }
     
     private func getBoxCenter(_ observation: VNRectangleObservation?) -> CGPoint {
@@ -60,9 +61,9 @@ class RectangleDetectionService {
     private func drawDebugPolygon(_ points: [CGPoint], color: UIColor) {
         #if DEBUG
             DispatchQueue.main.async {
-                let convertedPoints = points.map{ self.sceneView.convertFromCamera($0) }
+                let convertedPoints = points.map{ self.sceneView!.convertFromCamera($0) }
                 let debugLayer = DebugPolygon(points: convertedPoints, color: color)
-                self.sceneView.layer.addSublayer(debugLayer)
+                self.sceneView!.layer.addSublayer(debugLayer)
             }
         #endif
     }
