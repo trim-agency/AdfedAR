@@ -256,7 +256,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     
     // MARK: - Get Video Id's
     private func getVideoIds(){
-        Alamofire.request("https://r5bgtuldo1.execute-api.us-west-2.amazonaws.com/development/adfed-ar-video")
+        Alamofire.request(Secrets.AWS_URL)
             .responseJSON(completionHandler: { (response) in
                 switch response.result{
                 case .success(_):
