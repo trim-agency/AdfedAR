@@ -2,6 +2,10 @@ import UIKit
 import SceneKit
 import ARKit
 import Vision
+import Alamofire
+import SwiftyJSON
+import XCDYouTubeKit
+import AVKit
 
 class HomeViewController: UIViewController {
    
@@ -28,7 +32,8 @@ class HomeViewController: UIViewController {
     var debugLayer: CAShapeLayer?
     var rootAnchor: ARAnchor?
     var detectedPage: Page?
-
+    var videos: Videos?
+    
     // MARK: - Protocol Methods
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,6 +49,7 @@ class HomeViewController: UIViewController {
     private func setup() {
         defineSceneView()
         setupDebug()
+        getVideoIds()
     }
     
     private func start() {
@@ -269,17 +275,33 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         }
         let touchPoint = touch.preciseLocation(in: sceneView)
         let hitTestResults = sceneView.hitTest(touchPoint, options: nil)
+
         if let _ = hitTestResults.first?.node {
-            performSegue(withIdentifier: "segueToVideoVC", sender: self)
+            playVideo(videoIdentifier: videoId())
         }
     }
     
-    // MARK: - Segue Methods
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "segueToVideoVC" {
-            let viewController = segue.destination as! VideoViewController
-            viewController.page = detectedPage!
-        }
+    // MARK: - Get Video Id's
+    private func getVideoIds(){
+        Alamofire.request(Secrets.AWS_URL)
+            .responseJSON(completionHandler: { (response) in
+                switch response.result{
+                case .success(_):
+                    do {
+                        let jsonResponse = try JSON(data: response.data!)
+                        
+                        if let judgesChoice = jsonResponse["judgesChoice"].string,
+                            let bestOfShow = jsonResponse["bestOfShow"].string {
+                            self.videos = Videos(bestOfShow: bestOfShow,
+                                                 judgesChoice: judgesChoice)
+                        }
+                    } catch {
+                        log.error("json deserialization error")
+                    }
+                case .failure(let error):
+                    log.debug(error)
+                }
+            })
     }
 }
 
@@ -340,7 +362,30 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
     }
 }
 
+// MARK: - Video Player
+extension HomeViewController {
+   
+    private func playVideo(videoIdentifier: String?) {
+        let playerViewController = AVPlayerViewController()
+        self.present(playerViewController, animated: true, completion: nil)
+        
+        XCDYouTubeClient.default().getVideoWithIdentifier(videoIdentifier) { [weak playerViewController] (video: XCDYouTubeVideo?, error: Error?) in
+            if let streamURLs = video?.streamURLs, let streamURL = (streamURLs[XCDYouTubeVideoQualityHTTPLiveStreaming] ?? streamURLs[YouTubeVideoQuality.hd720] ?? streamURLs[YouTubeVideoQuality.medium360] ?? streamURLs[YouTubeVideoQuality.small240]) {
+                playerViewController?.player = AVPlayer(url: streamURL)
+                playerViewController?.player?.play()
+            } else {
+                self.dismiss(animated: true, completion: nil)
+            }
+        }
+    }
 
-
+    private func videoId() -> String {
+        if detectedPage == Page.judgesChoice {
+            return (videos?.judgesChoice)!
+        }  else {
+            return (videos?.bestOfShow)!
+        }
+    }
+}
 
 
