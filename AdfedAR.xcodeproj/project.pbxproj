@@ -13,6 +13,8 @@
 		69170E062033947B00740745 /* YoutubeVideoQuality.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69170E052033947B00740745 /* YoutubeVideoQuality.swift */; };
 		69170E0C20347AB500740745 /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69170E0B20347AB500740745 /* Secrets.swift */; };
 		69170E0E2034A18600740745 /* SceneView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69170E0D2034A18600740745 /* SceneView.swift */; };
+		69170E122034EE9800740745 /* Runes.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 69170E112034EE9800740745 /* Runes.xcassets */; };
+		69170E142034F49300740745 /* Animator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69170E132034F49300740745 /* Animator.swift */; };
 		691BFB8E202226C50086FD13 /* LogoHintOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 691BFB8D202226C50086FD13 /* LogoHintOverlay.swift */; };
 		6927A3D4201F709C00A089E0 /* VNRectangleObservationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927A3D3201F709C00A089E0 /* VNRectangleObservationExtension.swift */; };
 		6927A3D7201F752D00A089E0 /* MainARSCNView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6927A3D6201F752D00A089E0 /* MainARSCNView.swift */; };
@@ -69,6 +71,8 @@
 		69170E052033947B00740745 /* YoutubeVideoQuality.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YoutubeVideoQuality.swift; sourceTree = "<group>"; };
 		69170E0B20347AB500740745 /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		69170E0D2034A18600740745 /* SceneView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneView.swift; sourceTree = "<group>"; };
+		69170E112034EE9800740745 /* Runes.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Runes.xcassets; sourceTree = "<group>"; };
+		69170E132034F49300740745 /* Animator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Animator.swift; sourceTree = "<group>"; };
 		691BFB8D202226C50086FD13 /* LogoHintOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoHintOverlay.swift; sourceTree = "<group>"; };
 		6927A3D3201F709C00A089E0 /* VNRectangleObservationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VNRectangleObservationExtension.swift; sourceTree = "<group>"; };
 		6927A3D6201F752D00A089E0 /* MainARSCNView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainARSCNView.swift; sourceTree = "<group>"; };
@@ -197,6 +201,7 @@
 				69D121102016714600B39411 /* Services */,
 				6937D8AB200E9DC30024AC33 /* StoryBoards */,
 				6937D8AC200E9DD80024AC33 /* Views */,
+				69170E112034EE9800740745 /* Runes.xcassets */,
 			);
 			path = AdfedAR;
 			sourceTree = "<group>";
@@ -281,6 +286,7 @@
 			children = (
 				69D121112016715B00B39411 /* CoreMLService.swift */,
 				6927A3D8201F76DB00A089E0 /* RectangleDetectionService.swift */,
+				69170E132034F49300740745 /* Animator.swift */,
 			);
 			name = Services;
 			path = "New Group";
@@ -433,6 +439,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				69170E122034EE9800740745 /* Runes.xcassets in Resources */,
 				6929798A200CF4120019A0B9 /* LaunchScreen.storyboard in Resources */,
 				69D617F3200EB4D40067FC36 /* 3dAssets.scnassets in Resources */,
 				69297987200CF4120019A0B9 /* Assets.xcassets in Resources */,
@@ -653,6 +660,7 @@
 				69170E0E2034A18600740745 /* SceneView.swift in Sources */,
 				6927A3DD201FAD2000A089E0 /* RectangleDetectionServiceDelegate.swift in Sources */,
 				6929797E200CF4120019A0B9 /* AppDelegate.swift in Sources */,
+				69170E142034F49300740745 /* Animator.swift in Sources */,
 				69B037A32020CB7C00906004 /* CoreMLError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

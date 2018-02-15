@@ -20,13 +20,13 @@ class HomeViewController: UIViewController {
     var didTapReset             = false
     var isPlayingAnimation      = false
 
-    @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
     @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet weak var sceneView: MainARSCNView!
     @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
+    @IBOutlet weak var logoHintOverlay: UIView!
     @IBAction func didTapDebug(_ sender: Any) { reset() }
-    
+
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
     var debugLayer: CAShapeLayer?
@@ -44,6 +44,11 @@ class HomeViewController: UIViewController {
         super.viewWillAppear(animated)
         start()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        displayLogoHintOverlay()
+    }
 
     // MARK: - Setup, Layout & ARKIT Start
     private func setup() {
@@ -57,9 +62,10 @@ class HomeViewController: UIViewController {
         scene.loadAllAnimations()
         loadCoreMLService()
     }
+    
     private func reset() {
         scene.removeAllNodes(completion: {
-            self.logoHintOverlay.fadeIn()
+            Animator.fade(view: self.logoHintOverlay, to: 1.0, for: 1.0, completion: nil)
             self.startPageDetection()
             DispatchQueue.main.async {
                 self.debugLabel.text = ""
@@ -84,9 +90,16 @@ class HomeViewController: UIViewController {
         sceneView.delegate  = self
     }
     
+    private func displayLogoHintOverlay() {
+        logoHintOverlay.isHidden = false
+        view.addSubview(logoHintOverlay)
+        logoHintOverlay.snp.makeConstraints{ make -> Void in
+            make.center.equalTo(self.view.snp.center)
+            make.width.height.equalTo(self.view.snp.width).multipliedBy(0.7)
+        }
+    }
+    
     // MARK: - RESET
-    
-    
     // MARK: Methods
     private func pageDetected() {
         userInstructionLabel.updateText(.none)
@@ -226,7 +239,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
 // MARK: - CoreMLService Delegate
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
-        logoHintOverlay.fadeOut()
+        Animator.fade(view: logoHintOverlay, to: 0.0, for: 2.0, completion: nil)
         provideHapticFeedback()
         detectedPage = page
         appendToDebugLabel("\n✅ " + (self.detectedPage?.rawValue)!)
