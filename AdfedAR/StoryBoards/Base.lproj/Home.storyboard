@@ -43,7 +43,27 @@
                                 <color key="shadowColor" red="0.0" green="0.0" blue="0.0" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                                 <size key="shadowOffset" width="-1" height="1"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nih-WI-hAp">
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YJ1-Vx-QFj" userLabel="darkeningLayer">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.2758032570422535" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N9W-3c-axU">
+                                <rect key="frame" x="41" y="45" width="88.5" height="25"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="25" id="zC1-PR-ip7"/>
+                                </constraints>
+                                <attributedString key="attributedText">
+                                    <fragment content="AAF/AAA">
+                                        <attributes>
+                                            <color key="NSColor" red="1" green="1" blue="1" alpha="0.84999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="18" name="Gotham-Medium"/>
+                                            <integer key="NSUnderline" value="1"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nih-WI-hAp">
                                 <rect key="frame" x="16" y="20" width="70" height="70"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="70" id="gUo-HC-FxT"/>
@@ -57,10 +77,6 @@
                                     <action selector="didTapDebug:" destination="BV1-FR-VrT" eventType="touchUpInside" id="V7i-d5-CLV"/>
                                 </connections>
                             </button>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="YJ1-Vx-QFj" userLabel="darkeningLayer">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.2758032570422535" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -73,10 +89,12 @@
                             <constraint firstAttribute="trailing" secondItem="lPY-XG-4EC" secondAttribute="trailing" constant="20" id="Xyh-r3-ZTQ"/>
                             <constraint firstItem="nih-WI-hAp" firstAttribute="top" secondItem="gLx-C2-PS4" secondAttribute="topMargin" id="aTP-aZ-P4m"/>
                             <constraint firstAttribute="trailing" secondItem="YJ1-Vx-QFj" secondAttribute="trailing" id="bE6-yJ-hOV"/>
+                            <constraint firstItem="N9W-3c-axU" firstAttribute="leading" secondItem="gLx-C2-PS4" secondAttribute="leadingMargin" constant="25" id="eYB-n9-ULw"/>
                             <constraint firstAttribute="bottom" secondItem="U7P-0S-NKa" secondAttribute="bottom" id="h9n-xy-ipJ"/>
                             <constraint firstItem="0ZJ-TJ-W7j" firstAttribute="leading" secondItem="XkV-5f-4kR" secondAttribute="leading" constant="20" id="hIO-5V-K6i"/>
                             <constraint firstAttribute="bottom" secondItem="YJ1-Vx-QFj" secondAttribute="bottom" id="ikL-jv-TFu"/>
                             <constraint firstItem="YJ1-Vx-QFj" firstAttribute="leading" secondItem="gLx-C2-PS4" secondAttribute="leading" id="jTR-cf-tlU"/>
+                            <constraint firstItem="N9W-3c-axU" firstAttribute="top" secondItem="gLx-C2-PS4" secondAttribute="topMargin" constant="25" id="kd6-iR-TZ0"/>
                             <constraint firstItem="YJ1-Vx-QFj" firstAttribute="top" secondItem="gLx-C2-PS4" secondAttribute="top" id="ocZ-Sc-Zwv"/>
                             <constraint firstItem="nih-WI-hAp" firstAttribute="leading" secondItem="gLx-C2-PS4" secondAttribute="leadingMargin" id="pKM-He-HdM"/>
                             <constraint firstAttribute="bottom" secondItem="lPY-XG-4EC" secondAttribute="bottom" constant="100" id="sUU-cO-9Zd"/>
@@ -84,6 +102,7 @@
                         <viewLayoutGuide key="safeArea" id="XkV-5f-4kR"/>
                     </view>
                     <connections>
+                        <outlet property="aafLabel" destination="N9W-3c-axU" id="Jbe-ZJ-0CA"/>
                         <outlet property="debugLabel" destination="0ZJ-TJ-W7j" id="4Hr-E7-g9B"/>
                         <outlet property="logoHintOverlay" destination="qJF-sB-r1M" id="n8D-qM-08V"/>
                         <outlet property="resetButton" destination="nih-WI-hAp" id="bF1-lW-ldo"/>
@@ -123,6 +142,7 @@
                     </connections>
                 </view>
             </objects>
+            <point key="canvasLocation" x="36" y="33.733133433283363"/>
         </scene>
     </scenes>
     <resources>

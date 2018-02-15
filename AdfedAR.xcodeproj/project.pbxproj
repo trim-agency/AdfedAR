@@ -29,6 +29,7 @@
 		692979A0200CF4120019A0B9 /* AdfedARUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6929799F200CF4120019A0B9 /* AdfedARUITests.swift */; };
 		69355CAB201A352B00241310 /* DebugPolygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69355CAA201A352B00241310 /* DebugPolygon.swift */; };
 		6937D8AA200E7ED70024AC33 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D8A9200E7ED70024AC33 /* UIViewExtension.swift */; };
+		6985CFF520361BD90069116D /* AafLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6985CFF420361BD90069116D /* AafLabel.swift */; };
 		69B037A32020CB7C00906004 /* CoreMLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B037A22020CB7C00906004 /* CoreMLError.swift */; };
 		69D121122016715B00B39411 /* CoreMLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121112016715B00B39411 /* CoreMLService.swift */; };
 		69D121162016727E00B39411 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121152016727E00B39411 /* Page.swift */; };
@@ -93,6 +94,9 @@
 		692979A1200CF4120019A0B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		69355CAA201A352B00241310 /* DebugPolygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugPolygon.swift; sourceTree = "<group>"; };
 		6937D8A9200E7ED70024AC33 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		6985CFF2203619A50069116D /* Gotham-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Medium.otf"; sourceTree = "<group>"; };
+		6985CFF3203619A60069116D /* Gotham-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Book.otf"; sourceTree = "<group>"; };
+		6985CFF420361BD90069116D /* AafLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AafLabel.swift; sourceTree = "<group>"; };
 		69B037A22020CB7C00906004 /* CoreMLError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLError.swift; sourceTree = "<group>"; };
 		69D121112016715B00B39411 /* CoreMLService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLService.swift; sourceTree = "<group>"; };
 		69D121152016727E00B39411 /* Page.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page.swift; sourceTree = "<group>"; };
@@ -189,19 +193,20 @@
 		6929797C200CF4120019A0B9 /* AdfedAR */ = {
 			isa = PBXGroup;
 			children = (
-				69170E0220337CE900740745 /* Structs */,
-				6927A3D5201F750A00A089E0 /* Subclasses */,
-				699A3C82201A775C00FFB5F6 /* Model */,
 				69D617F2200EB4D40067FC36 /* 3dAssets.scnassets */,
 				69D121132016726900B39411 /* Enums */,
 				6937D8A8200E7EC80024AC33 /* Extensions */,
+				6985CFF12036198D0069116D /* Fonts */,
 				6929798B200CF4120019A0B9 /* Info.plist */,
+				699A3C82201A775C00FFB5F6 /* Model */,
 				697EED7E200E9E4600A345DB /* Other */,
 				69D121172016870600B39411 /* Protocols */,
+				69170E112034EE9800740745 /* Runes.xcassets */,
 				69D121102016714600B39411 /* Services */,
 				6937D8AB200E9DC30024AC33 /* StoryBoards */,
+				69170E0220337CE900740745 /* Structs */,
+				6927A3D5201F750A00A089E0 /* Subclasses */,
 				6937D8AC200E9DD80024AC33 /* Views */,
-				69170E112034EE9800740745 /* Runes.xcassets */,
 			);
 			path = AdfedAR;
 			sourceTree = "<group>";
@@ -230,6 +235,7 @@
 				69355CAA201A352B00241310 /* DebugPolygon.swift */,
 				69074D062020EA3000FEC5EB /* UserInstructionLabel.swift */,
 				691BFB8D202226C50086FD13 /* LogoHintOverlay.swift */,
+				6985CFF420361BD90069116D /* AafLabel.swift */,
 			);
 			path = "Element Subclasses";
 			sourceTree = "<group>";
@@ -270,6 +276,15 @@
 				69170E0B20347AB500740745 /* Secrets.swift */,
 			);
 			path = Other;
+			sourceTree = "<group>";
+		};
+		6985CFF12036198D0069116D /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				6985CFF3203619A60069116D /* Gotham-Book.otf */,
+				6985CFF2203619A50069116D /* Gotham-Medium.otf */,
+			);
+			path = Fonts;
 			sourceTree = "<group>";
 		};
 		699A3C82201A775C00FFB5F6 /* Model */ = {
@@ -654,6 +669,7 @@
 				69297982200CF4120019A0B9 /* HomeViewController.swift in Sources */,
 				69074D092020EA7500FEC5EB /* UserInstructionsEnum.swift in Sources */,
 				69EEAF7E202903C9009E9D4E /* AdFed.mlmodel in Sources */,
+				6985CFF520361BD90069116D /* AafLabel.swift in Sources */,
 				69074D072020EA3000FEC5EB /* UserInstructionLabel.swift in Sources */,
 				69355CAB201A352B00241310 /* DebugPolygon.swift in Sources */,
 				69D121192016877800B39411 /* CoreMLServiceDelegate.swift in Sources */,

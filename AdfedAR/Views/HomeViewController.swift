@@ -20,6 +20,7 @@ class HomeViewController: UIViewController {
     var didTapReset             = false
     var isPlayingAnimation      = false
 
+    @IBOutlet weak var aafLabel: UILabel!
     @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet weak var sceneView: MainARSCNView!
