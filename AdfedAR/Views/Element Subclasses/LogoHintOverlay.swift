@@ -24,14 +24,14 @@ class LogoHintOverlay: UIView {
     
     func selectRune(_ page: Page) {
         isPageDetected = true
+        removeAnimations()
+//        Animator.stopAnimations(views: [bestOfShow!, judgesChoice!])
         if page == .bestOfShow {
-            removeAnimations()
             glowSymbol(bestOfShow!, page: page)
-            Animator.fade(view: bestOfShow!, to: 1.0, for: 2.0, completion: nil)
+            Animator.fade(view: bestOfShow!, to: 1.0, for: 2.0, options: [UIViewAnimationOptions.curveEaseInOut], completion: nil)
         } else {
-            removeAnimations()
             glowSymbol(judgesChoice!, page: page)
-            Animator.fade(view: judgesChoice!, to: 1.0, for: 2.0, completion: nil)
+            Animator.fade(view: judgesChoice!, to: 1.0, for: 2.0, options: [UIViewAnimationOptions.curveEaseInOut], completion: nil)
         }
     }
     
@@ -52,11 +52,11 @@ class LogoHintOverlay: UIView {
     
     private func glowSymbol(_ imageView: UIImageView, page: Page) {
         DispatchQueue.main.async {
-            let image = page == .judgesChoice ? #imageLiteral(resourceName: "judges-choice-rune") : #imageLiteral(resourceName: "best-of-show-rune")
-            self.winnerView.image = image
-            self.winnerView.tintColor = UIColor(red:0.75, green:0.65, blue:0.30, alpha:1.0)
-            self.winnerView.isHidden = false
-            Animator.fade(view: self.winnerView, to: 0.0, for: 10, completion: nil)
+            let image                   = page == .judgesChoice ? #imageLiteral(resourceName: "judges-choice-rune") : #imageLiteral(resourceName: "best-of-show-rune")
+            self.winnerView.image       = image
+            self.winnerView.tintColor   = UIColor(red:0.75, green:0.65, blue:0.30, alpha:1.0)
+            self.winnerView.isHidden    = false
+            Animator.fade(view: self.winnerView, to: 0.0, for: 10, options: [UIViewAnimationOptions.curveEaseIn], completion: nil)
         }
     }
 
