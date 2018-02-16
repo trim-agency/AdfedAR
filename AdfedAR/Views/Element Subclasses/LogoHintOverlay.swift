@@ -38,10 +38,10 @@ class LogoHintOverlay: UIView {
 
     func pulse<T: UIView>(view: T, for length: Double, to alpha: CGFloat ) {
         if !isPageDetected {
-            UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseInOut], animations: {
+            UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseOut], animations: {
                 view.alpha = 1.0
             }) { (finished) in
-                UIView.animate(withDuration: 0.5, delay: 0, options: [.curveEaseOut], animations: {
+                UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseOut], animations: {
                     view.alpha = 0.2
                 }, completion: {(finished) in
                     DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1500), execute: {
