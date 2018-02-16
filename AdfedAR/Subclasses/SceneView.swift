@@ -33,7 +33,7 @@ class Scene: SCNScene {
             } else {
                 self.isPlayingAnimation = false
                 node.removeFromParentNode()
-                completion?()
+//                completion?()
             }
         }
     }

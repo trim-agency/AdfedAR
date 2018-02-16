@@ -20,12 +20,13 @@ class HomeViewController: UIViewController {
     var didTapReset             = false
     var isPlayingAnimation      = false
 
+    @IBOutlet weak var darkeningLayer: UIView!
     @IBOutlet weak var aafLabel: UILabel!
     @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet weak var sceneView: MainARSCNView!
     @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
-    @IBOutlet weak var logoHintOverlay: UIView!
+    @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
     @IBAction func didTapDebug(_ sender: Any) { reset() }
 
     var configuration: ARWorldTrackingConfiguration?
@@ -66,7 +67,6 @@ class HomeViewController: UIViewController {
     
     private func reset() {
         scene.removeAllNodes(completion: {
-            Animator.fade(view: self.logoHintOverlay, to: 1.0, for: 1.0, completion: nil)
             self.startPageDetection()
             DispatchQueue.main.async {
                 self.debugLabel.text = ""
@@ -108,6 +108,7 @@ class HomeViewController: UIViewController {
             self.scene.removeAllAnimations()
             switch self.detectedPage! {
             case .judgesChoice:
+                
                 self.scene.loadAndPlayAnimation(key: "grandma")
             case .bestOfShow:
                 self.scene.loadAndPlayAnimation(key: "bellyDancing")
@@ -240,9 +241,9 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
 // MARK: - CoreMLService Delegate
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
-        Animator.fade(view: logoHintOverlay, to: 0.0, for: 2.0, completion: nil)
         provideHapticFeedback()
         detectedPage = page
+        logoHintOverlay.selectRune(detectedPage!)
         appendToDebugLabel("\n✅ " + (self.detectedPage?.rawValue)!)
         if rootAnchor != nil && didTapReset == false {
             appendToDebugLabel("\n✅ Rectangle Detection Running")
@@ -284,6 +285,7 @@ extension HomeViewController: CoreMLServiceDelegate {
 // MARK: - Rectangle Detection Delegate
 extension HomeViewController: RectangleDetectionServiceDelegate {
     func didDetectRectangle(sender: RectangleDetectionService, corners: [CGPoint]) {
+        Animator.fade(view: darkeningLayer, to: 0.0, for: 2.0, completion: nil)
         appendToDebugLabel("\n✅ Rectangle Detected")
         pageDetected()
     }

@@ -10,6 +10,11 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Gotham-Book.otf">
+            <string>Gotham-Book</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Home View Controller-->
         <scene sceneID="tXr-a1-R10">
@@ -22,14 +27,14 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U7P-0S-NKa" customClass="MainARSCNView" customModule="AdfedAR" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </arscnView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPY-XG-4EC" customClass="UserInstructionLabel" customModule="AdfedAR" customModuleProvider="target">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPY-XG-4EC" customClass="UserInstructionLabel" customModule="AdfedAR" customModuleProvider="target">
                                 <rect key="frame" x="20" y="507" width="335" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="CCl-wM-nXH"/>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="MIv-nz-pri"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="23"/>
-                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="25"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0ZJ-TJ-W7j">
@@ -47,7 +52,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.2758032570422535" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N9W-3c-axU">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="N9W-3c-axU" customClass="AafLabel" customModule="AdfedAR" customModuleProvider="target">
                                 <rect key="frame" x="41" y="45" width="88.5" height="25"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="25" id="zC1-PR-ip7"/>
@@ -103,6 +108,7 @@
                     </view>
                     <connections>
                         <outlet property="aafLabel" destination="N9W-3c-axU" id="Jbe-ZJ-0CA"/>
+                        <outlet property="darkeningLayer" destination="YJ1-Vx-QFj" id="OIB-W5-kgb"/>
                         <outlet property="debugLabel" destination="0ZJ-TJ-W7j" id="4Hr-E7-g9B"/>
                         <outlet property="logoHintOverlay" destination="qJF-sB-r1M" id="n8D-qM-08V"/>
                         <outlet property="resetButton" destination="nih-WI-hAp" id="bF1-lW-ldo"/>
@@ -121,17 +127,24 @@
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="judges-choice-rune" translatesAutoresizingMaskIntoConstraints="NO" id="Wjr-Id-Qm7">
                             <rect key="frame" x="0.0" y="0.0" width="240" height="425"/>
                         </imageView>
+                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NA0-T5-ERI">
+                            <rect key="frame" x="0.0" y="148" width="240" height="128"/>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="Wjr-Id-Qm7" firstAttribute="centerY" secondItem="qJF-sB-r1M" secondAttribute="centerY" id="0vj-En-1UB"/>
                         <constraint firstItem="7tc-kw-bfp" firstAttribute="leading" secondItem="qJF-sB-r1M" secondAttribute="leading" id="3ON-FA-l8r"/>
+                        <constraint firstItem="NA0-T5-ERI" firstAttribute="centerX" secondItem="7tc-kw-bfp" secondAttribute="centerX" id="4xs-sm-lw5"/>
+                        <constraint firstItem="NA0-T5-ERI" firstAttribute="height" secondItem="7tc-kw-bfp" secondAttribute="height" id="AHf-Dl-eqf"/>
                         <constraint firstItem="7tc-kw-bfp" firstAttribute="top" secondItem="qJF-sB-r1M" secondAttribute="top" id="Cbf-TF-EyI"/>
                         <constraint firstItem="Wjr-Id-Qm7" firstAttribute="centerX" secondItem="qJF-sB-r1M" secondAttribute="centerX" id="DYB-EC-uih"/>
+                        <constraint firstItem="NA0-T5-ERI" firstAttribute="width" secondItem="7tc-kw-bfp" secondAttribute="width" id="Hwe-eV-IVL"/>
                         <constraint firstItem="7tc-kw-bfp" firstAttribute="centerX" secondItem="qJF-sB-r1M" secondAttribute="centerX" id="Qjy-Co-7Q6"/>
                         <constraint firstAttribute="trailing" secondItem="7tc-kw-bfp" secondAttribute="trailing" id="WwO-94-cxh"/>
                         <constraint firstItem="Wjr-Id-Qm7" firstAttribute="width" secondItem="7tc-kw-bfp" secondAttribute="width" id="bhS-I4-t8c"/>
                         <constraint firstItem="7tc-kw-bfp" firstAttribute="centerY" secondItem="qJF-sB-r1M" secondAttribute="centerY" id="eOS-Dn-YNm"/>
+                        <constraint firstItem="NA0-T5-ERI" firstAttribute="centerY" secondItem="7tc-kw-bfp" secondAttribute="centerY" id="f4a-eN-UPi"/>
                         <constraint firstAttribute="bottom" secondItem="7tc-kw-bfp" secondAttribute="bottom" id="k3a-Uu-nef"/>
                         <constraint firstItem="Wjr-Id-Qm7" firstAttribute="height" secondItem="7tc-kw-bfp" secondAttribute="height" id="yia-OG-auM"/>
                     </constraints>
@@ -139,6 +152,7 @@
                     <connections>
                         <outlet property="bestOfShow" destination="7tc-kw-bfp" id="ZyB-Wc-WlB"/>
                         <outlet property="judgesChoice" destination="Wjr-Id-Qm7" id="dBY-eU-V3I"/>
+                        <outlet property="winnerView" destination="NA0-T5-ERI" id="ryW-K2-OYZ"/>
                     </connections>
                 </view>
             </objects>

@@ -16,4 +16,10 @@ class Animator {
             view.alpha = alpha
         }, completion: nil)
     }
+    
+    static func stopAnimations<T: CALayer>(layer: T){
+        DispatchQueue.main.async {
+            layer.removeAllAnimations()
+        }
+    }
 }
