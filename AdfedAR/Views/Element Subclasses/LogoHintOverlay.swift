@@ -17,7 +17,7 @@ class LogoHintOverlay: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
-            self.animateRune(startAlpha: 1.0, to: 0.1, for: 1.0)
+            self.animateRune(startAlpha: 0.80, to: 0.2, for: 1.25)
         }
     }
     

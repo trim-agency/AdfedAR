@@ -108,9 +108,10 @@ class HomeViewController: UIViewController {
             self.scene.removeAllAnimations()
             switch self.detectedPage! {
             case .judgesChoice:
-                
+                self.appendToDebugLabel("judges choice triggered")
                 self.scene.loadAndPlayAnimation(key: "grandma")
             case .bestOfShow:
+                self.appendToDebugLabel("best of show triggered")
                 self.scene.loadAndPlayAnimation(key: "bellyDancing")
             }
         }

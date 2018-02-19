@@ -10,17 +10,23 @@ class CoreMLService {
     static let instance = CoreMLService()
 
     func getPageType(_ arFrame: ARFrame) throws {
-        hasFoundPage        = false
-        let image           = arFrame.capturedImage
-        let transformedImage = transformBuffer(image, arFrame.lightEstimate?.ambientIntensity)
-        let context         = CIContext()
-        let cgImage         = context.createCGImage(transformedImage, from: transformedImage.extent)
-        let croppedImage    = UIImage(cgImage: cgImage!).cropToCenter(to: CGSize(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.width * 0.6))
-        let ciImage         = CIImage(image: croppedImage)
-        let model           = try VNCoreMLModel(for: AdFed().model)
-        let request         = VNCoreMLRequest(model: model, completionHandler: pageRecognitionHandler)
-        let handler         = VNImageRequestHandler(ciImage: ciImage!, options: [:])
-        try handler.perform([request])
+        DispatchQueue.global().async {
+            do {
+                self.hasFoundPage        = false
+                let image           = arFrame.capturedImage
+                let transformedImage = self.transformBuffer(image, arFrame.lightEstimate?.ambientIntensity)
+                let context         = CIContext()
+                let cgImage         = context.createCGImage(transformedImage, from: transformedImage.extent)
+                let croppedImage    = UIImage(cgImage: cgImage!).cropToCenter(to: CGSize(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.width * 0.6))
+                let ciImage         = CIImage(image: croppedImage)
+                let model           = try VNCoreMLModel(for: AdFed().model)
+                let request         = VNCoreMLRequest(model: model, completionHandler: self.pageRecognitionHandler)
+                let handler         = VNImageRequestHandler(ciImage: ciImage!, options: [:])
+                try handler.perform([request])
+            } catch {
+                log.debug("handler error")
+            }
+        }
     }
     
     private func transformBuffer(_ pixelBuffer: CVPixelBuffer, _ exposure: CGFloat?) -> CIImage {
