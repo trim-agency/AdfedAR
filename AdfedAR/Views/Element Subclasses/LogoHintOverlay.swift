@@ -11,18 +11,24 @@ class LogoHintOverlay: UIView {
         super.awakeFromNib()
         bestOfShow?.tintColor   = UIColor.white
         judgesChoice?.tintColor = UIColor.white
+       
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        bestOfShow?.alpha = 0.0
-        judgesChoice?.alpha = 0.0
-        self.alpha = 0
-        Animator.fade(view: self, to: 1.0, for: 2.0, completion: {
-            self.animateRune(alpha: 1.0, length: 1.5)
-        })
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
+            self.animateRune(startAlpha: 1.0, to: 0.1, for: 1.0)
+        }
     }
     
+    override func didMoveToSuperview() {
+        super.didMoveToSuperview()
+        bestOfShow?.alpha   = 1.0
+        judgesChoice?.alpha = 0.1
+    }
+   
+    
+
     func selectRune(_ page: Page) {
         isPageDetected = true
         removeAnimations()
@@ -36,37 +42,31 @@ class LogoHintOverlay: UIView {
         }
     }
 
-    func pulse<T: UIView>(view: T, for length: Double, to alpha: CGFloat ) {
+    func pulse<T: UIView>(view: T, for length: Double, startAlpha: CGFloat, endAlpha: CGFloat) {
         if !isPageDetected {
-            UIView.animate(withDuration: 1.0, delay: 0.0, options: [.curveEaseOut], animations: {
-                view.alpha = 1.0
-            }) { (finished) in
-                UIView.animate(withDuration: 1.0, delay: 0, options: [.curveEaseOut], animations: {
-                    view.alpha = 0.2
-                }, completion: {(finished) in
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1500), execute: {
-                        self.pulse(view: view, for: length, to: 1.0)
-                    })
+            Animator.fade(view: view, to: startAlpha, for: length, options: [.curveEaseOut], completion: {
+                Animator.fade(view: view, to: endAlpha, for: length, options: [.curveEaseOut], completion: {
+                    self.pulse(view: view, for: length, startAlpha: startAlpha, endAlpha: endAlpha )
                 })
-            }
+            })
+        } else {
+            Animator.fade(view: view, to: 0, for: 1.0, options: [.curveEaseInOut], completion: nil)
         }
     }
-
+    
     private func glowSymbol(_ imageView: UIImageView, page: Page) {
         DispatchQueue.main.async {
             let image                   = page == .judgesChoice ? #imageLiteral(resourceName: "judges-choice-rune") : #imageLiteral(resourceName: "best-of-show-rune")
             self.winnerView.image       = image
             self.winnerView.tintColor   = UIColor(red:0.75, green:0.65, blue:0.30, alpha:1.0)
             self.winnerView.isHidden    = false
-            Animator.fade(view: self.winnerView, to: 0.0, for: 5, options: [UIViewAnimationOptions.curveEaseIn], completion: nil)
+            Animator.fade(view: self.winnerView, to: 0.0, for: 3, options: [UIViewAnimationOptions.curveEaseIn], completion: nil)
         }
     }
 
     // MARK: - Rune
-    private func animateRune(alpha: CGFloat, length: Double) {
-        pulse(view: bestOfShow!, for: length, to: alpha)
-        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1500)) {
-            self.pulse(view: self.judgesChoice!, for: length, to: alpha)
-        }
+    private func animateRune(startAlpha: CGFloat, to endAlpha: CGFloat, for length: Double) {
+        pulse(view: bestOfShow!, for: length, startAlpha: startAlpha, endAlpha: endAlpha)
+        pulse(view: judgesChoice!, for: length, startAlpha: endAlpha, endAlpha: startAlpha)
     }
 }
