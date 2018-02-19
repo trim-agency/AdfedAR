@@ -6,6 +6,7 @@ import Alamofire
 import SwiftyJSON
 import XCDYouTubeKit
 import AVKit
+import SnapKit
 
 class HomeViewController: UIViewController {
    
@@ -29,6 +30,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
     @IBAction func didTapDebug(_ sender: Any) { reset() }
 
+    var rectangleDetectionGuide: RectangleDetectionGuide?
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
     var debugLayer: CAShapeLayer?
@@ -96,7 +98,7 @@ class HomeViewController: UIViewController {
         view.addSubview(logoHintOverlay)
         logoHintOverlay.snp.makeConstraints{ make -> Void in
             make.center.equalTo(self.view.snp.center)
-            make.width.height.equalTo(self.view.snp.width).multipliedBy(0.7)
+            make.width.height.equalTo(self.view.snp.width).multipliedBy(0.8)
         }
     }
     
@@ -116,9 +118,6 @@ class HomeViewController: UIViewController {
             }
         }
     }
-    
-    // MARK: - Custom Animations
-    
     
     // MARK: - Core ML
     private func loadCoreMLService() {
@@ -243,6 +242,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
         provideHapticFeedback()
+        showRectangleGuide()
         detectedPage = page
         logoHintOverlay.selectRune(detectedPage!)
         appendToDebugLabel("\n✅ " + (self.detectedPage?.rawValue)!)
@@ -287,6 +287,7 @@ extension HomeViewController: CoreMLServiceDelegate {
 extension HomeViewController: RectangleDetectionServiceDelegate {
     func didDetectRectangle(sender: RectangleDetectionService, corners: [CGPoint]) {
         Animator.fade(view: darkeningLayer, to: 0.0, for: 2.0, completion: nil)
+        hideRectangleDetectionGuide()
         appendToDebugLabel("\n✅ Rectangle Detected")
         pageDetected()
     }
@@ -294,6 +295,23 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
     func rectangleDetectionError(sender: RectangleDetectionService) {
         appendToDebugLabel("\n💥 Rectangle Detection Error")
         loadRectangleDetection()
+    }
+    
+    private func showRectangleGuide() {
+        DispatchQueue.main.async {
+            self.rectangleDetectionGuide = RectangleDetectionGuide()
+            self.view.addSubview(self.rectangleDetectionGuide!)
+            self.rectangleDetectionGuide!.snp.makeConstraints{ make -> Void in
+                make.width.equalTo(self.view.snp.width)
+                make.height.equalTo(self.view.snp.width).multipliedBy(0.788)
+                make.center.equalTo(self.view.snp.center)
+            }
+            self.rectangleDetectionGuide!.displayRectangleGuide()
+        }
+    }
+    
+    private func hideRectangleDetectionGuide() {
+        rectangleDetectionGuide!.hideRectangleGuide()
     }
 }
 

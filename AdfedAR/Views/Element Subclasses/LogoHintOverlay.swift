@@ -2,8 +2,8 @@ import UIKit
 import SnapKit
 
 class LogoHintOverlay: UIView {
-    @IBOutlet weak var bestOfShow   = UIImageView()
-    @IBOutlet weak var judgesChoice = UIImageView()
+    @IBOutlet weak var bestOfShow           = UIImageView()
+    @IBOutlet weak var judgesChoice         = UIImageView()
     @IBOutlet weak var winnerView: UIImageView!
     var isPageDetected = false
    
@@ -17,7 +17,7 @@ class LogoHintOverlay: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
-            self.animateRune(startAlpha: 0.80, to: 0.2, for: 1.25)
+            self.animateRune(startAlpha: 0.80, to: 0, for: 1.25)
         }
     }
     
@@ -69,4 +69,19 @@ class LogoHintOverlay: UIView {
         pulse(view: bestOfShow!, for: length, startAlpha: startAlpha, endAlpha: endAlpha)
         pulse(view: judgesChoice!, for: length, startAlpha: endAlpha, endAlpha: startAlpha)
     }
+    
+    
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

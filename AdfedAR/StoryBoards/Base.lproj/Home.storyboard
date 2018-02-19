@@ -27,18 +27,8 @@
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="U7P-0S-NKa" customClass="MainARSCNView" customModule="AdfedAR" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </arscnView>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPY-XG-4EC" customClass="UserInstructionLabel" customModule="AdfedAR" customModuleProvider="target">
-                                <rect key="frame" x="20" y="507" width="335" height="60"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="200" id="CCl-wM-nXH"/>
-                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="MIv-nz-pri"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="25"/>
-                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0ZJ-TJ-W7j">
-                                <rect key="frame" x="20" y="467" width="335" height="30"/>
+                                <rect key="frame" x="20" y="502" width="335" height="30"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="30" id="uF1-5p-RBj"/>
                                 </constraints>
@@ -82,6 +72,15 @@
                                     <action selector="didTapDebug:" destination="BV1-FR-VrT" eventType="touchUpInside" id="V7i-d5-CLV"/>
                                 </connections>
                             </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPY-XG-4EC" customClass="UserInstructionLabel" customModule="AdfedAR" customModuleProvider="target">
+                                <rect key="frame" x="20" y="542" width="335" height="60"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="MIv-nz-pri"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="16"/>
+                                <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -102,7 +101,7 @@
                             <constraint firstItem="N9W-3c-axU" firstAttribute="top" secondItem="gLx-C2-PS4" secondAttribute="topMargin" constant="25" id="kd6-iR-TZ0"/>
                             <constraint firstItem="YJ1-Vx-QFj" firstAttribute="top" secondItem="gLx-C2-PS4" secondAttribute="top" id="ocZ-Sc-Zwv"/>
                             <constraint firstItem="nih-WI-hAp" firstAttribute="leading" secondItem="gLx-C2-PS4" secondAttribute="leadingMargin" id="pKM-He-HdM"/>
-                            <constraint firstAttribute="bottom" secondItem="lPY-XG-4EC" secondAttribute="bottom" constant="100" id="sUU-cO-9Zd"/>
+                            <constraint firstAttribute="bottom" secondItem="lPY-XG-4EC" secondAttribute="bottom" constant="65" id="sUU-cO-9Zd"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="XkV-5f-4kR"/>
                     </view>
