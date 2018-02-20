@@ -4,9 +4,15 @@ import SnapKit
 class LogoHintOverlay: UIView {
     @IBOutlet weak var bestOfShow           = UIImageView()
     @IBOutlet weak var judgesChoice         = UIImageView()
+    @IBOutlet weak var rectangleGuide       = UIImageView()
     @IBOutlet weak var winnerView: UIImageView!
-    var isPageDetected = false
+    var isPageDetected = false {
+        didSet {
+            self.hideRunes()
+        }
+    }
    
+    // MARK: - Lifecycle Methods
     override func awakeFromNib() {
         super.awakeFromNib()
         bestOfShow?.tintColor   = UIColor.white
@@ -16,25 +22,17 @@ class LogoHintOverlay: UIView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
+        setInitialAlpha()
         DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(500)) {
             self.animateRune(startAlpha: 0.80, to: 0, for: 1.25)
         }
     }
-    
-    override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        
-    }
-   
-    private func setInitialAlpha(){
-        bestOfShow?.alpha   = 1.0
-        judgesChoice?.alpha = 0.1
-    }
 
+    // MARK: - Rune Animations
     func selectRune(_ page: Page) {
         isPageDetected = true
         removeAnimations()
-        page == .bestOfShow ? glowSymbol(bestOfShow!, page: page) : glowSymbol(judgesChoice!, page: page)
+        page == .bestOfShow ? glowSymbol(page: page) : glowSymbol(page: page)
     }
     
     private func removeAnimations() {
@@ -45,9 +43,17 @@ class LogoHintOverlay: UIView {
     }
 
     func restartPulsing() {
-        isPageDetected = false
-        Animator.fade(view: bestOfShow!, to: 1.0, for: 1.0, options: [.curveEaseOut], completion: nil)
-        Animator.fade(view: judgesChoice!, to: 0.1, for: 1.0, options: [.curveEaseOut]) {
+        isPageDetected      = false
+        winnerView.isHidden = true
+        Animator.fade(view: bestOfShow!,
+                      to: 1.0,
+                      for: 1.0,
+                      options: [.curveEaseOut],
+                      completion: nil)
+        Animator.fade(view: judgesChoice!,
+                      to: 0.1,
+                      for: 1.0, 
+                      options: [.curveEaseOut]) {
             self.animateRune(startAlpha: 1.0, to: 0.1, for: 1.25)
         }
     }
@@ -60,17 +66,24 @@ class LogoHintOverlay: UIView {
                 })
             })
         } else {
-            Animator.fade(view: view, to: 0, for: 1.0, options: [.curveEaseInOut], completion: nil)
+            Animator.fade(view: view, to: 0, for: 0.5, options: [.curveEaseInOut], completion: nil)
         }
     }
     
-    private func glowSymbol(_ imageView: UIImageView, page: Page) {
+    private func glowSymbol(page: Page) {
         DispatchQueue.main.async {
-            let image                   = page == .judgesChoice ? #imageLiteral(resourceName: "judges-choice-rune") : #imageLiteral(resourceName: "best-of-show-rune")
-            self.winnerView.image       = image
+            self.winnerView.image       = page == .judgesChoice ? #imageLiteral(resourceName: "judges-choice-rune") : #imageLiteral(resourceName: "best-of-show-rune")
             self.winnerView.tintColor   = UIColor(red:0.75, green:0.65, blue:0.30, alpha:1.0)
+            self.winnerView.alpha       = 1.0
             self.winnerView.isHidden    = false
-            Animator.fade(view: self.winnerView, to: 0.0, for: 3, options: [UIViewAnimationOptions.curveEaseIn], completion: nil)
+            Animator.fade(view: self.winnerView,
+                          to: 0.0,
+                          for: 2.5,
+                          options: [.curveEaseInOut],
+                          completion: {
+                self.showRectangleGuide()
+                self.winnerView.isHidden = true
+            })
         }
     }
 
@@ -80,8 +93,30 @@ class LogoHintOverlay: UIView {
         pulse(view: bestOfShow!, for: length, startAlpha: startAlpha, endAlpha: endAlpha)
         pulse(view: judgesChoice!, for: length, startAlpha: endAlpha, endAlpha: startAlpha)
     }
+
+    private func setInitialAlpha(){
+        bestOfShow?.alpha   = 1.0
+        judgesChoice?.alpha = 0.1
+    }
     
+    private func hideRunes() {
+        Animator.fade(view: bestOfShow!, to: 0, for: 0.5, options: [.curveEaseInOut], completion: nil)
+        Animator.fade(view: judgesChoice!, to: 0, for: 0.5, options: [.curveEaseInOut], completion: nil)
+    }
     
+    // MARK: - Rectangle Guide
+    func showRectangleGuide() {
+        rectangleGuide?.tintColor   = UIColor.white
+        rectangleGuide?.alpha       = 0
+        rectangleGuide?.isHidden    = false
+        Animator.fade(view: rectangleGuide!, to: 1.0, for: 0.75, options: [.curveEaseInOut], completion: nil)
+    }
+    
+    func hideRectangleGuide() {
+        Animator.fade(view: rectangleGuide!, to: 0.0, for: 1.0, options: [.curveEaseInOut], completion: {
+            self.rectangleGuide?.isHidden = true
+        })
+    }
 }
 
 

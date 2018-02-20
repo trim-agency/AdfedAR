@@ -37,6 +37,7 @@
 		69EEAF6F2024DB72009E9D4E /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EEAF6E2024DB72009E9D4E /* UIImageExtension.swift */; };
 		69EEAF7E202903C9009E9D4E /* AdFed.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 69EEAF7D202903C9009E9D4E /* AdFed.mlmodel */; };
 		69F29871203B3E43004F84B7 /* RectangleDetectionGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F29870203B3E43004F84B7 /* RectangleDetectionGuide.swift */; };
+		69F29875203C6E9F004F84B7 /* AwardType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F29874203C6E9F004F84B7 /* AwardType.swift */; };
 		9816AB41C660356A4A94F75D /* Pods_AdfedARUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5D15C24C3C493A3E5D0D87A /* Pods_AdfedARUITests.framework */; };
 		E800A42CEC8EF0EA8EE98283 /* Pods_AdfedARTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 660BC9C20DDA71A324F106BE /* Pods_AdfedARTests.framework */; };
 		EE25FD5D9C4A774EDBBB5FA6 /* Pods_AdfedAR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 599BB549AA4BDC6196DEE851 /* Pods_AdfedAR.framework */; };
@@ -104,6 +105,7 @@
 		69EEAF6E2024DB72009E9D4E /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
 		69EEAF7D202903C9009E9D4E /* AdFed.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AdFed.mlmodel; sourceTree = "<group>"; };
 		69F29870203B3E43004F84B7 /* RectangleDetectionGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleDetectionGuide.swift; sourceTree = "<group>"; };
+		69F29874203C6E9F004F84B7 /* AwardType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwardType.swift; sourceTree = "<group>"; };
 		8B17EF5604D866D7559D229D /* Pods-AdfedARTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedARTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedARTests/Pods-AdfedARTests.release.xcconfig"; sourceTree = "<group>"; };
 		B4B3E575B685449E3A1EE296 /* Pods-AdfedARUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedARUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedARUITests/Pods-AdfedARUITests.release.xcconfig"; sourceTree = "<group>"; };
 		C5D15C24C3C493A3E5D0D87A /* Pods_AdfedARUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AdfedARUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -236,6 +238,7 @@
 				69074D062020EA3000FEC5EB /* UserInstructionLabel.swift */,
 				691BFB8D202226C50086FD13 /* LogoHintOverlay.swift */,
 				69F29870203B3E43004F84B7 /* RectangleDetectionGuide.swift */,
+				69F29874203C6E9F004F84B7 /* AwardType.swift */,
 			);
 			path = "Element Subclasses";
 			sourceTree = "<group>";
@@ -674,6 +677,7 @@
 				69355CAB201A352B00241310 /* DebugPolygon.swift in Sources */,
 				69D121192016877800B39411 /* CoreMLServiceDelegate.swift in Sources */,
 				69170E0E2034A18600740745 /* SceneView.swift in Sources */,
+				69F29875203C6E9F004F84B7 /* AwardType.swift in Sources */,
 				6927A3DD201FAD2000A089E0 /* RectangleDetectionServiceDelegate.swift in Sources */,
 				6929797E200CF4120019A0B9 /* AppDelegate.swift in Sources */,
 				69170E142034F49300740745 /* Animator.swift in Sources */,
@@ -845,7 +849,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 26;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = ZVRNHU225Q;
 				DISPLAY_NAME = "Adfed-debug";
@@ -865,7 +869,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 23;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_TEAM = ZVRNHU225Q;
 				DISPLAY_NAME = "AdFed AR";
 				INFOPLIST_FILE = AdfedAR/Info.plist;
