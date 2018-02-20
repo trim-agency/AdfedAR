@@ -20,6 +20,7 @@ class HomeViewController: UIViewController {
     var waitingOnPlane          = true
     var didTapReset             = false
     var isPlayingAnimation      = false
+    var didRecognizePage        = false
     
     @IBOutlet weak var awardTypeLabel: AwardType!
     @IBOutlet weak var locationLabel: UILabel!
@@ -74,6 +75,7 @@ class HomeViewController: UIViewController {
         toggleUI(animationPlaying: false)
         logoHintOverlay.restartPulsing()
         isPlayingAnimation = false
+        didRecognizePage = false
         awardTypeLabel.hide()
         scene.removeAllNodes(completion: {
             self.startPageDetection()
@@ -111,22 +113,30 @@ class HomeViewController: UIViewController {
     // MARK: - RESET
     private func pageDetected() {
         userInstructionLabel.updateText(.none)
-        scene.removeAllNodes {
-            self.isPlayingAnimation = true
-            self.scene.removeAllAnimations()
-            switch self.detectedPage! {
-            case .judgesChoice:
-                self.awardTypeLabel.showLabel(.judgesChoice)
-                self.appendToDebugLabel("judges choice triggered")
-                self.scene.loadAndPlayAnimation(key: "grandma")
-            case .bestOfShow:
-                self.awardTypeLabel.showLabel(.bestOfShow)
-                self.appendToDebugLabel("best of show triggered")
-                self.scene.loadAndPlayAnimation(key: "bellyDancing")
+        if didTapReset {
+            displayAnimations()
+        } else {
+            scene.removeAllNodes {
+                self.displayAnimations()
             }
-            self.logoHintOverlay.hideRectangleGuide()
-            self.toggleUI(animationPlaying: true)
         }
+    }
+    
+    private func displayAnimations() {
+        isPlayingAnimation = true
+        scene.removeAllAnimations()
+        switch self.detectedPage! {
+        case .judgesChoice:
+            awardTypeLabel.showLabel(.judgesChoice)
+            appendToDebugLabel("judges choice triggered")
+            scene.loadAndPlayAnimation(key: "grandma")
+        case .bestOfShow:
+            awardTypeLabel.showLabel(.bestOfShow)
+            appendToDebugLabel("best of show triggered")
+            scene.loadAndPlayAnimation(key: "bellyDancing")
+        }
+        logoHintOverlay.hideRectangleGuide()
+        toggleUI(animationPlaying: true)
     }
     
     // MARK: - Core ML
@@ -205,8 +215,6 @@ class HomeViewController: UIViewController {
 // MARK: - ARKit Delegate
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        appendToDebugLabel("\n✅ Plane Detected")
-        appendToDebugLabel("\n✅ Rectangle Detection Running")
         loadRectangleDetection()
         waitingOnPlane = false
     }
@@ -216,7 +224,6 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         rootAnchor              = anchor
         node.transform          = SCNMatrix4(anchor.transform)
         sceneView.scene.rootNode.worldPosition = node.worldPosition
-        appendToDebugLabel("\n✅ Root Anchor Set")
         return node
     }
     
@@ -262,6 +269,8 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
 // MARK: - CoreMLService Delegate
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
+        if didRecognizePage == true { return }
+        didRecognizePage = true
         provideHapticFeedback()
         detectedPage = page
         logoHintOverlay.selectRune(detectedPage!)
@@ -305,13 +314,11 @@ extension HomeViewController: CoreMLServiceDelegate {
 extension HomeViewController: RectangleDetectionServiceDelegate {
     func didDetectRectangle(sender: RectangleDetectionService, corners: [CGPoint]) {
         Animator.fade(view: darkeningLayer, to: 0.0, for: 2.0, completion: nil)
-        appendToDebugLabel("\n✅ Rectangle Detected")
         logoHintOverlay.hideRectangleGuide()
         pageDetected()
     }
     
     func rectangleDetectionError(sender: RectangleDetectionService) {
-        appendToDebugLabel("\n💥 Rectangle Detection Error")
         loadRectangleDetection()
     }
 }
