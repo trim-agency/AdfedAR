@@ -6,6 +6,7 @@ import Alamofire
 import SwiftyJSON
 import XCDYouTubeKit
 import AVKit
+import SnapKit
 
 class HomeViewController: UIViewController {
    
@@ -13,20 +14,25 @@ class HomeViewController: UIViewController {
     var planeIdentifiers        = [UUID]()
     var anchors                 = [ARAnchor]()
     let visionHandler           = VNSequenceRequestHandler()
-    let scene                   = SCNScene()
+    let scene                   = Scene()
     var animations              = [String: CAAnimation]()
     var animationNodes          = [String: [String:Any]]()
     var waitingOnPlane          = true
     var didTapReset             = false
     var isPlayingAnimation      = false
 
-    @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
+    @IBOutlet weak var locationLabel: UILabel!
+    @IBOutlet weak var rightAwardsLabel: UILabel!
+    @IBOutlet weak var darkeningLayer: UIView!
+    @IBOutlet weak var aafLabel: UILabel!
     @IBOutlet weak var resetButton: UIButton!
     @IBOutlet weak var debugLabel: UILabel!
     @IBOutlet weak var sceneView: MainARSCNView!
     @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
+    @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
     @IBAction func didTapDebug(_ sender: Any) { reset() }
-    
+
+    var rectangleDetectionGuide: RectangleDetectionGuide?
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
     var debugLayer: CAShapeLayer?
@@ -44,6 +50,11 @@ class HomeViewController: UIViewController {
         super.viewWillAppear(animated)
         start()
     }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        displayLogoHintOverlay()
+    }
 
     // MARK: - Setup, Layout & ARKIT Start
     private func setup() {
@@ -54,18 +65,20 @@ class HomeViewController: UIViewController {
     
     private func start() {
         configureAR()
-        loadAllAnimations()
+        scene.loadAllAnimations()
         loadCoreMLService()
     }
+    
     private func reset() {
-        removeAllNodes(completion: {
-            self.logoHintOverlay.fadeIn()
+        toggleUI(animationPlaying: false)
+        logoHintOverlay.restartPulsing()
+        scene.removeAllNodes(completion: {
             self.startPageDetection()
+            self.isPlayingAnimation = false
             DispatchQueue.main.async {
                 self.debugLabel.text = ""
             }
             self.didTapReset     = true
-            self.detectedPage    = nil
         })
     }
     
@@ -84,107 +97,30 @@ class HomeViewController: UIViewController {
         sceneView.delegate  = self
     }
     
-    // MARK: - RESET
-    private func removeAllNodes(completion: (() -> ())?) {
-        for node in sceneView.scene.rootNode.childNodes {
-            if isPlayingAnimation {
-                let action = SCNAction.fadeOut(duration: 2.0)
-                node.runAction(action){
-                    node.removeFromParentNode()
-                    self.isPlayingAnimation = false
-                    completion?()
-                }
-            } else {
-                self.isPlayingAnimation = false
-                node.removeFromParentNode()
-            }
+    private func displayLogoHintOverlay() {
+        logoHintOverlay.isHidden = false
+        view.addSubview(logoHintOverlay)
+        logoHintOverlay.snp.makeConstraints{ make -> Void in
+            make.center.equalTo(self.view.snp.center)
+            make.width.height.equalTo(self.view.snp.width).multipliedBy(0.8)
         }
-        resetButton.isHidden = true
     }
     
-    // MARK: Methods
+    // MARK: - RESET
     private func pageDetected() {
         userInstructionLabel.updateText(.none)
-        log.debug(detectedPage!)
-        switch detectedPage! {
-        case .judgesChoice:
-            loadAndPlayAnimation(key: "grandma")
-        case .bestOfShow:
-            loadAndPlayAnimation(key: "bellyDancing")
+        scene.removeAllNodes {
+            self.isPlayingAnimation = true
+            self.scene.removeAllAnimations()
+            switch self.detectedPage! {
+            case .judgesChoice:
+                self.appendToDebugLabel("judges choice triggered")
+                self.scene.loadAndPlayAnimation(key: "grandma")
+            case .bestOfShow:
+                self.appendToDebugLabel("best of show triggered")
+                self.scene.loadAndPlayAnimation(key: "bellyDancing")
+            }
         }
-    }
-    
-    // MARK: - Custom Animations
-    private func loadAllAnimations() {
-        loadColladaAsset(key: "grandma", for: "3dAssets.scnassets/hipHopFormatted", animationID:  "hipHopFormatted-1")
-        loadColladaAsset(key: "bellyDancing", for: "3dAssets.scnassets/BellydancingFormatted", animationID: "BellydancingFormatted-1")
-    }
-    
-    private func loadColladaAsset(key: String, for filePath: String, animationID: String) {
-        let scene       = SCNScene(named: filePath + ".dae")!
-        let parentNode  = SCNNode()
-        parentNode.name = key
-        add(node: scene.rootNode, to: parentNode)
-        let animation: CAAnimation = loadAnimation(withKey: key, sceneName: filePath, animationIdentifier: animationID)!
-        let animationDetails = [ "node": parentNode,
-                                 "animation": animation ]
-        animationNodes[key] = animationDetails
-    }
-    
-    func loadAnimation(withKey: String, sceneName:String, animationIdentifier:String) -> CAAnimation? {
-        let sceneURL    = Bundle.main.url(forResource: sceneName, withExtension: "dae")
-        let sceneSource = SCNSceneSource(url: sceneURL!, options: nil)
-        
-        guard let animationObject = sceneSource?.entryWithIdentifier(animationIdentifier, withClass: CAAnimation.self) else {
-            log.error("animation nil")
-            return nil
-        }
-       
-        animationObject.fadeInDuration = CGFloat(3)
-        animationObject.fadeOutDuration = CGFloat(0.5)
-        
-        return animationObject
-    }
-    
-    func loadAndPlayAnimation(key: String) {
-        DispatchQueue.main.async {
-            self.removeAllNodes(completion: nil)
-            self.sceneView.scene.rootNode.removeAllAnimations()
-            let node        = self.animationNodes[key]!["node"] as! SCNNode
-            node.opacity    = 0.0
-            self.add(node: node, to: self.sceneView.scene.rootNode)
-            self.sceneView.scene.rootNode.scale = SCNVector3(0.001, 0.001, 0.001)
-            self.playAnimation(key: key, for: node)
-        }
-    }
-    
-    private func playAnimation(key: String, for node: SCNNode) {
-        isPlayingAnimation      = true
-        resetButton.isHidden    = false
-        let animation           = self.animationNodes[key]!["animation"] as! CAAnimation
-        log.debug(sceneView.scene.rootNode.animationKeys)
-        sceneView.scene.rootNode.addAnimation(animation, forKey: key)
-        fadeIn(node)
-    }
-    
-    private func fadeIn(_ node: SCNNode) {
-        let action = SCNAction.fadeIn(duration: 1.0)
-        node.runAction(action)
-    }
-    
-    private func fadeOut(_ node: SCNNode) {
-        let action = SCNAction.fadeOut(duration: 1.5)
-        node.runAction(action)
-    }
-    
-    private func add(node: SCNNode, to parentNode: SCNNode) {
-        parentNode.addChildNode(node)
-    }
-
-    func stopAnimation(key: String) {
-        isPlayingAnimation      = false
-        resetButton.isHidden    = true
-        sceneView.scene.rootNode.removeAnimation(forKey: key, blendOutDuration: CGFloat(0.5))
     }
     
     // MARK: - Core ML
@@ -208,6 +144,16 @@ class HomeViewController: UIViewController {
                     self.appendToDebugLabel("\n💥 Page Detection Error")
                 }
             }
+        }
+    }
+    
+    // MARK: - UI Elements
+    private func toggleUI(animationPlaying: Bool) {
+        DispatchQueue.main.async {
+            self.resetButton.isHidden       = !animationPlaying
+            self.aafLabel.isHidden          = animationPlaying
+            self.rightAwardsLabel.isHidden  = !animationPlaying
+            self.locationLabel.isHidden     = !animationPlaying
         }
     }
     
@@ -268,6 +214,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if !isPlayingAnimation { return }
         guard let touch = touches.first,
             let _ = event else {
                 log.error("Touch or Event nil")
@@ -308,9 +255,10 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
 // MARK: - CoreMLService Delegate
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
-        logoHintOverlay.fadeOut()
         provideHapticFeedback()
+        showRectangleGuide()
         detectedPage = page
+        logoHintOverlay.selectRune(detectedPage!)
         appendToDebugLabel("\n✅ " + (self.detectedPage?.rawValue)!)
         if rootAnchor != nil && didTapReset == false {
             appendToDebugLabel("\n✅ Rectangle Detection Running")
@@ -352,6 +300,8 @@ extension HomeViewController: CoreMLServiceDelegate {
 // MARK: - Rectangle Detection Delegate
 extension HomeViewController: RectangleDetectionServiceDelegate {
     func didDetectRectangle(sender: RectangleDetectionService, corners: [CGPoint]) {
+        Animator.fade(view: darkeningLayer, to: 0.0, for: 2.0, completion: nil)
+        hideRectangleDetectionGuide()
         appendToDebugLabel("\n✅ Rectangle Detected")
         pageDetected()
     }
@@ -359,6 +309,24 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
     func rectangleDetectionError(sender: RectangleDetectionService) {
         appendToDebugLabel("\n💥 Rectangle Detection Error")
         loadRectangleDetection()
+    }
+    
+    private func showRectangleGuide() {
+        DispatchQueue.main.async {
+            self.rectangleDetectionGuide = RectangleDetectionGuide()
+            self.view.addSubview(self.rectangleDetectionGuide!)
+            self.rectangleDetectionGuide!.snp.makeConstraints{ make -> Void in
+                make.width.equalTo(self.view.snp.width).multipliedBy(0.9)
+                make.height.equalTo(self.view.snp.width).multipliedBy(0.788)
+                make.center.equalTo(self.view.snp.center)
+            }
+            self.rectangleDetectionGuide!.displayRectangleGuide()
+        }
+    }
+    
+    private func hideRectangleDetectionGuide() {
+        rectangleDetectionGuide!.hideRectangleGuide()
+        toggleUI(animationPlaying: true)
     }
 }
 
