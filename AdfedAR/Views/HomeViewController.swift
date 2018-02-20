@@ -74,6 +74,7 @@ class HomeViewController: UIViewController {
         logoHintOverlay.restartPulsing()
         scene.removeAllNodes(completion: {
             self.startPageDetection()
+            self.isPlayingAnimation = false
             DispatchQueue.main.async {
                 self.debugLabel.text = ""
             }
@@ -106,10 +107,10 @@ class HomeViewController: UIViewController {
     }
     
     // MARK: - RESET
-    // MARK: Methods
     private func pageDetected() {
         userInstructionLabel.updateText(.none)
         scene.removeAllNodes {
+            self.isPlayingAnimation = true
             self.scene.removeAllAnimations()
             switch self.detectedPage! {
             case .judgesChoice:
@@ -213,6 +214,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        if !isPlayingAnimation { return }
         guard let touch = touches.first,
             let _ = event else {
                 log.error("Touch or Event nil")
@@ -222,8 +224,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         let hitTestResults = sceneView.hitTest(touchPoint, options: nil)
 
         if let _ = hitTestResults.first?.node {
-            scene.loadAndPlayAnimation(key: "grandma")
-//            playVideo(videoIdentifier: videoId())
+            playVideo(videoIdentifier: videoId())
         }
     }
     
@@ -315,7 +316,7 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
             self.rectangleDetectionGuide = RectangleDetectionGuide()
             self.view.addSubview(self.rectangleDetectionGuide!)
             self.rectangleDetectionGuide!.snp.makeConstraints{ make -> Void in
-                make.width.equalTo(self.view.snp.width)
+                make.width.equalTo(self.view.snp.width).multipliedBy(0.9)
                 make.height.equalTo(self.view.snp.width).multipliedBy(0.788)
                 make.center.equalTo(self.view.snp.center)
             }

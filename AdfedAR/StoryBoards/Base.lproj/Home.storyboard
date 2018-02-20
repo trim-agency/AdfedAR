@@ -93,11 +93,11 @@
                                 </connections>
                             </button>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lPY-XG-4EC" customClass="UserInstructionLabel" customModule="AdfedAR" customModuleProvider="target">
-                                <rect key="frame" x="20" y="542" width="335" height="60"/>
+                                <rect key="frame" x="15" y="542" width="345" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="60" id="MIv-nz-pri"/>
                                 </constraints>
-                                <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="16"/>
+                                <fontDescription key="fontDescription" name="Gotham-Book" family="Gotham" pointSize="15"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -105,14 +105,14 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottomMargin" secondItem="Gtc-LY-KpD" secondAttribute="bottom" constant="40" id="4Es-vh-Yck"/>
-                            <constraint firstItem="lPY-XG-4EC" firstAttribute="leading" secondItem="gLx-C2-PS4" secondAttribute="leading" constant="20" id="5cE-Aj-HFV"/>
+                            <constraint firstItem="lPY-XG-4EC" firstAttribute="leading" secondItem="gLx-C2-PS4" secondAttribute="leading" constant="15" id="5cE-Aj-HFV"/>
                             <constraint firstItem="lPY-XG-4EC" firstAttribute="top" secondItem="0ZJ-TJ-W7j" secondAttribute="bottom" constant="10" id="9D3-gq-uTc"/>
                             <constraint firstItem="U7P-0S-NKa" firstAttribute="top" secondItem="gLx-C2-PS4" secondAttribute="top" id="AhR-nM-6Ah"/>
                             <constraint firstItem="XkV-5f-4kR" firstAttribute="trailing" secondItem="0ZJ-TJ-W7j" secondAttribute="trailing" constant="20" id="B17-Eu-btd"/>
                             <constraint firstAttribute="trailing" secondItem="U7P-0S-NKa" secondAttribute="trailing" id="CZ7-zc-qgw"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Jd0-rZ-7Fv" secondAttribute="trailing" constant="15" id="TP5-fw-kx6"/>
                             <constraint firstItem="U7P-0S-NKa" firstAttribute="leading" secondItem="XkV-5f-4kR" secondAttribute="leading" id="Wox-en-4Hf"/>
-                            <constraint firstAttribute="trailing" secondItem="lPY-XG-4EC" secondAttribute="trailing" constant="20" id="Xyh-r3-ZTQ"/>
+                            <constraint firstAttribute="trailing" secondItem="lPY-XG-4EC" secondAttribute="trailing" constant="15" id="Xyh-r3-ZTQ"/>
                             <constraint firstItem="Jd0-rZ-7Fv" firstAttribute="top" secondItem="gLx-C2-PS4" secondAttribute="topMargin" constant="30" id="YJx-HB-jlI"/>
                             <constraint firstItem="nih-WI-hAp" firstAttribute="top" secondItem="gLx-C2-PS4" secondAttribute="topMargin" id="aTP-aZ-P4m"/>
                             <constraint firstAttribute="trailing" secondItem="YJ1-Vx-QFj" secondAttribute="trailing" id="bE6-yJ-hOV"/>
