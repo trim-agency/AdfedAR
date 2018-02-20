@@ -20,12 +20,7 @@ class LogoHintOverlay: UIView {
             self.animateRune(startAlpha: 0.80, to: 0, for: 1.25)
         }
     }
-    
-    override func didMoveToSuperview() {
-        super.didMoveToSuperview()
-        
-    }
-   
+
     private func setInitialAlpha(){
         bestOfShow?.alpha   = 1.0
         judgesChoice?.alpha = 0.1
@@ -64,7 +59,7 @@ class LogoHintOverlay: UIView {
         }
     }
     
-    private func glowSymbol(_ imageView: UIImageView, page: Page) {
+    private func glowSymbol(page: Page) {
         DispatchQueue.main.async {
             let image                   = page == .judgesChoice ? #imageLiteral(resourceName: "judges-choice-rune") : #imageLiteral(resourceName: "best-of-show-rune")
             self.winnerView.image       = image
@@ -80,8 +75,6 @@ class LogoHintOverlay: UIView {
         pulse(view: bestOfShow!, for: length, startAlpha: startAlpha, endAlpha: endAlpha)
         pulse(view: judgesChoice!, for: length, startAlpha: endAlpha, endAlpha: startAlpha)
     }
-    
-    
 }
 
 

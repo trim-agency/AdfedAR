@@ -332,7 +332,6 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
 
 // MARK: - Video Player
 extension HomeViewController {
-   
     private func playVideo(videoIdentifier: String?) {
         let playerViewController = AVPlayerViewController()
         self.present(playerViewController, animated: true, completion: nil)
