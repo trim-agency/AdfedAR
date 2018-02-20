@@ -21,6 +21,8 @@ class HomeViewController: UIViewController {
     var didTapReset             = false
     var isPlayingAnimation      = false
 
+    @IBOutlet weak var locationLabel: UILabel!
+    @IBOutlet weak var rightAwardsLabel: UILabel!
     @IBOutlet weak var darkeningLayer: UIView!
     @IBOutlet weak var aafLabel: UILabel!
     @IBOutlet weak var resetButton: UIButton!
@@ -68,13 +70,13 @@ class HomeViewController: UIViewController {
     }
     
     private func reset() {
+        toggleUI(animationPlaying: false)
         scene.removeAllNodes(completion: {
             self.startPageDetection()
             DispatchQueue.main.async {
                 self.debugLabel.text = ""
             }
             self.didTapReset     = true
-            self.detectedPage    = nil
         })
     }
     
@@ -140,6 +142,16 @@ class HomeViewController: UIViewController {
                     self.appendToDebugLabel("\n💥 Page Detection Error")
                 }
             }
+        }
+    }
+    
+    // MARK: - UI Elements
+    private func toggleUI(animationPlaying: Bool) {
+        DispatchQueue.main.async {
+            self.resetButton.isHidden       = !animationPlaying
+            self.aafLabel.isHidden          = animationPlaying
+            self.rightAwardsLabel.isHidden  = !animationPlaying
+            self.locationLabel.isHidden     = !animationPlaying
         }
     }
     
@@ -312,6 +324,7 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
     
     private func hideRectangleDetectionGuide() {
         rectangleDetectionGuide!.hideRectangleGuide()
+        toggleUI(animationPlaying: true)
     }
 }
 
