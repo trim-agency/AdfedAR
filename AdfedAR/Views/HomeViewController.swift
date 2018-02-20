@@ -21,6 +21,7 @@ class HomeViewController: UIViewController {
     var didTapReset             = false
     var isPlayingAnimation      = false
 
+    @IBOutlet weak var awardTypeLabel: AwardType!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var rightAwardsLabel: UILabel!
     @IBOutlet weak var darkeningLayer: UIView!
@@ -72,9 +73,10 @@ class HomeViewController: UIViewController {
     private func reset() {
         toggleUI(animationPlaying: false)
         logoHintOverlay.restartPulsing()
+        isPlayingAnimation = false
+        awardTypeLabel.hide()
         scene.removeAllNodes(completion: {
             self.startPageDetection()
-            self.isPlayingAnimation = false
             DispatchQueue.main.async {
                 self.debugLabel.text = ""
             }
@@ -114,12 +116,15 @@ class HomeViewController: UIViewController {
             self.scene.removeAllAnimations()
             switch self.detectedPage! {
             case .judgesChoice:
+                self.awardTypeLabel.showLabel(.judgesChoice)
                 self.appendToDebugLabel("judges choice triggered")
                 self.scene.loadAndPlayAnimation(key: "grandma")
             case .bestOfShow:
+                self.awardTypeLabel.showLabel(.bestOfShow)
                 self.appendToDebugLabel("best of show triggered")
                 self.scene.loadAndPlayAnimation(key: "bellyDancing")
             }
+            self.logoHintOverlay.hideRectangleGuide()
             self.toggleUI(animationPlaying: true)
         }
     }

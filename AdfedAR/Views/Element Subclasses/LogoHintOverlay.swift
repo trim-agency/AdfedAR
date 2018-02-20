@@ -38,7 +38,8 @@ class LogoHintOverlay: UIView {
     }
 
     func restartPulsing() {
-        isPageDetected = false
+        isPageDetected      = false
+        winnerView.isHidden = true
         Animator.fade(view: bestOfShow!, to: 1.0, for: 1.0, options: [.curveEaseOut], completion: nil)
         Animator.fade(view: judgesChoice!, to: 0.1, for: 1.0, options: [.curveEaseOut]) {
             self.animateRune(startAlpha: 1.0, to: 0.1, for: 1.25)
@@ -59,12 +60,13 @@ class LogoHintOverlay: UIView {
     
     private func glowSymbol(page: Page) {
         DispatchQueue.main.async {
-            let image                   = page == .judgesChoice ? #imageLiteral(resourceName: "judges-choice-rune") : #imageLiteral(resourceName: "best-of-show-rune")
-            self.winnerView.image       = image
+            self.winnerView.image       = page == .judgesChoice ? #imageLiteral(resourceName: "judges-choice-rune") : #imageLiteral(resourceName: "best-of-show-rune")
             self.winnerView.tintColor   = UIColor(red:0.75, green:0.65, blue:0.30, alpha:1.0)
+            self.winnerView.alpha       = 1.0
             self.winnerView.isHidden    = false
             Animator.fade(view: self.winnerView, to: 0.0, for: 3, options: [UIViewAnimationOptions.curveEaseIn], completion: {
                 self.showRectangleGuide()
+                self.winnerView.isHidden = true
             })
         }
     }
@@ -90,7 +92,7 @@ class LogoHintOverlay: UIView {
     }
     
     func hideRectangleGuide() {
-        Animator.fade(view: rectangleGuide!, to: 1.0, for: 1.0, options: [.curveEaseIn], completion: {
+        Animator.fade(view: rectangleGuide!, to: 0.0, for: 1.0, options: [.curveEaseIn], completion: {
             self.rectangleGuide?.isHidden = true
         })
     }
