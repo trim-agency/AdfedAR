@@ -24,9 +24,11 @@ class Scene: SCNScene {
     func removeAllNodes(completion: (() -> ())?) {
         for node in rootNode.childNodes {
             if isPlayingAnimation {
-                let action = SCNAction.fadeOut(duration: 2.0)
+                let action = SCNAction.fadeOut(duration: 1.0)
                 node.runAction(action){
+                    log.debug("removing node")
                     node.removeFromParentNode()
+                    log.debug("node removed")
                     self.isPlayingAnimation = false
                     completion?()
                 }
@@ -104,7 +106,7 @@ class Scene: SCNScene {
     }
     
     private func fadeOut(_ node: SCNNode) {
-        let action = SCNAction.fadeOut(duration: 1.5)
+        let action = SCNAction.fadeOut(duration: 1.0)
         node.runAction(action)
     }
     

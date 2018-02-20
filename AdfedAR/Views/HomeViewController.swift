@@ -9,7 +9,7 @@ import AVKit
 import SnapKit
 
 class HomeViewController: UIViewController {
-   
+    
     let planeHeight: CGFloat    = 1
     var planeIdentifiers        = [UUID]()
     var anchors                 = [ARAnchor]()
@@ -20,7 +20,8 @@ class HomeViewController: UIViewController {
     var waitingOnPlane          = true
     var didTapReset             = false
     var isPlayingAnimation      = false
-
+    
+    @IBOutlet weak var awardTypeLabel: AwardType!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var rightAwardsLabel: UILabel!
     @IBOutlet weak var darkeningLayer: UIView!
@@ -31,7 +32,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
     @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
     @IBAction func didTapDebug(_ sender: Any) { reset() }
-
+    
     var rectangleDetectionGuide: RectangleDetectionGuide?
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
@@ -45,7 +46,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         setup()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         start()
@@ -55,7 +56,7 @@ class HomeViewController: UIViewController {
         super.viewDidAppear(animated)
         displayLogoHintOverlay()
     }
-
+    
     // MARK: - Setup, Layout & ARKIT Start
     private func setup() {
         defineSceneView()
@@ -72,9 +73,10 @@ class HomeViewController: UIViewController {
     private func reset() {
         toggleUI(animationPlaying: false)
         logoHintOverlay.restartPulsing()
+        isPlayingAnimation = false
+        awardTypeLabel.hide()
         scene.removeAllNodes(completion: {
             self.startPageDetection()
-            self.isPlayingAnimation = false
             DispatchQueue.main.async {
                 self.debugLabel.text = ""
             }
@@ -82,7 +84,7 @@ class HomeViewController: UIViewController {
         })
     }
     
-
+    
     // MARK: - ARKit
     // MARK: Setup
     private func configureAR() {
@@ -102,7 +104,7 @@ class HomeViewController: UIViewController {
         view.addSubview(logoHintOverlay)
         logoHintOverlay.snp.makeConstraints{ make -> Void in
             make.center.equalTo(self.view.snp.center)
-            make.width.height.equalTo(self.view.snp.width).multipliedBy(0.8)
+            make.width.height.equalTo(self.view.snp.width)
         }
     }
     
@@ -114,12 +116,16 @@ class HomeViewController: UIViewController {
             self.scene.removeAllAnimations()
             switch self.detectedPage! {
             case .judgesChoice:
+                self.awardTypeLabel.showLabel(.judgesChoice)
                 self.appendToDebugLabel("judges choice triggered")
                 self.scene.loadAndPlayAnimation(key: "grandma")
             case .bestOfShow:
+                self.awardTypeLabel.showLabel(.bestOfShow)
                 self.appendToDebugLabel("best of show triggered")
                 self.scene.loadAndPlayAnimation(key: "bellyDancing")
             }
+            self.logoHintOverlay.hideRectangleGuide()
+            self.toggleUI(animationPlaying: true)
         }
     }
     
@@ -181,7 +187,8 @@ class HomeViewController: UIViewController {
             let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
             let handler             = VNImageRequestHandler(ciImage: ciImage)
             let rectService         = RectangleDetectionService.instance
-            if !(self.didTapReset) { // keeps duplication from occurring after reset
+            if !(self.didTapReset) {
+                // keeps duplication from occurring after reset
                 rectService.setup(sceneView: self.sceneView, rootAnchor: self.rootAnchor!)
                 rectService.delegate    = self
             }
@@ -199,9 +206,9 @@ class HomeViewController: UIViewController {
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         appendToDebugLabel("\n✅ Plane Detected")
-            appendToDebugLabel("\n✅ Rectangle Detection Running")
-            loadRectangleDetection()
-            waitingOnPlane = false
+        appendToDebugLabel("\n✅ Rectangle Detection Running")
+        loadRectangleDetection()
+        waitingOnPlane = false
     }
     
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
@@ -222,7 +229,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         }
         let touchPoint = touch.preciseLocation(in: sceneView)
         let hitTestResults = sceneView.hitTest(touchPoint, options: nil)
-
+        
         if let _ = hitTestResults.first?.node {
             playVideo(videoIdentifier: videoId())
         }
@@ -256,7 +263,6 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
         provideHapticFeedback()
-        showRectangleGuide()
         detectedPage = page
         logoHintOverlay.selectRune(detectedPage!)
         appendToDebugLabel("\n✅ " + (self.detectedPage?.rawValue)!)
@@ -301,8 +307,8 @@ extension HomeViewController: CoreMLServiceDelegate {
 extension HomeViewController: RectangleDetectionServiceDelegate {
     func didDetectRectangle(sender: RectangleDetectionService, corners: [CGPoint]) {
         Animator.fade(view: darkeningLayer, to: 0.0, for: 2.0, completion: nil)
-        hideRectangleDetectionGuide()
         appendToDebugLabel("\n✅ Rectangle Detected")
+        logoHintOverlay.hideRectangleGuide()
         pageDetected()
     }
     
@@ -310,29 +316,10 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
         appendToDebugLabel("\n💥 Rectangle Detection Error")
         loadRectangleDetection()
     }
-    
-    private func showRectangleGuide() {
-        DispatchQueue.main.async {
-            self.rectangleDetectionGuide = RectangleDetectionGuide()
-            self.view.addSubview(self.rectangleDetectionGuide!)
-            self.rectangleDetectionGuide!.snp.makeConstraints{ make -> Void in
-                make.width.equalTo(self.view.snp.width).multipliedBy(0.9)
-                make.height.equalTo(self.view.snp.width).multipliedBy(0.788)
-                make.center.equalTo(self.view.snp.center)
-            }
-            self.rectangleDetectionGuide!.displayRectangleGuide()
-        }
-    }
-    
-    private func hideRectangleDetectionGuide() {
-        rectangleDetectionGuide!.hideRectangleGuide()
-        toggleUI(animationPlaying: true)
-    }
 }
 
 // MARK: - Video Player
 extension HomeViewController {
-   
     private func playVideo(videoIdentifier: String?) {
         let playerViewController = AVPlayerViewController()
         self.present(playerViewController, animated: true, completion: nil)
@@ -346,7 +333,7 @@ extension HomeViewController {
             }
         }
     }
-
+    
     private func videoId() -> String {
         if detectedPage == Page.judgesChoice {
             return (videos?.judgesChoice)!
