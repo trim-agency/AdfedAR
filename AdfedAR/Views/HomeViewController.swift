@@ -187,7 +187,8 @@ class HomeViewController: UIViewController {
             let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
             let handler             = VNImageRequestHandler(ciImage: ciImage)
             let rectService         = RectangleDetectionService.instance
-            if !(self.didTapReset) { // keeps duplication from occurring after reset
+            if !(self.didTapReset) {
+                // keeps duplication from occurring after reset
                 rectService.setup(sceneView: self.sceneView, rootAnchor: self.rootAnchor!)
                 rectService.delegate    = self
             }

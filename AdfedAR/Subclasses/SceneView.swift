@@ -104,7 +104,7 @@ class Scene: SCNScene {
     }
     
     private func fadeOut(_ node: SCNNode) {
-        let action = SCNAction.fadeOut(duration: 1.5)
+        let action = SCNAction.fadeOut(duration: 1.0)
         node.runAction(action)
     }
     

@@ -60,9 +60,8 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="AMERICAN ADVERTISING AWARDS" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Jd0-rZ-7Fv">
-                                <rect key="frame" x="144" y="30" width="200" height="21"/>
+                                <rect key="frame" x="160" y="30" width="184" height="21"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="200" id="Adp-S3-wSt"/>
                                     <constraint firstAttribute="height" constant="21" id="UJy-PK-iuz"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
@@ -70,10 +69,9 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="FORT LAUDERDALE / PALM BEACH" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gtc-LY-KpD">
-                                <rect key="frame" x="144" y="606" width="200" height="21"/>
+                                <rect key="frame" x="159" y="606" width="185" height="21"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="21" id="AD3-et-KdR"/>
-                                    <constraint firstAttribute="width" constant="200" id="jcb-VO-A49"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                 <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
@@ -119,6 +117,7 @@
                             <constraint firstItem="XkV-5f-4kR" firstAttribute="trailing" secondItem="0ZJ-TJ-W7j" secondAttribute="trailing" constant="20" id="B17-Eu-btd"/>
                             <constraint firstAttribute="trailing" secondItem="U7P-0S-NKa" secondAttribute="trailing" id="CZ7-zc-qgw"/>
                             <constraint firstItem="TbX-FT-Ri4" firstAttribute="top" secondItem="nih-WI-hAp" secondAttribute="bottom" constant="20" id="Drb-f9-A8l"/>
+                            <constraint firstAttribute="trailingMargin" relation="greaterThanOrEqual" secondItem="N9W-3c-axU" secondAttribute="trailing" constant="100" id="Eiw-DZ-nET"/>
                             <constraint firstAttribute="trailingMargin" secondItem="Jd0-rZ-7Fv" secondAttribute="trailing" constant="15" id="TP5-fw-kx6"/>
                             <constraint firstItem="U7P-0S-NKa" firstAttribute="leading" secondItem="XkV-5f-4kR" secondAttribute="leading" id="Wox-en-4Hf"/>
                             <constraint firstAttribute="trailing" secondItem="lPY-XG-4EC" secondAttribute="trailing" constant="15" id="Xyh-r3-ZTQ"/>
