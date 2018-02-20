@@ -9,7 +9,7 @@ import AVKit
 import SnapKit
 
 class HomeViewController: UIViewController {
-   
+    
     let planeHeight: CGFloat    = 1
     var planeIdentifiers        = [UUID]()
     var anchors                 = [ARAnchor]()
@@ -20,7 +20,7 @@ class HomeViewController: UIViewController {
     var waitingOnPlane          = true
     var didTapReset             = false
     var isPlayingAnimation      = false
-
+    
     @IBOutlet weak var awardTypeLabel: AwardType!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var rightAwardsLabel: UILabel!
@@ -32,7 +32,7 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var userInstructionLabel: UserInstructionLabel!
     @IBOutlet weak var logoHintOverlay: LogoHintOverlay!
     @IBAction func didTapDebug(_ sender: Any) { reset() }
-
+    
     var rectangleDetectionGuide: RectangleDetectionGuide?
     var configuration: ARWorldTrackingConfiguration?
     var lastObservation: VNDetectedObjectObservation?
@@ -46,7 +46,7 @@ class HomeViewController: UIViewController {
         super.viewDidLoad()
         setup()
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         start()
@@ -56,7 +56,7 @@ class HomeViewController: UIViewController {
         super.viewDidAppear(animated)
         displayLogoHintOverlay()
     }
-
+    
     // MARK: - Setup, Layout & ARKIT Start
     private func setup() {
         defineSceneView()
@@ -84,7 +84,7 @@ class HomeViewController: UIViewController {
         })
     }
     
-
+    
     // MARK: - ARKit
     // MARK: Setup
     private func configureAR() {
@@ -206,9 +206,9 @@ class HomeViewController: UIViewController {
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         appendToDebugLabel("\n✅ Plane Detected")
-            appendToDebugLabel("\n✅ Rectangle Detection Running")
-            loadRectangleDetection()
-            waitingOnPlane = false
+        appendToDebugLabel("\n✅ Rectangle Detection Running")
+        loadRectangleDetection()
+        waitingOnPlane = false
     }
     
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
@@ -229,7 +229,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
         }
         let touchPoint = touch.preciseLocation(in: sceneView)
         let hitTestResults = sceneView.hitTest(touchPoint, options: nil)
-
+        
         if let _ = hitTestResults.first?.node {
             playVideo(videoIdentifier: videoId())
         }
@@ -333,7 +333,7 @@ extension HomeViewController {
             }
         }
     }
-
+    
     private func videoId() -> String {
         if detectedPage == Page.judgesChoice {
             return (videos?.judgesChoice)!
