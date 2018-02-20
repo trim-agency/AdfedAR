@@ -5,7 +5,7 @@ class Scene: SCNScene {
     var isPlayingAnimation = false
     var animations              = [String: CAAnimation]()
     var animationNodes          = [String: [String:Any]]()
-    
+
     // MARK: - Initialization
     override init() {
         super.init()
@@ -30,14 +30,13 @@ class Scene: SCNScene {
                     node.removeFromParentNode()
                     log.debug("node removed")
                     self.isPlayingAnimation = false
-                    completion?()
                 }
             } else {
                 self.isPlayingAnimation = false
                 node.removeFromParentNode()
-                completion?()
             }
         }
+        completion?()
     }
     
     // Mark: - Asset management
