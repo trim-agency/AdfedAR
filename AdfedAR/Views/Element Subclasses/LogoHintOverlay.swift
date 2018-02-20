@@ -23,11 +23,13 @@ class LogoHintOverlay: UIView {
     
     override func didMoveToSuperview() {
         super.didMoveToSuperview()
+        
+    }
+   
+    private func setInitialAlpha(){
         bestOfShow?.alpha   = 1.0
         judgesChoice?.alpha = 0.1
     }
-   
-    
 
     func selectRune(_ page: Page) {
         isPageDetected = true
@@ -42,6 +44,14 @@ class LogoHintOverlay: UIView {
         }
     }
 
+    func restartPulsing() {
+        isPageDetected = false
+        Animator.fade(view: bestOfShow!, to: 1.0, for: 1.0, options: [.curveEaseOut], completion: nil)
+        Animator.fade(view: judgesChoice!, to: 0.1, for: 1.0, options: [.curveEaseOut]) {
+            self.animateRune(startAlpha: 1.0, to: 0.1, for: 1.25)
+        }
+    }
+    
     func pulse<T: UIView>(view: T, for length: Double, startAlpha: CGFloat, endAlpha: CGFloat) {
         if !isPageDetected {
             Animator.fade(view: view, to: startAlpha, for: length, options: [.curveEaseOut], completion: {
@@ -65,7 +75,8 @@ class LogoHintOverlay: UIView {
     }
 
     // MARK: - Rune
-    private func animateRune(startAlpha: CGFloat, to endAlpha: CGFloat, for length: Double) {
+    func animateRune(startAlpha: CGFloat, to endAlpha: CGFloat, for length: Double) {
+        isHidden = false
         pulse(view: bestOfShow!, for: length, startAlpha: startAlpha, endAlpha: endAlpha)
         pulse(view: judgesChoice!, for: length, startAlpha: endAlpha, endAlpha: startAlpha)
     }

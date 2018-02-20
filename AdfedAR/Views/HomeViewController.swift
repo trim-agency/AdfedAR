@@ -71,6 +71,7 @@ class HomeViewController: UIViewController {
     
     private func reset() {
         toggleUI(animationPlaying: false)
+        logoHintOverlay.restartPulsing()
         scene.removeAllNodes(completion: {
             self.startPageDetection()
             DispatchQueue.main.async {
