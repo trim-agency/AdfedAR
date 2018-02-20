@@ -7,6 +7,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -147,36 +148,39 @@
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="best-of-show-rune" translatesAutoresizingMaskIntoConstraints="NO" id="7tc-kw-bfp">
-                            <rect key="frame" x="0.0" y="0.0" width="240" height="425"/>
+                            <rect key="frame" x="24" y="54.5" width="192" height="316"/>
                         </imageView>
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="judges-choice-rune" translatesAutoresizingMaskIntoConstraints="NO" id="Wjr-Id-Qm7">
-                            <rect key="frame" x="0.0" y="0.0" width="240" height="425"/>
+                            <rect key="frame" x="24" y="54.5" width="192" height="316"/>
                         </imageView>
-                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NA0-T5-ERI">
+                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NA0-T5-ERI">
                             <rect key="frame" x="0.0" y="148" width="240" height="128"/>
+                        </imageView>
+                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rectangle" translatesAutoresizingMaskIntoConstraints="NO" id="DmM-Pn-Gri">
+                            <rect key="frame" x="12" y="76.5" width="216" height="271"/>
                         </imageView>
                     </subviews>
                     <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     <constraints>
                         <constraint firstItem="Wjr-Id-Qm7" firstAttribute="centerY" secondItem="qJF-sB-r1M" secondAttribute="centerY" id="0vj-En-1UB"/>
-                        <constraint firstItem="7tc-kw-bfp" firstAttribute="leading" secondItem="qJF-sB-r1M" secondAttribute="leading" id="3ON-FA-l8r"/>
+                        <constraint firstItem="DmM-Pn-Gri" firstAttribute="width" secondItem="qJF-sB-r1M" secondAttribute="width" multiplier="0.9" id="3vY-Bh-ZQr"/>
                         <constraint firstItem="NA0-T5-ERI" firstAttribute="centerX" secondItem="7tc-kw-bfp" secondAttribute="centerX" id="4xs-sm-lw5"/>
-                        <constraint firstItem="NA0-T5-ERI" firstAttribute="height" secondItem="7tc-kw-bfp" secondAttribute="height" id="AHf-Dl-eqf"/>
-                        <constraint firstItem="7tc-kw-bfp" firstAttribute="top" secondItem="qJF-sB-r1M" secondAttribute="top" id="Cbf-TF-EyI"/>
+                        <constraint firstItem="DmM-Pn-Gri" firstAttribute="centerX" secondItem="qJF-sB-r1M" secondAttribute="centerX" id="A1b-z8-93s"/>
                         <constraint firstItem="Wjr-Id-Qm7" firstAttribute="centerX" secondItem="qJF-sB-r1M" secondAttribute="centerX" id="DYB-EC-uih"/>
-                        <constraint firstItem="NA0-T5-ERI" firstAttribute="width" secondItem="7tc-kw-bfp" secondAttribute="width" id="Hwe-eV-IVL"/>
+                        <constraint firstItem="NA0-T5-ERI" firstAttribute="width" secondItem="7tc-kw-bfp" secondAttribute="width" multiplier="0.8" id="Hwe-eV-IVL"/>
                         <constraint firstItem="7tc-kw-bfp" firstAttribute="centerX" secondItem="qJF-sB-r1M" secondAttribute="centerX" id="Qjy-Co-7Q6"/>
-                        <constraint firstAttribute="trailing" secondItem="7tc-kw-bfp" secondAttribute="trailing" id="WwO-94-cxh"/>
+                        <constraint firstItem="DmM-Pn-Gri" firstAttribute="centerY" secondItem="qJF-sB-r1M" secondAttribute="centerY" id="XPW-Rc-Pgw"/>
                         <constraint firstItem="Wjr-Id-Qm7" firstAttribute="width" secondItem="7tc-kw-bfp" secondAttribute="width" id="bhS-I4-t8c"/>
                         <constraint firstItem="7tc-kw-bfp" firstAttribute="centerY" secondItem="qJF-sB-r1M" secondAttribute="centerY" id="eOS-Dn-YNm"/>
                         <constraint firstItem="NA0-T5-ERI" firstAttribute="centerY" secondItem="7tc-kw-bfp" secondAttribute="centerY" id="f4a-eN-UPi"/>
-                        <constraint firstAttribute="bottom" secondItem="7tc-kw-bfp" secondAttribute="bottom" id="k3a-Uu-nef"/>
+                        <constraint firstItem="7tc-kw-bfp" firstAttribute="width" secondItem="qJF-sB-r1M" secondAttribute="width" multiplier="0.8" id="l9R-OV-l08"/>
                         <constraint firstItem="Wjr-Id-Qm7" firstAttribute="height" secondItem="7tc-kw-bfp" secondAttribute="height" id="yia-OG-auM"/>
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="nFV-eu-CZe"/>
                     <connections>
                         <outlet property="bestOfShow" destination="7tc-kw-bfp" id="ZyB-Wc-WlB"/>
                         <outlet property="judgesChoice" destination="Wjr-Id-Qm7" id="dBY-eU-V3I"/>
+                        <outlet property="rectangleGuide" destination="DmM-Pn-Gri" id="uA4-XL-NbV"/>
                         <outlet property="winnerView" destination="NA0-T5-ERI" id="ryW-K2-OYZ"/>
                     </connections>
                 </view>
@@ -187,5 +191,6 @@
     <resources>
         <image name="best-of-show-rune" width="277" height="282"/>
         <image name="judges-choice-rune" width="196" height="316"/>
+        <image name="rectangle" width="343" height="271"/>
     </resources>
 </document>

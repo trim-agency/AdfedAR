@@ -102,7 +102,7 @@ class HomeViewController: UIViewController {
         view.addSubview(logoHintOverlay)
         logoHintOverlay.snp.makeConstraints{ make -> Void in
             make.center.equalTo(self.view.snp.center)
-            make.width.height.equalTo(self.view.snp.width).multipliedBy(0.8)
+            make.width.height.equalTo(self.view.snp.width)
         }
     }
     
@@ -120,6 +120,7 @@ class HomeViewController: UIViewController {
                 self.appendToDebugLabel("best of show triggered")
                 self.scene.loadAndPlayAnimation(key: "bellyDancing")
             }
+            self.toggleUI(animationPlaying: true)
         }
     }
     
@@ -256,7 +257,6 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
         provideHapticFeedback()
-        showRectangleGuide()
         detectedPage = page
         logoHintOverlay.selectRune(detectedPage!)
         appendToDebugLabel("\n✅ " + (self.detectedPage?.rawValue)!)
@@ -301,32 +301,14 @@ extension HomeViewController: CoreMLServiceDelegate {
 extension HomeViewController: RectangleDetectionServiceDelegate {
     func didDetectRectangle(sender: RectangleDetectionService, corners: [CGPoint]) {
         Animator.fade(view: darkeningLayer, to: 0.0, for: 2.0, completion: nil)
-        hideRectangleDetectionGuide()
         appendToDebugLabel("\n✅ Rectangle Detected")
+        logoHintOverlay.hideRectangleGuide()
         pageDetected()
     }
     
     func rectangleDetectionError(sender: RectangleDetectionService) {
         appendToDebugLabel("\n💥 Rectangle Detection Error")
         loadRectangleDetection()
-    }
-    
-    private func showRectangleGuide() {
-        DispatchQueue.main.async {
-            self.rectangleDetectionGuide = RectangleDetectionGuide()
-            self.view.addSubview(self.rectangleDetectionGuide!)
-            self.rectangleDetectionGuide!.snp.makeConstraints{ make -> Void in
-                make.width.equalTo(self.view.snp.width).multipliedBy(0.9)
-                make.height.equalTo(self.view.snp.width).multipliedBy(0.788)
-                make.center.equalTo(self.view.snp.center)
-            }
-            self.rectangleDetectionGuide!.displayRectangleGuide()
-        }
-    }
-    
-    private func hideRectangleDetectionGuide() {
-        rectangleDetectionGuide!.hideRectangleGuide()
-        toggleUI(animationPlaying: true)
     }
 }
 
