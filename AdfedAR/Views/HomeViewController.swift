@@ -22,7 +22,6 @@ class HomeViewController: UIViewController {
     var isPlayingAnimation      = false
     var didRecognizePage        = false
     
-    @IBOutlet weak var awardTypeLabel: AwardType!
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var rightAwardsLabel: UILabel!
     @IBOutlet weak var darkeningLayer: UIView!
@@ -76,7 +75,6 @@ class HomeViewController: UIViewController {
         logoHintOverlay.restartPulsing()
         isPlayingAnimation = false
         didRecognizePage = false
-        awardTypeLabel.hide()
         scene.removeAllNodes(completion: {
             self.startPageDetection()
             DispatchQueue.main.async {
@@ -127,11 +125,9 @@ class HomeViewController: UIViewController {
         scene.removeAllAnimations()
         switch self.detectedPage! {
         case .judgesChoice:
-            awardTypeLabel.showLabel(.judgesChoice)
             appendToDebugLabel("judges choice triggered")
             scene.loadAndPlayAnimation(key: "grandma")
         case .bestOfShow:
-            awardTypeLabel.showLabel(.bestOfShow)
             appendToDebugLabel("best of show triggered")
             scene.loadAndPlayAnimation(key: "bellyDancing")
         }
