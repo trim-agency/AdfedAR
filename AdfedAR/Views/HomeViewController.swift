@@ -19,7 +19,11 @@ class HomeViewController: UIViewController {
     var animationNodes          = [String: [String:Any]]()
     var waitingOnPlane          = true
     var didTapReset             = false
-    var isPlayingAnimation      = false
+    var isPlayingAnimation      = false{
+        didSet {
+            setInstructionLabelForAnimation()
+        }
+    }
     var didRecognizePage        = false
     
     @IBOutlet weak var locationLabel: UILabel!
@@ -204,6 +208,14 @@ class HomeViewController: UIViewController {
             } catch {
                 log.error(error)
             }
+        }
+    }
+    
+    private func setInstructionLabelForAnimation() {
+        if isPlayingAnimation {
+            userInstructionLabel.updateText(.tapForVideo)
+        } else {
+            userInstructionLabel.updateText(.none)
         }
     }
 }
