@@ -145,7 +145,8 @@ class HomeViewController: UIViewController {
         appendToDebugLabel("\n✅ CoreML Waiting for Init")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
             CoreMLService.instance.delegate = self
-            self.startPageDetection()
+            self.sceneView.session.delegate = self
+//            self.startPageDetection()
             self.userInstructionLabel.updateText(.lookingForSymbol)
         })
     }
@@ -221,7 +222,15 @@ class HomeViewController: UIViewController {
 }
 
 // MARK: - ARKit Delegate
-extension HomeViewController: ARSCNViewDelegate, ARSessionObserver {
+extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDelegate {
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        do {
+            try CoreMLService.instance.getPageType(frame)
+        } catch {
+            self.appendToDebugLabel("\n💥 Page Detection Error")
+        }
+    }
+
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         loadRectangleDetection()
         waitingOnPlane = false
