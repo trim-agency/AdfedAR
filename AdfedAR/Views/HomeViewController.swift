@@ -19,7 +19,11 @@ class HomeViewController: UIViewController {
     var animationNodes          = [String: [String:Any]]()
     var waitingOnPlane          = true
     var didTapReset             = false
-    var isPlayingAnimation      = false
+    var isPlayingAnimation      = false{
+        didSet {
+            setInstructionLabelForAnimation()
+        }
+    }
     var didRecognizePage        = false
     
     @IBOutlet weak var locationLabel: UILabel!
@@ -206,6 +210,14 @@ class HomeViewController: UIViewController {
             }
         }
     }
+    
+    private func setInstructionLabelForAnimation() {
+        if isPlayingAnimation {
+            userInstructionLabel.updateText(.tapForVideo)
+        } else {
+            userInstructionLabel.updateText(.none)
+        }
+    }
 }
 
 // MARK: - ARKit Delegate
@@ -274,6 +286,7 @@ extension HomeViewController: CoreMLServiceDelegate {
             loadRectangleDetection()
         } else if didTapReset == true {
             userInstructionLabel.updateText(.lookingForPlane)
+            rootAnchor = nil
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
                 self.loadRectangleDetection()
                 self.userInstructionLabel.updateText(.none)

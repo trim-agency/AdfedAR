@@ -26,9 +26,7 @@ class Scene: SCNScene {
             if isPlayingAnimation {
                 let action = SCNAction.fadeOut(duration: 1.0)
                 node.runAction(action){
-                    log.debug("removing node")
                     node.removeFromParentNode()
-                    log.debug("node removed")
                     self.isPlayingAnimation = false
                 }
             } else {
