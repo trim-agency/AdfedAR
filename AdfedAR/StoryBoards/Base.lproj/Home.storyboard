@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="TTU-Gg-X7P">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -17,6 +17,36 @@
         </array>
     </customFonts>
     <scenes>
+        <!--Fake Launch Screen-->
+        <scene sceneID="8xg-0R-NmY">
+            <objects>
+                <viewController id="TTU-Gg-X7P" customClass="FakeLaunchScreen" customModule="AdfedAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="f9z-tf-pCX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="img" translatesAutoresizingMaskIntoConstraints="NO" id="Gvf-W8-FC6">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="Gvf-W8-FC6" secondAttribute="bottom" id="HWS-7S-3S2"/>
+                            <constraint firstItem="Gvf-W8-FC6" firstAttribute="top" secondItem="f9z-tf-pCX" secondAttribute="top" id="hKs-1E-Xa9"/>
+                            <constraint firstItem="Gvf-W8-FC6" firstAttribute="leading" secondItem="f9z-tf-pCX" secondAttribute="leading" id="tQG-0b-0m7"/>
+                            <constraint firstAttribute="trailing" secondItem="Gvf-W8-FC6" secondAttribute="trailing" id="viU-9d-600"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="ats-rN-SDF"/>
+                    </view>
+                    <connections>
+                        <outlet property="image" destination="Gvf-W8-FC6" id="Fvm-s8-YWQ"/>
+                        <segue destination="BV1-FR-VrT" kind="show" identifier="segueToHome" customClass="CrossDissolveSegue" customModule="AdfedAR" customModuleProvider="target" id="tMJ-rw-MmK"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UiM-Xl-D9b" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-711" y="10"/>
+        </scene>
         <!--Home View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
@@ -183,12 +213,13 @@
                     </connections>
                 </view>
             </objects>
-            <point key="canvasLocation" x="36" y="33.733133433283363"/>
+            <point key="canvasLocation" x="306" y="9"/>
         </scene>
     </scenes>
     <resources>
         <image name="best-of-show-rune" width="277" height="282"/>
         <image name="chevron" width="12" height="21"/>
+        <image name="img" width="375" height="812"/>
         <image name="judges-choice-rune" width="196" height="316"/>
         <image name="rectangle" width="343" height="271"/>
     </resources>

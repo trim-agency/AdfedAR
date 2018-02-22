@@ -29,6 +29,8 @@
 		692979A0200CF4120019A0B9 /* AdfedARUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6929799F200CF4120019A0B9 /* AdfedARUITests.swift */; };
 		69355CAB201A352B00241310 /* DebugPolygon.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69355CAA201A352B00241310 /* DebugPolygon.swift */; };
 		6937D8AA200E7ED70024AC33 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D8A9200E7ED70024AC33 /* UIViewExtension.swift */; };
+		69461A1E203E2A2F00BD8DFF /* FakeLaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69461A1D203E2A2F00BD8DFF /* FakeLaunchScreen.swift */; };
+		69461A21203E2D0300BD8DFF /* CrossDissolveSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69461A20203E2D0300BD8DFF /* CrossDissolveSegue.swift */; };
 		69B037A32020CB7C00906004 /* CoreMLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B037A22020CB7C00906004 /* CoreMLError.swift */; };
 		69D121122016715B00B39411 /* CoreMLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121112016715B00B39411 /* CoreMLService.swift */; };
 		69D121162016727E00B39411 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121152016727E00B39411 /* Page.swift */; };
@@ -95,6 +97,8 @@
 		692979A1200CF4120019A0B9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		69355CAA201A352B00241310 /* DebugPolygon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugPolygon.swift; sourceTree = "<group>"; };
 		6937D8A9200E7ED70024AC33 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
+		69461A1D203E2A2F00BD8DFF /* FakeLaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeLaunchScreen.swift; sourceTree = "<group>"; };
+		69461A20203E2D0300BD8DFF /* CrossDissolveSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossDissolveSegue.swift; sourceTree = "<group>"; };
 		6985CFF2203619A50069116D /* Gotham-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Medium.otf"; sourceTree = "<group>"; };
 		6985CFF3203619A60069116D /* Gotham-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Book.otf"; sourceTree = "<group>"; };
 		69B037A22020CB7C00906004 /* CoreMLError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLError.swift; sourceTree = "<group>"; };
@@ -195,6 +199,7 @@
 		6929797C200CF4120019A0B9 /* AdfedAR */ = {
 			isa = PBXGroup;
 			children = (
+				69461A1F203E2CF100BD8DFF /* Segues */,
 				69D617F2200EB4D40067FC36 /* 3dAssets.scnassets */,
 				69D121132016726900B39411 /* Enums */,
 				6937D8A8200E7EC80024AC33 /* Extensions */,
@@ -267,8 +272,17 @@
 			children = (
 				69355CA9201A351200241310 /* Element Subclasses */,
 				69297981200CF4120019A0B9 /* HomeViewController.swift */,
+				69461A1D203E2A2F00BD8DFF /* FakeLaunchScreen.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		69461A1F203E2CF100BD8DFF /* Segues */ = {
+			isa = PBXGroup;
+			children = (
+				69461A20203E2D0300BD8DFF /* CrossDissolveSegue.swift */,
+			);
+			path = Segues;
 			sourceTree = "<group>";
 		};
 		697EED7E200E9E4600A345DB /* Other */ = {
@@ -669,11 +683,13 @@
 				691BFB8E202226C50086FD13 /* LogoHintOverlay.swift in Sources */,
 				69EEAF6F2024DB72009E9D4E /* UIImageExtension.swift in Sources */,
 				6927A3D7201F752D00A089E0 /* MainARSCNView.swift in Sources */,
+				69461A1E203E2A2F00BD8DFF /* FakeLaunchScreen.swift in Sources */,
 				69F29871203B3E43004F84B7 /* RectangleDetectionGuide.swift in Sources */,
 				69297982200CF4120019A0B9 /* HomeViewController.swift in Sources */,
 				69074D092020EA7500FEC5EB /* UserInstructionsEnum.swift in Sources */,
 				69EEAF7E202903C9009E9D4E /* AdFed.mlmodel in Sources */,
 				69074D072020EA3000FEC5EB /* UserInstructionLabel.swift in Sources */,
+				69461A21203E2D0300BD8DFF /* CrossDissolveSegue.swift in Sources */,
 				69355CAB201A352B00241310 /* DebugPolygon.swift in Sources */,
 				69D121192016877800B39411 /* CoreMLServiceDelegate.swift in Sources */,
 				69170E0E2034A18600740745 /* SceneView.swift in Sources */,
