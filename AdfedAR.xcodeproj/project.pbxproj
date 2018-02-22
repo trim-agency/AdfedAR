@@ -31,13 +31,14 @@
 		6937D8AA200E7ED70024AC33 /* UIViewExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6937D8A9200E7ED70024AC33 /* UIViewExtension.swift */; };
 		69461A1E203E2A2F00BD8DFF /* FakeLaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69461A1D203E2A2F00BD8DFF /* FakeLaunchScreen.swift */; };
 		69461A21203E2D0300BD8DFF /* CrossDissolveSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69461A20203E2D0300BD8DFF /* CrossDissolveSegue.swift */; };
+		69461A23203F5C3000BD8DFF /* AdFed.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 69461A22203F5C3000BD8DFF /* AdFed.mlmodel */; };
+		69461A25203F65AA00BD8DFF /* ArFrameStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69461A24203F65AA00BD8DFF /* ArFrameStruct.swift */; };
 		69B037A32020CB7C00906004 /* CoreMLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B037A22020CB7C00906004 /* CoreMLError.swift */; };
 		69D121122016715B00B39411 /* CoreMLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121112016715B00B39411 /* CoreMLService.swift */; };
 		69D121162016727E00B39411 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121152016727E00B39411 /* Page.swift */; };
 		69D121192016877800B39411 /* CoreMLServiceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121182016877800B39411 /* CoreMLServiceDelegate.swift */; };
 		69D617F3200EB4D40067FC36 /* 3dAssets.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 69D617F2200EB4D40067FC36 /* 3dAssets.scnassets */; };
 		69EEAF6F2024DB72009E9D4E /* UIImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69EEAF6E2024DB72009E9D4E /* UIImageExtension.swift */; };
-		69EEAF7E202903C9009E9D4E /* AdFed.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 69EEAF7D202903C9009E9D4E /* AdFed.mlmodel */; };
 		69F29871203B3E43004F84B7 /* RectangleDetectionGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F29870203B3E43004F84B7 /* RectangleDetectionGuide.swift */; };
 		69F29875203C6E9F004F84B7 /* AwardType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69F29874203C6E9F004F84B7 /* AwardType.swift */; };
 		9816AB41C660356A4A94F75D /* Pods_AdfedARUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C5D15C24C3C493A3E5D0D87A /* Pods_AdfedARUITests.framework */; };
@@ -99,6 +100,8 @@
 		6937D8A9200E7ED70024AC33 /* UIViewExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewExtension.swift; sourceTree = "<group>"; };
 		69461A1D203E2A2F00BD8DFF /* FakeLaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FakeLaunchScreen.swift; sourceTree = "<group>"; };
 		69461A20203E2D0300BD8DFF /* CrossDissolveSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossDissolveSegue.swift; sourceTree = "<group>"; };
+		69461A22203F5C3000BD8DFF /* AdFed.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AdFed.mlmodel; sourceTree = "<group>"; };
+		69461A24203F65AA00BD8DFF /* ArFrameStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArFrameStruct.swift; sourceTree = "<group>"; };
 		6985CFF2203619A50069116D /* Gotham-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Medium.otf"; sourceTree = "<group>"; };
 		6985CFF3203619A60069116D /* Gotham-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Book.otf"; sourceTree = "<group>"; };
 		69B037A22020CB7C00906004 /* CoreMLError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLError.swift; sourceTree = "<group>"; };
@@ -107,7 +110,6 @@
 		69D121182016877800B39411 /* CoreMLServiceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreMLServiceDelegate.swift; sourceTree = "<group>"; };
 		69D617F2200EB4D40067FC36 /* 3dAssets.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = 3dAssets.scnassets; sourceTree = "<group>"; };
 		69EEAF6E2024DB72009E9D4E /* UIImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageExtension.swift; sourceTree = "<group>"; };
-		69EEAF7D202903C9009E9D4E /* AdFed.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AdFed.mlmodel; sourceTree = "<group>"; };
 		69F29870203B3E43004F84B7 /* RectangleDetectionGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleDetectionGuide.swift; sourceTree = "<group>"; };
 		69F29874203C6E9F004F84B7 /* AwardType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AwardType.swift; sourceTree = "<group>"; };
 		8B17EF5604D866D7559D229D /* Pods-AdfedARTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AdfedARTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-AdfedARTests/Pods-AdfedARTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -161,6 +163,7 @@
 			children = (
 				69170E0320337CFC00740745 /* Videos.swift */,
 				69170E052033947B00740745 /* YoutubeVideoQuality.swift */,
+				69461A24203F65AA00BD8DFF /* ArFrameStruct.swift */,
 			);
 			path = Structs;
 			sourceTree = "<group>";
@@ -307,7 +310,7 @@
 		699A3C82201A775C00FFB5F6 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				69EEAF7D202903C9009E9D4E /* AdFed.mlmodel */,
+				69461A22203F5C3000BD8DFF /* AdFed.mlmodel */,
 			);
 			name = Model;
 			path = "New Group2";
@@ -673,6 +676,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6937D8AA200E7ED70024AC33 /* UIViewExtension.swift in Sources */,
+				69461A23203F5C3000BD8DFF /* AdFed.mlmodel in Sources */,
 				69170E0C20347AB500740745 /* Secrets.swift in Sources */,
 				69D121162016727E00B39411 /* Page.swift in Sources */,
 				6927A3D4201F709C00A089E0 /* VNRectangleObservationExtension.swift in Sources */,
@@ -687,7 +691,6 @@
 				69F29871203B3E43004F84B7 /* RectangleDetectionGuide.swift in Sources */,
 				69297982200CF4120019A0B9 /* HomeViewController.swift in Sources */,
 				69074D092020EA7500FEC5EB /* UserInstructionsEnum.swift in Sources */,
-				69EEAF7E202903C9009E9D4E /* AdFed.mlmodel in Sources */,
 				69074D072020EA3000FEC5EB /* UserInstructionLabel.swift in Sources */,
 				69461A21203E2D0300BD8DFF /* CrossDissolveSegue.swift in Sources */,
 				69355CAB201A352B00241310 /* DebugPolygon.swift in Sources */,
@@ -697,6 +700,7 @@
 				6927A3DD201FAD2000A089E0 /* RectangleDetectionServiceDelegate.swift in Sources */,
 				6929797E200CF4120019A0B9 /* AppDelegate.swift in Sources */,
 				69170E142034F49300740745 /* Animator.swift in Sources */,
+				69461A25203F65AA00BD8DFF /* ArFrameStruct.swift in Sources */,
 				69B037A32020CB7C00906004 /* CoreMLError.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
