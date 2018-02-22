@@ -1,6 +1,7 @@
 import UIKit
 
 class UserInstructionLabel: UILabel {
+
     override func drawText(in rect: CGRect) {
         let insets = UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10 )
         super.drawText(in: UIEdgeInsetsInsetRect(rect, insets))
@@ -15,12 +16,11 @@ class UserInstructionLabel: UILabel {
     }
 
     func updateText(_ instructions: UserInstructions) {
-        DispatchQueue.main.async {
+        if Thread.isMainThread {
             self.text = instructions.rawValue.uppercased()
-            if instructions != .none {
-                self.isHidden = false
-            } else {
-                self.isHidden = true
+        } else {
+            DispatchQueue.main.async {
+                self.text = instructions.rawValue.uppercased()
             }
         }
     }

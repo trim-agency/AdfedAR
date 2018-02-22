@@ -286,6 +286,7 @@ extension HomeViewController: CoreMLServiceDelegate {
             loadRectangleDetection()
         } else if didTapReset == true {
             userInstructionLabel.updateText(.lookingForPlane)
+            rootAnchor = nil
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
                 self.loadRectangleDetection()
                 self.userInstructionLabel.updateText(.none)
