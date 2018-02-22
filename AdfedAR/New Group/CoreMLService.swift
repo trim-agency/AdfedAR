@@ -7,20 +7,23 @@ import ARKit
 class CoreMLService {
     var delegate: CoreMLServiceDelegate?
     var hasFoundPage = false
+    let model           = try! VNCoreMLModel(for: AdFed().model)
+    var currentFrame: ArFrameData?
     static let instance = CoreMLService()
 
-    func getPageType(_ arFrame: ARFrame) throws {
-        DispatchQueue.global().async {
+    func getPageType() throws {
+        DispatchQueue.global().async  {
             do {
                 self.hasFoundPage        = false
-                let image           = arFrame.capturedImage
-                let transformedImage = self.transformBuffer(image, arFrame.lightEstimate?.ambientIntensity)
+                guard let currentFrame = self.currentFrame else {
+                    return
+                }
+                let transformedImage = self.transformBuffer(currentFrame.image, currentFrame.exposure)
                 let context         = CIContext()
                 let cgImage         = context.createCGImage(transformedImage, from: transformedImage.extent)
                 let croppedImage    = UIImage(cgImage: cgImage!).cropToCenter(to: CGSize(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.width * 0.6))
                 let ciImage         = CIImage(image: croppedImage)
-                let model           = try VNCoreMLModel(for: AdFed().model)
-                let request         = VNCoreMLRequest(model: model, completionHandler: self.pageRecognitionHandler)
+                let request         = VNCoreMLRequest(model: self.model, completionHandler: self.pageRecognitionHandler)
                 let handler         = VNImageRequestHandler(ciImage: ciImage!, options: [:])
                 try handler.perform([request])
             } catch {
@@ -98,6 +101,7 @@ class CoreMLService {
                 log.error("Page not created")
             }
         } else {
+            log.debug(highConfidenceObservation.confidence)
             delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.lowConfidence)
         }
     }

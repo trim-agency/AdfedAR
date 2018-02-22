@@ -146,7 +146,7 @@ class HomeViewController: UIViewController {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
             CoreMLService.instance.delegate = self
             self.sceneView.session.delegate = self
-//            self.startPageDetection()
+            self.startPageDetection()
             self.userInstructionLabel.updateText(.lookingForSymbol)
         })
     }
@@ -156,7 +156,7 @@ class HomeViewController: UIViewController {
         DispatchQueue.global(qos: .userInitiated).async {
             if self.sceneView.session.currentFrame != nil {
                 do {
-                    try CoreMLService.instance.getPageType(self.sceneView.session.currentFrame!)
+                    try CoreMLService.instance.getPageType()
                 } catch {
                     self.appendToDebugLabel("\n💥 Page Detection Error")
                 }
@@ -224,11 +224,9 @@ class HomeViewController: UIViewController {
 // MARK: - ARKit Delegate
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        do {
-            try CoreMLService.instance.getPageType(frame)
-        } catch {
-            self.appendToDebugLabel("\n💥 Page Detection Error")
-        }
+        if didRecognizePage { return }
+        guard let exposure = frame.lightEstimate?.ambientIntensity else { return }
+        CoreMLService.instance.currentFrame = ArFrameData(image: frame.capturedImage, exposure: exposure)
     }
 
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
