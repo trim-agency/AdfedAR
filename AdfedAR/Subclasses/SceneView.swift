@@ -28,13 +28,14 @@ class Scene: SCNScene {
                 node.runAction(action){
                     node.removeFromParentNode()
                     self.isPlayingAnimation = false
+                    completion?()
                 }
             } else {
                 self.isPlayingAnimation = false
                 node.removeFromParentNode()
+                completion?()
             }
         }
-        completion?()
     }
     
     // Mark: - Asset management
