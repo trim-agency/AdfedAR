@@ -75,10 +75,10 @@ class HomeViewController: UIViewController {
     }
     
     private func reset() {
-        toggleUI(animationPlaying: false)
+        isPlayingAnimation  = false
+        didRecognizePage    = false
+        toggleUI()
         logoHintOverlay.restartPulsing()
-        isPlayingAnimation = false
-        didRecognizePage = false
         scene.removeAllNodes(completion: {
             self.startPageDetection()
             DispatchQueue.main.async {
@@ -127,7 +127,8 @@ class HomeViewController: UIViewController {
     private func displayAnimations() {
         isPlayingAnimation = true
         scene.removeAllAnimations()
-        switch self.detectedPage! {
+        guard let detectedPage = self.detectedPage else { return }
+        switch detectedPage {
         case .judgesChoice:
             appendToDebugLabel("judges choice triggered")
             scene.loadAndPlayAnimation(key: "grandma")
@@ -136,7 +137,7 @@ class HomeViewController: UIViewController {
             scene.loadAndPlayAnimation(key: "bellyDancing")
         }
         logoHintOverlay.hideRectangleGuide()
-        toggleUI(animationPlaying: true)
+        toggleUI()
     }
     
     // MARK: - Core ML
@@ -165,12 +166,12 @@ class HomeViewController: UIViewController {
     }
     
     // MARK: - UI Elements
-    private func toggleUI(animationPlaying: Bool) {
+    private func toggleUI() {
         DispatchQueue.main.async {
-            self.resetButton.isHidden       = !animationPlaying
-            self.aafLabel.isHidden          = animationPlaying
-            self.rightAwardsLabel.isHidden  = !animationPlaying
-            self.locationLabel.isHidden     = !animationPlaying
+            self.resetButton.isHidden       = !self.isPlayingAnimation
+            self.aafLabel.isHidden          = self.isPlayingAnimation
+            self.rightAwardsLabel.isHidden  = !self.isPlayingAnimation
+            self.locationLabel.isHidden     = !self.isPlayingAnimation
         }
     }
     
@@ -230,8 +231,11 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
     }
 
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        loadRectangleDetection()
-        waitingOnPlane = false
+        if !waitingOnPlane {
+            waitingOnPlane = false
+        } else {
+            loadRectangleDetection()
+        }
     }
     
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
@@ -285,6 +289,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
         if didRecognizePage == true { return }
+        CoreMLService.instance.currentFrame = nil
         didRecognizePage = true
         provideHapticFeedback()
         detectedPage = page

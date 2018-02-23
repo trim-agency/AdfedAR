@@ -181,7 +181,7 @@
                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="judges-choice-rune" translatesAutoresizingMaskIntoConstraints="NO" id="Wjr-Id-Qm7">
                             <rect key="frame" x="24" y="54.5" width="192" height="316"/>
                         </imageView>
-                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NA0-T5-ERI">
+                        <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="NA0-T5-ERI">
                             <rect key="frame" x="0.0" y="148" width="240" height="128"/>
                         </imageView>
                         <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="rectangle" translatesAutoresizingMaskIntoConstraints="NO" id="DmM-Pn-Gri">
@@ -195,13 +195,14 @@
                         <constraint firstItem="NA0-T5-ERI" firstAttribute="centerX" secondItem="7tc-kw-bfp" secondAttribute="centerX" id="4xs-sm-lw5"/>
                         <constraint firstItem="DmM-Pn-Gri" firstAttribute="centerX" secondItem="qJF-sB-r1M" secondAttribute="centerX" id="A1b-z8-93s"/>
                         <constraint firstItem="Wjr-Id-Qm7" firstAttribute="centerX" secondItem="qJF-sB-r1M" secondAttribute="centerX" id="DYB-EC-uih"/>
-                        <constraint firstItem="NA0-T5-ERI" firstAttribute="width" secondItem="7tc-kw-bfp" secondAttribute="width" multiplier="0.8" id="Hwe-eV-IVL"/>
                         <constraint firstItem="7tc-kw-bfp" firstAttribute="centerX" secondItem="qJF-sB-r1M" secondAttribute="centerX" id="Qjy-Co-7Q6"/>
+                        <constraint firstItem="NA0-T5-ERI" firstAttribute="height" secondItem="7tc-kw-bfp" secondAttribute="height" id="X3O-py-aKX"/>
                         <constraint firstItem="DmM-Pn-Gri" firstAttribute="centerY" secondItem="qJF-sB-r1M" secondAttribute="centerY" id="XPW-Rc-Pgw"/>
                         <constraint firstItem="Wjr-Id-Qm7" firstAttribute="width" secondItem="7tc-kw-bfp" secondAttribute="width" id="bhS-I4-t8c"/>
                         <constraint firstItem="7tc-kw-bfp" firstAttribute="centerY" secondItem="qJF-sB-r1M" secondAttribute="centerY" id="eOS-Dn-YNm"/>
                         <constraint firstItem="NA0-T5-ERI" firstAttribute="centerY" secondItem="7tc-kw-bfp" secondAttribute="centerY" id="f4a-eN-UPi"/>
                         <constraint firstItem="7tc-kw-bfp" firstAttribute="width" secondItem="qJF-sB-r1M" secondAttribute="width" multiplier="0.8" id="l9R-OV-l08"/>
+                        <constraint firstItem="NA0-T5-ERI" firstAttribute="width" secondItem="7tc-kw-bfp" secondAttribute="width" id="t8t-fX-yr0"/>
                         <constraint firstItem="Wjr-Id-Qm7" firstAttribute="height" secondItem="7tc-kw-bfp" secondAttribute="height" id="yia-OG-auM"/>
                     </constraints>
                     <viewLayoutGuide key="safeArea" id="nFV-eu-CZe"/>
