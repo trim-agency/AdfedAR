@@ -9,7 +9,7 @@ class FakeLaunchScreen: UIViewController {
     
     private func waitAndSegue() {
         DispatchQueue.main.asyncAfter(wallDeadline: .now() + .milliseconds(500), execute: {
-            self.performSegue(withIdentifier: "segueToHome", sender: self)
+            self.performSegue(withIdentifier: "segueToWalkthrough", sender: self)
         })
     }
 }
