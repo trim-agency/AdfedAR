@@ -153,14 +153,11 @@ class HomeViewController: UIViewController {
     }
     
     private func startPageDetection() {
-        appendToDebugLabel("\n✅ Page Detection Started")
-        DispatchQueue.global(qos: .userInitiated).async {
-            if self.sceneView.session.currentFrame != nil {
-                do {
-                    try CoreMLService.instance.getPageType()
-                } catch {
-                    self.appendToDebugLabel("\n💥 Page Detection Error")
-                }
+        if self.sceneView.session.currentFrame != nil {
+            do {
+                try CoreMLService.instance.getPageType()
+            } catch {
+                self.appendToDebugLabel("\n💥 Page Detection Error")
             }
         }
     }
@@ -227,7 +224,9 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         if didRecognizePage { return }
         guard let exposure = frame.lightEstimate?.ambientIntensity else { return }
-        CoreMLService.instance.currentFrame = ArFrameData(image: frame.capturedImage, exposure: exposure)
+        DispatchQueue.global().async {
+            CoreMLService.instance.currentFrame = ArFrameData(image: frame.capturedImage, exposure: exposure)
+        }
     }
 
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
