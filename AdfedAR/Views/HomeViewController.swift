@@ -19,7 +19,7 @@ class HomeViewController: UIViewController {
     var animationNodes          = [String: [String:Any]]()
     var waitingOnPlane          = true
     var didTapReset             = false
-    var isPlayingAnimation      = false{
+    var isPlayingAnimation      = false   {
         didSet {
             setInstructionLabelForAnimation()
         }
@@ -131,10 +131,10 @@ class HomeViewController: UIViewController {
         switch detectedPage {
         case .judgesChoice:
             appendToDebugLabel("judges choice triggered")
-            scene.loadAndPlayAnimation(key: "grandma")
+            scene.loadAndPlayAnimation(key: "judgesChoice")
         case .bestOfShow:
             appendToDebugLabel("best of show triggered")
-            scene.loadAndPlayAnimation(key: "bellyDancing")
+            scene.loadAndPlayAnimation(key: "bestOfShow")
         }
         logoHintOverlay.hideRectangleGuide()
         toggleUI()
