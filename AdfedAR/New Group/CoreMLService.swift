@@ -16,6 +16,7 @@ class CoreMLService {
             do {
                 self.hasFoundPage        = false
                 guard let currentFrame = self.currentFrame else {
+                    log.debug("Current frame nil")
                     return
                 }
                 let transformedImage = self.transformBuffer(currentFrame.image, currentFrame.exposure)
@@ -24,7 +25,9 @@ class CoreMLService {
                 let croppedImage    = UIImage(cgImage: cgImage!).cropToCenter(to: CGSize(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.width * 0.6))
                 let ciImage         = CIImage(image: croppedImage)
                 let request         = VNCoreMLRequest(model: self.model, completionHandler: self.pageRecognitionHandler)
+                request.usesCPUOnly = true
                 let handler         = VNImageRequestHandler(ciImage: ciImage!, options: [:])
+                log.debug("Performoing request")
                 try handler.perform([request])
             } catch {
                 log.debug("handler error")
