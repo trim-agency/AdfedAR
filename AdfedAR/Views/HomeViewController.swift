@@ -9,7 +9,7 @@ import AVKit
 import SnapKit
 
 class HomeViewController: UIViewController {
-    
+
     let planeHeight: CGFloat    = 1
     var planeIdentifiers        = [UUID]()
     var anchors                 = [ARAnchor]()
@@ -49,6 +49,7 @@ class HomeViewController: UIViewController {
     // MARK: - Protocol Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        AppState.instance.current = State.appLoading
         setup()
     }
     
@@ -148,6 +149,7 @@ class HomeViewController: UIViewController {
     
     // MARK: - Core ML
     private func loadCoreMLService() {
+        if AppState.instance.current == .appLoading { AppState.instance.current = .detectingRune }
         if isPlayingAnimation { return } // to keep coreml from triggering when transitioning back from video view
         appendToDebugLabel("\n✅ CoreML Waiting for Init")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
@@ -297,6 +299,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
 // MARK: - CoreMLService Delegate
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizeRune(sender: CoreMLService, page: Page) {
+        if AppState.instance.current == .detectingRune { AppState.instance.current = .runeDetected }
         if didRecognizeRune { return } // keeps repeated triggering from delegate method from causing problems
         didRecognizeRune = true
         CoreMLService.instance.currentFrame = nil
@@ -318,7 +321,7 @@ extension HomeViewController: CoreMLServiceDelegate {
     }
     
     func didReceiveRuneRecognitionError(sender: CoreMLService, error: CoreMLError) {
-        if didRecognizeRune { return }
+        if AppState.instance.current == .detectingRune { return }
         switch error {
         case .lowConfidence:
             appendToDebugLabel("\n💥 Low Confidence Observation")
@@ -381,5 +384,11 @@ extension HomeViewController {
         }
     }
 }
+
+
+
+
+
+
 
 
