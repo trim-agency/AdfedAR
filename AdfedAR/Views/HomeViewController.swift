@@ -77,6 +77,7 @@ class HomeViewController: UIViewController {
     }
     
     private func reset() {
+        AppState.instance.current = .reset
         isPlayingAnimation  = false
         didRecognizeRune    = false
         didDetectRectangle  = false
@@ -131,6 +132,7 @@ class HomeViewController: UIViewController {
     }
     
     private func displayAnimations() {
+        if AppState.instance.current == .rectangleDetected { AppState.instance.current = .loadingAnimation }
         if isPlayingAnimation { return }
         scene.removeAllAnimations()
         guard let detectedPage = self.detectedPage else { return }
@@ -145,11 +147,11 @@ class HomeViewController: UIViewController {
         logoHintOverlay.hideRectangleGuide()
         toggleUI()
         isPlayingAnimation = true
+        if AppState.instance.current == .loadingAnimation { AppState.instance.current = .playingAnimation }
     }
     
     // MARK: - Core ML
     private func loadCoreMLService() {
-        if AppState.instance.current == .appLoading { AppState.instance.current = .detectingRune }
         if isPlayingAnimation { return } // to keep coreml from triggering when transitioning back from video view
         appendToDebugLabel("\n✅ CoreML Waiting for Init")
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
@@ -161,6 +163,9 @@ class HomeViewController: UIViewController {
     }
     
     private func startPageDetection() {
+        if AppState.instance.current == .appLoading ||
+            AppState.instance.current == .reset { AppState.instance.current = .detectingRune }
+        
         if self.sceneView.session.currentFrame != nil {
             do {
                 try CoreMLService.instance.getRuneType()
@@ -198,6 +203,7 @@ class HomeViewController: UIViewController {
     
     // MARK: - Vision Framework
     func loadRectangleDetection() {
+        if AppState.instance.current == .runeDetected { AppState.instance.current = .detectingRectangle }
         if didDetectRectangle { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
             if !self.didRecognizeRune { return }
@@ -348,6 +354,7 @@ extension HomeViewController: CoreMLServiceDelegate {
 // MARK: - Rectangle Detection Delegate
 extension HomeViewController: RectangleDetectionServiceDelegate {
     func didDetectRectangle(sender: RectangleDetectionService, corners: [CGPoint]) {
+        if AppState.instance.current == .detectingRectangle  { AppState.instance.current = .rectangleDetected }
         log.debug("Rect DETECTED")
         didDetectRectangle = true
         Animator.fade(view: darkeningLayer, to: 0.0, for: 2.0, completion: nil)
