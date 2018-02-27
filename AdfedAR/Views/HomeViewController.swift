@@ -180,11 +180,12 @@ class HomeViewController: UIViewController {
     
     // MARK: - UI Elements
     private func toggleUI() {
+        log.debug("UI Toggled")
         DispatchQueue.main.async {
-            self.resetButton.isHidden       = !self.isPlayingAnimation
-            self.aafLabel.isHidden          = self.isPlayingAnimation
-            self.rightAwardsLabel.isHidden  = !self.isPlayingAnimation
-            self.locationLabel.isHidden     = !self.isPlayingAnimation
+            self.resetButton.isHidden       = !self.resetButton.isHidden
+            self.aafLabel.isHidden          = !self.aafLabel.isHidden
+            self.rightAwardsLabel.isHidden  = !self.rightAwardsLabel.isHidden
+            self.locationLabel.isHidden     = !self.locationLabel.isHidden
         }
     }
     
