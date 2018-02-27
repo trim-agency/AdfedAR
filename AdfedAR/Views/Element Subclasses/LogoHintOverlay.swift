@@ -109,7 +109,7 @@ class LogoHintOverlay: UIView {
         rectangleGuide?.tintColor   = UIColor.white
         rectangleGuide?.alpha       = 0
         rectangleGuide?.isHidden    = false
-        Animator.fade(view: rectangleGuide!, to: 1.0, for: 0.75, options: [.curveEaseInOut], completion: nil)
+        Animator.fade(view: rectangleGuide!, to: 1.0, for: 0.25, options: [.curveEaseInOut], completion: nil)
     }
     
     func hideRectangleGuide() {
