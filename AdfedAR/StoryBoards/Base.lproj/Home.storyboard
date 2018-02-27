@@ -225,7 +225,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="35" translatesAutoresizingMaskIntoConstraints="NO" id="nFN-OK-b2y">
-                                <rect key="frame" x="37.5" y="145" width="300" height="407"/>
+                                <rect key="frame" x="37.5" y="157" width="300" height="407"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kfu-QD-TfX">
                                         <rect key="frame" x="0.0" y="0.0" width="300" height="190"/>
@@ -246,20 +246,20 @@
                                         </attributedString>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="gxt-HJ-Wsm">
+                                    <stackView opaque="NO" contentMode="center" distribution="fillEqually" spacing="-20" translatesAutoresizingMaskIntoConstraints="NO" id="gxt-HJ-Wsm">
                                         <rect key="frame" x="0.0" y="225" width="300" height="125"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bestOfShowRune" translatesAutoresizingMaskIntoConstraints="NO" id="c4h-Uh-5ZJ">
-                                                <rect key="frame" x="0.0" y="0.0" width="150" height="125"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="160" height="125"/>
                                             </imageView>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="judgesChoiceRune" translatesAutoresizingMaskIntoConstraints="NO" id="6Ct-et-Ofh">
-                                                <rect key="frame" x="150" y="0.0" width="150" height="125"/>
+                                                <rect key="frame" x="140" y="0.0" width="160" height="125"/>
                                             </imageView>
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9iq-w2-UDf">
                                         <rect key="frame" x="0.0" y="385" width="300" height="22"/>
-                                        <state key="normal" title="Let's Go" image="chevron">
+                                        <state key="normal" title="LET'S GO" image="chevron">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
                                         <connections>
@@ -275,7 +275,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstItem="nFN-OK-b2y" firstAttribute="centerX" secondItem="EAW-6Q-fTY" secondAttribute="centerX" id="Xno-g1-zmY"/>
-                            <constraint firstItem="nFN-OK-b2y" firstAttribute="top" secondItem="NgK-9P-QAD" secondAttribute="top" constant="125" id="jqW-3S-Lzw"/>
+                            <constraint firstItem="nFN-OK-b2y" firstAttribute="top" secondItem="NgK-9P-QAD" secondAttribute="top" constant="137" id="jqW-3S-Lzw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NgK-9P-QAD"/>
                     </view>

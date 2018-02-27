@@ -12,7 +12,7 @@ class WalkthroughViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         instructionLabel.sizeToFit()
-        mainStack.setCustomSpacing(65, after: logoStack)
+        mainStack.setCustomSpacing(60, after: logoStack)
         setupLetsGoButton()
         setupGradient()
     }
@@ -22,7 +22,7 @@ class WalkthroughViewController: UIViewController {
         let margin = CGFloat(5.0)
         letsGoButton.titleEdgeInsets    = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 15)
         letsGoButton.imageEdgeInsets    = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        letsGoButton.contentEdgeInsets  = UIEdgeInsets(top: 0, left: margin, bottom: 0, right: margin)
+        letsGoButton.contentEdgeInsets  = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: margin)
     }
     
     private func setupGradient() {
