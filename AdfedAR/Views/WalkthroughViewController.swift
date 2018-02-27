@@ -19,7 +19,7 @@ class WalkthroughViewController: UIViewController {
     
     private func setupLetsGoButton() {
         letsGoButton.imageView?.transform = CGAffineTransform(scaleX: -1, y: 1)
-        let margin = CGFloat(5.0)
+        let margin                      = CGFloat(5.0)
         letsGoButton.titleEdgeInsets    = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 15)
         letsGoButton.imageEdgeInsets    = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         letsGoButton.contentEdgeInsets  = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: margin)
