@@ -6,15 +6,15 @@ import ARKit
 
 class CoreMLService {
     var delegate: CoreMLServiceDelegate?
-    var hasFoundPage = false
+    var hasFoundRune    = false
     let model           = try! VNCoreMLModel(for: AdFed().model)
     var currentFrame: ArFrameData?
     static let instance = CoreMLService()
 
-    func getPageType() throws {
+    func getRuneType() throws {
         DispatchQueue.global().async  {
             do {
-                self.hasFoundPage        = false
+                self.hasFoundRune      = false
                 guard let currentFrame = self.currentFrame else {
                     self.delegate?.didReceiveRuneRecognitionError(sender: self, error: .missingARFrame)
                     return
@@ -94,9 +94,9 @@ class CoreMLService {
         
         if highConfidenceObservation.confidence > 0.90 {
             if let page = Page(rawValue: highConfidenceObservation.identifier)  {
-                if hasFoundPage { return }
+                if hasFoundRune { return }
                 delegate?.didRecognizeRune(sender: self, page: page)
-                hasFoundPage = true
+                hasFoundRune = true
             } else {
                 delegate?.didReceiveRuneRecognitionError(sender: self, error: CoreMLError.observationError)
                 log.error("Page not created")

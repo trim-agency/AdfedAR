@@ -130,6 +130,7 @@ class HomeViewController: UIViewController {
     }
     
     private func displayAnimations() {
+        if isPlayingAnimation { return }
         scene.removeAllAnimations()
         guard let detectedPage = self.detectedPage else { return }
         switch detectedPage {
@@ -160,7 +161,7 @@ class HomeViewController: UIViewController {
     private func startPageDetection() {
         if self.sceneView.session.currentFrame != nil {
             do {
-                try CoreMLService.instance.getPageType()
+                try CoreMLService.instance.getRuneType()
             } catch {
                 self.appendToDebugLabel("\n💥 Page Detection Error")
             }
@@ -195,6 +196,7 @@ class HomeViewController: UIViewController {
     
     // MARK: - Vision Framework
     func loadRectangleDetection() {
+        if didDetectRectangle { return }
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
             if !self.didRecognizeRune { return }
             log.debug("RECT DETECT STARTED")
@@ -239,9 +241,8 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
     }
 
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
-        if !waitingOnPlane {
-            waitingOnPlane = false
-        } else if didRecognizeRune {
+        waitingOnPlane = false
+        if didRecognizeRune {
             loadRectangleDetection()
         }
     }
@@ -317,6 +318,7 @@ extension HomeViewController: CoreMLServiceDelegate {
     }
     
     func didReceiveRuneRecognitionError(sender: CoreMLService, error: CoreMLError) {
+        if didRecognizeRune { return }
         switch error {
         case .lowConfidence:
             appendToDebugLabel("\n💥 Low Confidence Observation")
