@@ -14,7 +14,6 @@ class Animator {
     static func stopAnimations<T: UIView>(views: [T]){
         DispatchQueue.main.async {
             views.forEach({ (view) in
-                log.debug(view)
                 view.layer.removeAllAnimations()
             })
         }

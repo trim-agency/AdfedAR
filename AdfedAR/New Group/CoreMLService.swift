@@ -16,7 +16,7 @@ class CoreMLService {
             do {
                 self.hasFoundPage        = false
                 guard let currentFrame = self.currentFrame else {
-                    log.debug("Current frame nil")
+                    self.delegate?.didReceiveRecognitionError(sender: self, error: .missingARFrame)
                     return
                 }
                 let transformedImage = self.transformBuffer(currentFrame.image, currentFrame.exposure)
@@ -27,7 +27,6 @@ class CoreMLService {
                 let request         = VNCoreMLRequest(model: self.model, completionHandler: self.pageRecognitionHandler)
                 request.usesCPUOnly = true
                 let handler         = VNImageRequestHandler(ciImage: ciImage!, options: [:])
-                log.debug("Performoing request")
                 try handler.perform([request])
             } catch {
                 log.debug("handler error")
@@ -72,7 +71,6 @@ class CoreMLService {
             }
             parseResults(results)
         } else {
-            log.debug(error!)
             delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.observationError)
         }
     }
@@ -104,7 +102,6 @@ class CoreMLService {
                 log.error("Page not created")
             }
         } else {
-            log.debug(highConfidenceObservation.confidence)
             delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.lowConfidence)
         }
     }

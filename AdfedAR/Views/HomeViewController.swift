@@ -77,6 +77,7 @@ class HomeViewController: UIViewController {
     private func reset() {
         isPlayingAnimation  = false
         didRecognizePage    = false
+        CoreMLService.instance.currentFrame = nil
         toggleUI()
         logoHintOverlay.restartPulsing()
         scene.removeAllNodes(completion: {
@@ -155,7 +156,6 @@ class HomeViewController: UIViewController {
     private func startPageDetection() {
         if self.sceneView.session.currentFrame != nil {
             do {
-                log.debug("coreml started again")
                 try CoreMLService.instance.getPageType()
             } catch {
                 self.appendToDebugLabel("\n💥 Page Detection Error")
@@ -226,7 +226,6 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
         if didRecognizePage { return }
         guard let exposure = frame.lightEstimate?.ambientIntensity else { return }
         DispatchQueue.global().async {
-            log.debug("Updating frames")
             CoreMLService.instance.currentFrame = ArFrameData(image: frame.capturedImage, exposure: exposure)
         }
     }
@@ -289,9 +288,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
 // MARK: - CoreMLService Delegate
 extension HomeViewController: CoreMLServiceDelegate {
     func didRecognizePage(sender: CoreMLService, page: Page) {
-        log.debug("recognized page")
         if didRecognizePage == true {
-            log.debug("already recognized page")
             return
         }
         CoreMLService.instance.currentFrame = nil
@@ -322,6 +319,8 @@ extension HomeViewController: CoreMLServiceDelegate {
             appendToDebugLabel("\n💥 Observation Error")
         case .invalidObject:
             appendToDebugLabel("\n💥 Invalid Object")
+        case .missingARFrame:
+            appendToDebugLabel("Missing AR frame")
         }
         startPageDetection()
     }

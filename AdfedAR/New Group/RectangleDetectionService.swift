@@ -14,7 +14,6 @@ class RectangleDetectionService {
     }
     
     func handleRectangles(request: VNRequest, error: Error?) {
-        log.debug("Rect Service Started")
         guard let observations = request.results as? [VNRectangleObservation] else {
             return
         }

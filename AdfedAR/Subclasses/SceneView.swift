@@ -48,7 +48,6 @@ class Scene: SCNScene {
         let scene       = SCNScene(named: filePath + ".dae")!
         let parentNode  = SCNNode()
         parentNode.name = key
-        log.debug(scene.rootNode.childNodes)
         add(node: scene.rootNode, to: parentNode)
 //        let animation: CAAnimation = loadAnimation(withKey: key,
 //                                                   sceneName: filePath)!
