@@ -4,8 +4,8 @@
   <contributor>
    <authoring_tool>SceneKit Collada Exporter v1.0</authoring_tool>
   </contributor>
-  <created>2018-02-23T20:47:03Z</created>
-  <modified>2018-02-23T20:47:03Z</modified>
+  <created>2018-02-27T20:10:59Z</created>
+  <modified>2018-02-27T20:10:59Z</modified>
   <unit meter="1.000000"/>
   <up_axis>Y_UP</up_axis>
  </asset>
@@ -121,7 +121,7 @@
     </instance_geometry>
    </node>
    <node id="node6" name="spot">
-    <matrix>0.7693865 -0.6112434 0.1851317 0.5900484 0.437445 0.7155283 0.544525 2.127552 -0.4653415 -0.3379842 0.8179747 2.912502 0 0 0 1 </matrix>
+    <matrix>0.7761075 -0.611228 0.1545161 0.5900483 0.4586606 0.7155105 0.5267642 2.127552 -0.432582 -0.3379758 0.8357426 2.912502 0 0 0 1 </matrix>
     <instance_light url="#spot"/>
    </node>
   </visual_scene>

@@ -1,6 +1,6 @@
 import Foundation
 
 protocol CoreMLServiceDelegate {
-    func didRecognizePage(sender: CoreMLService, page: Page)
-    func didReceiveRecognitionError(sender: CoreMLService, error: CoreMLError)
+    func didRecognizeRune(sender: CoreMLService, page: Page)
+    func didReceiveRuneRecognitionError(sender: CoreMLService, error: CoreMLError)
 }

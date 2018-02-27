@@ -6,6 +6,7 @@ class LogoHintOverlay: UIView {
     @IBOutlet weak var judgesChoice         = UIImageView()
     @IBOutlet weak var rectangleGuide       = UIImageView()
     @IBOutlet weak var winnerView: UIImageView!
+    var homeViewController: HomeViewController!
     var isPageDetected = false {
         didSet {
             self.hideRunes()
@@ -109,7 +110,9 @@ class LogoHintOverlay: UIView {
         rectangleGuide?.tintColor   = UIColor.white
         rectangleGuide?.alpha       = 0
         rectangleGuide?.isHidden    = false
-        Animator.fade(view: rectangleGuide!, to: 1.0, for: 0.75, options: [.curveEaseInOut], completion: nil)
+        if !homeViewController.didDetectRectangle {
+            Animator.fade(view: rectangleGuide!, to: 1.0, for: 0.75, options: [.curveEaseInOut], completion: nil)
+        }
     }
     
     func hideRectangleGuide() {

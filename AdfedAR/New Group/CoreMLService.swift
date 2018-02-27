@@ -16,7 +16,7 @@ class CoreMLService {
             do {
                 self.hasFoundPage        = false
                 guard let currentFrame = self.currentFrame else {
-                    self.delegate?.didReceiveRecognitionError(sender: self, error: .missingARFrame)
+                    self.delegate?.didReceiveRuneRecognitionError(sender: self, error: .missingARFrame)
                     return
                 }
                 let transformedImage = self.transformBuffer(currentFrame.image, currentFrame.exposure)
@@ -71,7 +71,7 @@ class CoreMLService {
             }
             parseResults(results)
         } else {
-            delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.observationError)
+            delegate?.didReceiveRuneRecognitionError(sender: self, error: CoreMLError.observationError)
         }
     }
     
@@ -88,21 +88,21 @@ class CoreMLService {
         do {
            highConfidenceObservation = try highestConfidenceObservation(observations)
         } catch {
-            delegate?.didReceiveRecognitionError(sender: self, error: error as! CoreMLError)
+            delegate?.didReceiveRuneRecognitionError(sender: self, error: error as! CoreMLError)
             return
         }
         
         if highConfidenceObservation.confidence > 0.90 {
             if let page = Page(rawValue: highConfidenceObservation.identifier)  {
                 if hasFoundPage { return }
-                delegate?.didRecognizePage(sender: self, page: page)
+                delegate?.didRecognizeRune(sender: self, page: page)
                 hasFoundPage = true
             } else {
-                delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.observationError)
+                delegate?.didReceiveRuneRecognitionError(sender: self, error: CoreMLError.observationError)
                 log.error("Page not created")
             }
         } else {
-            delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.lowConfidence)
+            delegate?.didReceiveRuneRecognitionError(sender: self, error: CoreMLError.lowConfidence)
         }
     }
     
