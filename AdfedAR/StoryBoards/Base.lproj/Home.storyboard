@@ -40,7 +40,6 @@
                     </view>
                     <connections>
                         <outlet property="image" destination="Gvf-W8-FC6" id="Fvm-s8-YWQ"/>
-                        <segue destination="BV1-FR-VrT" kind="show" identifier="segueToHome" customClass="CrossDissolveSegue" customModule="AdfedAR" customModuleProvider="target" id="tMJ-rw-MmK"/>
                         <segue destination="OOG-YA-RHm" kind="custom" identifier="segueToWalkthrough" customClass="CrossDissolveSegue" customModule="AdfedAR" customModuleProvider="target" id="AA5-7S-7cl"/>
                     </connections>
                 </viewController>
@@ -215,7 +214,7 @@
                     </connections>
                 </view>
             </objects>
-            <point key="canvasLocation" x="311" y="9"/>
+            <point key="canvasLocation" x="343" y="9"/>
         </scene>
         <!--Walkthrough View Controller-->
         <scene sceneID="4hA-QC-rzg">
@@ -263,6 +262,9 @@
                                         <state key="normal" title="Let's Go" image="chevron">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
+                                        <connections>
+                                            <action selector="didTapLetsGo:" destination="OOG-YA-RHm" eventType="touchUpInside" id="q6e-CF-SvZ"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <constraints>
@@ -282,7 +284,7 @@
                         <outlet property="letsGoButton" destination="9iq-w2-UDf" id="LE1-XR-cSs"/>
                         <outlet property="logoStack" destination="gxt-HJ-Wsm" id="z9j-eo-q8T"/>
                         <outlet property="mainStack" destination="nFN-OK-b2y" id="Q9f-e0-fqy"/>
-                        <segue destination="BV1-FR-VrT" kind="custom" customClass="CrossDissolveSegue" customModule="AdfedAR" customModuleProvider="target" id="jKM-Vl-mUn"/>
+                        <segue destination="BV1-FR-VrT" kind="custom" identifier="segueToHome" customClass="CrossDissolveSegue" customModule="AdfedAR" customModuleProvider="target" id="jKM-Vl-mUn"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="P2x-ec-252" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -299,7 +301,4 @@
         <image name="judgesChoiceRune" width="76" height="125"/>
         <image name="rectangle" width="343" height="271"/>
     </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="jKM-Vl-mUn"/>
-    </inferredMetricsTieBreakers>
 </document>
