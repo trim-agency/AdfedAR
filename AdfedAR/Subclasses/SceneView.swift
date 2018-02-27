@@ -70,11 +70,11 @@ class Scene: SCNScene {
     func loadAndPlayAnimation(key: String) {
         DispatchQueue.main.async {
             let node        = self.animationNodes[key]!["node"] as! SCNNode
-//            node.opacity    = 0.0
+            node.opacity    = 0.0
             self.add(node: node, to: self.rootNode)
             self.rootNode.scale = SCNVector3(0.1, 0.1, 0.1)
 //            self.rootNode.scale = SCNVector3(1, 1, 1)
-//            self.fadeIn(node)
+            self.fadeIn(node)
 //            self.playAnimation(key: key, for: node)
         }
     }
