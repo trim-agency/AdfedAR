@@ -297,14 +297,16 @@ extension HomeViewController: CoreMLServiceDelegate {
         if rootAnchor != nil && didTapReset == false {
             loadRectangleDetection()
         } else if didTapReset == true {
-            userInstructionLabel.updateText(.lookingForPlane)
             rootAnchor = nil
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
                 self.loadRectangleDetection()
-                self.userInstructionLabel.updateText(.none)
+                self.userInstructionLabel.updateText(.lookingForPlane)
             })
         } else {
-            userInstructionLabel.updateText(.lookingForPlane)
+            userInstructionLabel.updateText(.none)
+            DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(2500), execute: {
+                self.userInstructionLabel.updateText(.lookingForPlane)
+            })
             waitingOnPlane = true
         }
     }
