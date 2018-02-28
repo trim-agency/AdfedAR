@@ -17,27 +17,20 @@ class RectangleDetectionService {
             log.debug("observation error")
             return
         }
-        
-        for observation in observations {
-            log.debug(observation.boundingBox)
-        }
-        
+
         let highConfidenceObservation = observations.max { a, b in a.confidence < b.confidence }
         
         guard let highestConfidenceObservation = highConfidenceObservation else {
             delegate?.rectangleDetectionError(sender: self)
             return
         }
+
         highestConfidenceObservation.boundingBox.applying(CGAffineTransform(scaleX: 1, y: -1))
         highestConfidenceObservation.boundingBox.applying(CGAffineTransform(translationX: 0, y: 1))
         
         let points = (highConfidenceObservation?.corners())!
-log.debug(points)
 
-        
         let center          = getBoxCenter(highConfidenceObservation)
-        log.debug(center)
-        drawDebugDot(center)
         let hitTestResults  = self.sceneView!.hitTest(center, types: [.existingPlaneUsingExtent, .featurePoint])
         guard let result    = hitTestResults.first else {
             delegate?.rectangleDetectionError(sender: self)
@@ -47,18 +40,8 @@ log.debug(points)
         
         updateRootAnchor(result)
         delegate?.didDetectRectangle(sender: self, corners: points)
-        drawDebugPolygon(points, color: .red)
     }
 
-    private func drawDebugDot(_ center: CGPoint) {
-        let circleLayer         = CAShapeLayer()
-        let radius: CGFloat     = 15.0
-        circleLayer.path        = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: 2.0 * radius, height: 2.0 * radius), cornerRadius: radius).cgPath
-        circleLayer.position    = center
-        circleLayer.fillColor   = UIColor.red.cgColor
-        sceneView?.layer.addSublayer(circleLayer)
-    }
-    
     private func updateRootAnchor(_ result: ARHitTestResult) {
         if let rootAnchor = self.rootAnchor,
             let node = self.sceneView!.node(for: rootAnchor) {

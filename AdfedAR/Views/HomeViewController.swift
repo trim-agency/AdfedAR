@@ -206,16 +206,19 @@ class HomeViewController: UIViewController {
         if !isState(.runeDetected) && !isState(.planeDetected) && !isState(.detectingRectangle)  { return }
         AppState.instance.current = .detectingRectangle
         DispatchQueue.global(qos: .default).async {
-                let pixelBuffer         = self.sceneView.session.currentFrame?.capturedImage
-                let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
-                let handler             = VNImageRequestHandler(ciImage: ciImage)
-                let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: RectangleDetectionService.instance.handleRectangles)
-                do {
-                    try handler.perform([rectangleRequest])
-                } catch {
-                    log.error(error)
-                }
+            let pixelBuffer         = self.sceneView.session.currentFrame?.capturedImage
+            let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
+            let handler             = VNImageRequestHandler(ciImage: ciImage)
+            let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: RectangleDetectionService.instance.handleRectangles)
+            if let anchor = self.rootAnchor {
+                if !AppState.instance.hasReset { RectangleDetectionService.instance.rootAnchor = anchor }
             }
+            do {
+                try handler.perform([rectangleRequest])
+            } catch {
+                log.error(error)
+            }
+        }
     }
 }
 
