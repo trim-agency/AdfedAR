@@ -2,9 +2,11 @@ import Foundation
 
 class AppState {
     static let instance = AppState()
+    var instructionLabel: UserInstructionLabel?
     var hasReset = false
-    var current: State!{
+    var current: State! {
         didSet {
+            instructionLabel?.updateState(current)
             switch current {
             case .appLoading :
                 log.debug(current)
@@ -17,6 +19,8 @@ class AppState {
             case .rectangleDetected:
                 log.debug(current)
             case .waitingOnPlane:
+                log.debug(current)
+            case .planeDetected:
                 log.debug(current)
             case .loadingAnimation:
                 log.debug(current)
@@ -32,17 +36,29 @@ class AppState {
             }
         }
     }
+   
+    
 }
 
-
+// MARk: - State Enum
 enum State {
     case appLoading
     case detectingRune
     case runeDetected
     case waitingOnPlane
+    case planeDetected
     case detectingRectangle
     case rectangleDetected
     case loadingAnimation
     case playingAnimation
     case reset
 }
+
+
+
+
+
+
+
+
+

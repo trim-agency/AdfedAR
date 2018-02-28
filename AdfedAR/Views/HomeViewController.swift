@@ -17,15 +17,7 @@ class HomeViewController: UIViewController {
     let scene                   = Scene()
     var animations              = [String: CAAnimation]()
     var animationNodes          = [String: [String:Any]]()
-    var hasDetectedPlane        = true
-    var didTapReset             = false
-    var isPlayingAnimation      = false   {
-        didSet {
-            setInstructionLabelForAnimation()
-        }
-    }
-    var didRecognizeRune        = false
-    var didDetectRectangle      = false
+    
 
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var rightAwardsLabel: UILabel!
@@ -45,10 +37,11 @@ class HomeViewController: UIViewController {
     var rootAnchor: ARAnchor?
     var detectedPage: Page?
     var videos: Videos?
-    
+
     // MARK: - Protocol Methods
     override func viewDidLoad() {
         super.viewDidLoad()
+        AppState.instance.instructionLabel = userInstructionLabel
         AppState.instance.current = State.appLoading
         setup()
     }
@@ -68,6 +61,7 @@ class HomeViewController: UIViewController {
         defineSceneView()
         setupDebug()
         getVideoIds()
+        loadRectangleDetection()
     }
     
     private func start() {
@@ -81,7 +75,6 @@ class HomeViewController: UIViewController {
         CoreMLService.instance.currentFrame = nil
         toggleUI()
         logoHintOverlay.restartPulsing()
-        userInstructionLabel.updateText(.lookingForRune)
         scene.removeAllNodes(completion: {
             self.startPageDetection()
         })
@@ -127,8 +120,7 @@ class HomeViewController: UIViewController {
     
     // MARK: - RESET
     private func pageDetected() {
-        userInstructionLabel.updateText(.none)
-        if didTapReset {
+        if AppState.instance.hasReset {
             displayAnimations()
         } else {
             scene.removeAllNodes {
@@ -161,7 +153,6 @@ class HomeViewController: UIViewController {
             CoreMLService.instance.delegate = self
             self.sceneView.session.delegate = self
             self.startPageDetection()
-            self.userInstructionLabel.updateText(.lookingForRune)
         })
     }
     
@@ -207,37 +198,24 @@ class HomeViewController: UIViewController {
     
     // MARK: - Vision Framework
     func loadRectangleDetection() {
-        if !isState(.runeDetected) { return }
-        setState(condition: .runeDetected, then: .detectingRectangle)
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
-            self.userInstructionLabel.updateText(.lookingForRectangle)
-            DispatchQueue.global(qos: .background).async {
+        RectangleDetectionService.instance.setup(sceneView: self.sceneView)
+        RectangleDetectionService.instance.delegate    = self
+    }
+    
+    func startRectangleDetection() {
+        if !isState(.runeDetected) && !isState(.planeDetected) && !isState(.detectingRectangle)  { return }
+        AppState.instance.current = .detectingRectangle
+        DispatchQueue.global(qos: .default).async {
                 let pixelBuffer         = self.sceneView.session.currentFrame?.capturedImage
                 let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
                 let handler             = VNImageRequestHandler(ciImage: ciImage)
-                let rectService         = RectangleDetectionService.instance
-                if !AppState.instance.hasReset {
-                    // keeps duplication from occurring after reset
-                    rectService.setup(sceneView: self.sceneView, rootAnchor: self.rootAnchor!)
-                    rectService.delegate    = self
-                }
-                let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: rectService.handleRectangles)
+                let rectangleRequest    = VNDetectRectanglesRequest(completionHandler: RectangleDetectionService.instance.handleRectangles)
                 do {
                     try handler.perform([rectangleRequest])
                 } catch {
                     log.error(error)
                 }
             }
-        })
-    }
-    
-    private func setInstructionLabelForAnimation() {
-        if isPlayingAnimation {
-            userInstructionLabel.updateText(.tapForVideo)
-        } else {
-            userInstructionLabel.updateText(.none)
-        }
     }
 }
 
@@ -253,8 +231,8 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
 
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         if isState(.waitingOnPlane) {
-            setState(condition: .waitingOnPlane, then: .runeDetected)
-            loadRectangleDetection()
+            setState(condition: .waitingOnPlane, then: .planeDetected)
+            startRectangleDetection()
         }
     }
     
@@ -314,14 +292,12 @@ extension HomeViewController: CoreMLServiceDelegate {
         detectedPage = page
         logoHintOverlay.selectRune(detectedPage!)
         if rootAnchor != nil && !isState(.reset) {
-            userInstructionLabel.updateText(.none)
-            loadRectangleDetection()
+            startRectangleDetection()
         } else if AppState.instance.hasReset {
-            userInstructionLabel.updateText(.lookingForPlane)
             rootAnchor = nil
-            loadRectangleDetection()
-            userInstructionLabel.updateText(.none)
+            startRectangleDetection()
         } else {
+            log.debug("dead zone")
             setState(condition: .runeDetected, then: .waitingOnPlane)
         }
     }
@@ -361,7 +337,7 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
     }
     
     func rectangleDetectionError(sender: RectangleDetectionService) {
-        loadRectangleDetection()
+        startRectangleDetection()
     }
 }
 
