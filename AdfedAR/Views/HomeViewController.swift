@@ -17,7 +17,9 @@ class HomeViewController: UIViewController {
     let scene                   = Scene()
     var animations              = [String: CAAnimation]()
     var animationNodes          = [String: [String:Any]]()
-    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
 
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var rightAwardsLabel: UILabel!
@@ -379,7 +381,6 @@ extension HomeViewController {
         }
     }
 }
-
 
 
 

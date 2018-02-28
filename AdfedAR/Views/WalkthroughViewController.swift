@@ -9,6 +9,10 @@ class WalkthroughViewController: UIViewController {
         performSegue(withIdentifier: "segueToHome", sender: self)
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         instructionLabel.sizeToFit()

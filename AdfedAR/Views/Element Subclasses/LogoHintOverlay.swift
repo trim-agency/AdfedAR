@@ -41,6 +41,7 @@ class LogoHintOverlay: UIView {
     }
 
     func restartPulsing() {
+        unHideRunes()
         isPageDetected      = false
         winnerView.isHidden = true
         Animator.fade(view: bestOfShow!,
@@ -65,6 +66,15 @@ class LogoHintOverlay: UIView {
             })
         } else {
             Animator.fade(view: view, to: 0, for: 0.5, options: [.curveEaseInOut], completion: nil)
+        }
+    }
+    
+    func unHideRunes() {
+        DispatchQueue.main.async {
+            self.bestOfShow?.isHidden   = false
+            self.judgesChoice?.isHidden = false
+            Animator.fade(view: self.bestOfShow!, to: 1.0, for: 0.25, options: [.curveEaseOut], completion: nil)
+            Animator.fade(view: self.judgesChoice!, to: 0.1, for: 0.25, options: [.curveEaseOut], completion: nil)
         }
     }
     
@@ -97,8 +107,12 @@ class LogoHintOverlay: UIView {
     }
     
     private func hideRunes() {
-        Animator.fade(view: bestOfShow!, to: 0, for: 0.25, options: [.curveEaseInOut], completion: nil)
-        Animator.fade(view: judgesChoice!, to: 0, for: 0.25, options: [.curveEaseInOut], completion: nil)
+        DispatchQueue.main.async {
+            self.bestOfShow?.isHidden   = true
+            self.judgesChoice?.isHidden = true
+            self.bestOfShow?.alpha      = 0
+            self.judgesChoice?.alpha    = 0
+        }
     }
     
     // MARK: - Rectangle Guide
