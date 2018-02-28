@@ -6,6 +6,7 @@ class RectangleDetectionService {
     var sceneView: MainARSCNView?
     var rootAnchor: ARAnchor?
     var delegate: RectangleDetectionServiceDelegate?
+    var currentRotation: simd_float4x4?
     static let instance = RectangleDetectionService()
     
     public func setup(sceneView: MainARSCNView) {
@@ -44,8 +45,11 @@ class RectangleDetectionService {
 
     private func updateRootAnchor(_ result: ARHitTestResult) {
         if let rootAnchor = self.rootAnchor,
-            let node = self.sceneView!.node(for: rootAnchor) {
-            node.transform = SCNMatrix4(result.worldTransform)
+            let node = self.sceneView!.node(for: rootAnchor),
+            let rotate = currentRotation {
+            let rotateTransform = simd_mul(result.worldTransform, rotate)
+            node.transform = SCNMatrix4(rotateTransform)
+//            node.transform = SCNMatrix4(result.worldTransform)
         } else {
             self.rootAnchor = ARAnchor(transform: result.worldTransform)
             self.sceneView!.session.add(anchor: self.rootAnchor!)
