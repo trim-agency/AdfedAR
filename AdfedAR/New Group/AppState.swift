@@ -14,6 +14,8 @@ class AppState {
                 log.debug(current)
             case .runeDetected:
                 log.debug(current)
+            case .rectangleDetectionPause:
+                log.debug(current)
             case .detectingRectangle:
                 log.debug(current)
             case .rectangleDetected:
@@ -47,6 +49,7 @@ enum State {
     case runeDetected
     case waitingOnPlane
     case planeDetected
+    case rectangleDetectionPause
     case detectingRectangle
     case rectangleDetected
     case loadingAnimation

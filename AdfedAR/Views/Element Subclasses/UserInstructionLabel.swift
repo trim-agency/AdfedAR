@@ -27,11 +27,15 @@ class UserInstructionLabel: UILabel {
             updateText(.lookingForRune)
         case .runeDetected:
             updateText(.none)
+        case .rectangleDetectionPause:
+            print("pause")
         case .detectingRectangle:
+            log.debug("detecting Rect")
             updateText(.lookingForRectangle)
         case .rectangleDetected:
             updateText(.none)
         case .waitingOnPlane:
+            print("waiting on plane")
             updateText(.lookingForPlane)
         case .planeDetected:
             updateText(.none)

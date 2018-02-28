@@ -82,8 +82,8 @@ class HomeViewController: UIViewController {
     
     
     //MARK: - State
-    private func setState(condition: State, then: State) {
-        if AppState.instance.current == condition { AppState.instance.current = then }
+    private func setState(condition startingState: State, then targetState: State) {
+        if AppState.instance.current == startingState { AppState.instance.current = targetState }
     }
     
     private func isState(_ state: State) -> Bool {
@@ -140,7 +140,6 @@ class HomeViewController: UIViewController {
         case .bestOfShow:
             scene.loadAndPlayAnimation(key: "bestOfShow")
         }
-        logoHintOverlay.hideRectangleGuide()
         toggleUI()
         setState(condition: .loadingAnimation, then: .playingAnimation)
     }
@@ -197,14 +196,27 @@ class HomeViewController: UIViewController {
     }
     
     // MARK: - Vision Framework
+    
+    private func waitAndStartRectangleDetection() {
+        if !isState(.runeDetected) && !isState(.planeDetected) && !isState(.detectingRectangle)  { return }
+        AppState.instance.current = .rectangleDetectionPause
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1500)) {
+            
+            self.logoHintOverlay.showRectangleGuide()
+            AppState.instance.current = .detectingRectangle
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(2500)) {
+            self.startRectangleDetection()
+        }
+    }
+    
     func loadRectangleDetection() {
         RectangleDetectionService.instance.setup(sceneView: self.sceneView)
         RectangleDetectionService.instance.delegate    = self
     }
     
     func startRectangleDetection() {
-        if !isState(.runeDetected) && !isState(.planeDetected) && !isState(.detectingRectangle)  { return }
-        AppState.instance.current = .detectingRectangle
+        setState(condition: .rectangleDetectionPause, then: .detectingRectangle)
         DispatchQueue.global(qos: .default).async {
             let pixelBuffer         = self.sceneView.session.currentFrame?.capturedImage
             let ciImage             = CIImage(cvImageBuffer: pixelBuffer!)
@@ -235,7 +247,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
         if isState(.waitingOnPlane) {
             setState(condition: .waitingOnPlane, then: .planeDetected)
-            startRectangleDetection()
+            waitAndStartRectangleDetection()
         }
     }
     
@@ -295,12 +307,11 @@ extension HomeViewController: CoreMLServiceDelegate {
         detectedPage = page
         logoHintOverlay.selectRune(detectedPage!)
         if rootAnchor != nil && !isState(.reset) {
-            startRectangleDetection()
+            waitAndStartRectangleDetection()
         } else if AppState.instance.hasReset {
-            rootAnchor = nil
-            startRectangleDetection()
+//            rootAnchor = nil
+            waitAndStartRectangleDetection()
         } else {
-            log.debug("dead zone")
             setState(condition: .runeDetected, then: .waitingOnPlane)
         }
     }
