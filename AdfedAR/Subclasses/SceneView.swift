@@ -45,7 +45,7 @@ class Scene: SCNScene {
     }
     
     func loadColladaAsset(key: String, for filePath: String) {
-        let scene       = SCNScene(named: filePath + ".dae")!
+        let scene       = SCNScene(named: filePath + ".scn")!
         let parentNode  = SCNNode()
         parentNode.name = key
         add(node: scene.rootNode, to: parentNode)
@@ -56,7 +56,7 @@ class Scene: SCNScene {
     }
     
     func loadAnimation(withKey: String, sceneName:String, animationIdentifier:String) -> CAAnimation? {
-        let sceneURL    = Bundle.main.url(forResource: sceneName, withExtension: "dae")
+        let sceneURL    = Bundle.main.url(forResource: sceneName, withExtension: "scn")
         let sceneSource = SCNSceneSource(url: sceneURL!, options: nil)
         
         guard let animationObject = sceneSource?.entryWithIdentifier(animationIdentifier, withClass: CAAnimation.self) else {
@@ -72,8 +72,8 @@ class Scene: SCNScene {
             let node        = self.animationNodes[key]!["node"] as! SCNNode
             node.opacity    = 0.0
             self.add(node: node, to: self.rootNode)
+//            self.rootNode.scale = SCNVector3(0.001, 0.001, 0.001)
             self.rootNode.scale = SCNVector3(0.1, 0.1, 0.1)
-//            self.rootNode.scale = SCNVector3(1, 1, 1)
             self.fadeIn(node)
 //            self.playAnimation(key: key, for: node)
         }
