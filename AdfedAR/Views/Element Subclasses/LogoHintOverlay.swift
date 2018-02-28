@@ -83,7 +83,6 @@ class LogoHintOverlay: UIView {
                           options: [.curveEaseInOut],
                           completion: {
                             self.winnerView.isHidden = true
-//                            self.showRectangleGuide()
             })
         }
     }
@@ -107,16 +106,10 @@ class LogoHintOverlay: UIView {
     
     // MARK: - Rectangle Guide
     func showRectangleGuide() {
-//        DispatchQueue.main.asyncAfter(deadline: .now() + .milliseconds(1500), execute: {
-            self.rectangleGuide?.tintColor   = UIColor.white
-            self.rectangleGuide?.alpha       = 0
-            self.rectangleGuide?.isHidden    = false
-            Animator.fade(view: self.rectangleGuide!, to: 1.0, for: 0.25, options: [.curveEaseInOut], completion: {
-//                if !(AppState.instance.current == .detectingRectangle) {
-//                    self.hideRectangleGuide()
-//                }
-            })
-//        })
+        self.rectangleGuide?.tintColor   = UIColor.white
+        self.rectangleGuide?.alpha       = 0
+        self.rectangleGuide?.isHidden    = false
+        Animator.fade(view: self.rectangleGuide!, to: 1.0, for: 0.25, options: [.curveEaseInOut], completion: nil)
     }
     
     func hideRectangleGuide() {
