@@ -6,16 +6,17 @@ import ARKit
 
 class CoreMLService {
     var delegate: CoreMLServiceDelegate?
-    var hasFoundPage = false
+    var hasFoundRune    = false
     let model           = try! VNCoreMLModel(for: AdFed().model)
     var currentFrame: ArFrameData?
     static let instance = CoreMLService()
 
-    func getPageType() throws {
+    func getRuneType() throws {
         DispatchQueue.global().async  {
             do {
-                self.hasFoundPage        = false
+                self.hasFoundRune      = false
                 guard let currentFrame = self.currentFrame else {
+                    self.delegate?.didReceiveRuneRecognitionError(sender: self, error: .missingARFrame)
                     return
                 }
                 let transformedImage = self.transformBuffer(currentFrame.image, currentFrame.exposure)
@@ -24,6 +25,7 @@ class CoreMLService {
                 let croppedImage    = UIImage(cgImage: cgImage!).cropToCenter(to: CGSize(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.width * 0.6))
                 let ciImage         = CIImage(image: croppedImage)
                 let request         = VNCoreMLRequest(model: self.model, completionHandler: self.pageRecognitionHandler)
+                request.usesCPUOnly = true
                 let handler         = VNImageRequestHandler(ciImage: ciImage!, options: [:])
                 try handler.perform([request])
             } catch {
@@ -69,8 +71,7 @@ class CoreMLService {
             }
             parseResults(results)
         } else {
-            log.debug(error!)
-            delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.observationError)
+            delegate?.didReceiveRuneRecognitionError(sender: self, error: CoreMLError.observationError)
         }
     }
     
@@ -87,22 +88,21 @@ class CoreMLService {
         do {
            highConfidenceObservation = try highestConfidenceObservation(observations)
         } catch {
-            delegate?.didReceiveRecognitionError(sender: self, error: error as! CoreMLError)
+            delegate?.didReceiveRuneRecognitionError(sender: self, error: error as! CoreMLError)
             return
         }
         
         if highConfidenceObservation.confidence > 0.90 {
             if let page = Page(rawValue: highConfidenceObservation.identifier)  {
-                if hasFoundPage { return }
-                delegate?.didRecognizePage(sender: self, page: page)
-                hasFoundPage = true
+                if hasFoundRune { return }
+                delegate?.didRecognizeRune(sender: self, page: page)
+                hasFoundRune = true
             } else {
-                delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.observationError)
+                delegate?.didReceiveRuneRecognitionError(sender: self, error: CoreMLError.observationError)
                 log.error("Page not created")
             }
         } else {
-            log.debug(highConfidenceObservation.confidence)
-            delegate?.didReceiveRecognitionError(sender: self, error: CoreMLError.lowConfidence)
+            delegate?.didReceiveRuneRecognitionError(sender: self, error: CoreMLError.lowConfidence)
         }
     }
     

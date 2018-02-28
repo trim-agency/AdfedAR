@@ -40,20 +40,18 @@ class Scene: SCNScene {
     
     // Mark: - Asset management
     func loadAllAnimations() {
-        loadColladaAsset(key: "grandma", for: "3dAssets.scnassets/hipHopFormatted", animationID:  "hipHopFormatted-1")
-        loadColladaAsset(key: "bellyDancing", for: "3dAssets.scnassets/BellydancingFormatted", animationID: "BellydancingFormatted-1")
+        loadColladaAsset(key: "judgesChoice", for: "3dAssets.scnassets/judgesChoice")
+        loadColladaAsset(key: "bestOfShow", for: "3dAssets.scnassets/bestOfShow")
     }
     
-    func loadColladaAsset(key: String, for filePath: String, animationID: String) {
+    func loadColladaAsset(key: String, for filePath: String) {
         let scene       = SCNScene(named: filePath + ".dae")!
         let parentNode  = SCNNode()
         parentNode.name = key
         add(node: scene.rootNode, to: parentNode)
-        let animation: CAAnimation = loadAnimation(withKey: key,
-                                                   sceneName: filePath,
-                                                   animationIdentifier: animationID)!
-        let animationDetails = [ "node": parentNode,
-                                 "animation": animation ]
+//        let animation: CAAnimation = loadAnimation(withKey: key,
+//                                                   sceneName: filePath)!
+        let animationDetails = [ "node": parentNode ]
         animationNodes[key] = animationDetails
     }
     
@@ -74,8 +72,10 @@ class Scene: SCNScene {
             let node        = self.animationNodes[key]!["node"] as! SCNNode
             node.opacity    = 0.0
             self.add(node: node, to: self.rootNode)
-            self.rootNode.scale = SCNVector3(0.001, 0.001, 0.001)
-            self.playAnimation(key: key, for: node)
+            self.rootNode.scale = SCNVector3(0.1, 0.1, 0.1)
+//            self.rootNode.scale = SCNVector3(1, 1, 1)
+            self.fadeIn(node)
+//            self.playAnimation(key: key, for: node)
         }
     }
  

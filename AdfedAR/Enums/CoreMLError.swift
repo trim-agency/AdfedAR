@@ -4,4 +4,5 @@ enum CoreMLError: Error  {
     case lowConfidence
     case observationError
     case invalidObject
+    case missingARFrame
 }

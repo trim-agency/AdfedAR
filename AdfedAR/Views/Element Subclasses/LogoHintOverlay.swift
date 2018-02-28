@@ -6,11 +6,8 @@ class LogoHintOverlay: UIView {
     @IBOutlet weak var judgesChoice         = UIImageView()
     @IBOutlet weak var rectangleGuide       = UIImageView()
     @IBOutlet weak var winnerView: UIImageView!
-    var isPageDetected = false {
-        didSet {
-            self.hideRunes()
-        }
-    }
+    var homeViewController: HomeViewController!
+    var isPageDetected = false
    
     // MARK: - Lifecycle Methods
     override func awakeFromNib() {
@@ -30,6 +27,7 @@ class LogoHintOverlay: UIView {
 
     // MARK: - Rune Animations
     func selectRune(_ page: Page) {
+        hideRunes()
         isPageDetected = true
         removeAnimations()
         page == .bestOfShow ? glowSymbol(page: page) : glowSymbol(page: page)
@@ -81,8 +79,7 @@ class LogoHintOverlay: UIView {
                           for: 2.5,
                           options: [.curveEaseInOut],
                           completion: {
-                self.showRectangleGuide()
-                self.winnerView.isHidden = true
+                            self.winnerView.isHidden = true
             })
         }
     }
@@ -100,20 +97,20 @@ class LogoHintOverlay: UIView {
     }
     
     private func hideRunes() {
-        Animator.fade(view: bestOfShow!, to: 0, for: 0.5, options: [.curveEaseInOut], completion: nil)
-        Animator.fade(view: judgesChoice!, to: 0, for: 0.5, options: [.curveEaseInOut], completion: nil)
+        Animator.fade(view: bestOfShow!, to: 0, for: 0.25, options: [.curveEaseInOut], completion: nil)
+        Animator.fade(view: judgesChoice!, to: 0, for: 0.25, options: [.curveEaseInOut], completion: nil)
     }
     
     // MARK: - Rectangle Guide
     func showRectangleGuide() {
-        rectangleGuide?.tintColor   = UIColor.white
-        rectangleGuide?.alpha       = 0
-        rectangleGuide?.isHidden    = false
-        Animator.fade(view: rectangleGuide!, to: 1.0, for: 0.75, options: [.curveEaseInOut], completion: nil)
+        self.rectangleGuide?.tintColor   = UIColor.white
+        self.rectangleGuide?.alpha       = 0
+        self.rectangleGuide?.isHidden    = false
+        Animator.fade(view: self.rectangleGuide!, to: 1.0, for: 0.25, options: [.curveEaseInOut], completion: nil)
     }
     
     func hideRectangleGuide() {
-        Animator.fade(view: rectangleGuide!, to: 0.0, for: 1.0, options: [.curveEaseInOut], completion: {
+        Animator.fade(view: rectangleGuide!, to: 0.0, for: 0.25, options: [.curveEaseInOut], completion: {
             self.rectangleGuide?.isHidden = true
         })
     }
