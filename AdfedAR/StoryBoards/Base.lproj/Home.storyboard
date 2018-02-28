@@ -40,12 +40,12 @@
                     </view>
                     <connections>
                         <outlet property="image" destination="Gvf-W8-FC6" id="Fvm-s8-YWQ"/>
-                        <segue destination="BV1-FR-VrT" kind="show" identifier="segueToHome" customClass="CrossDissolveSegue" customModule="AdfedAR" customModuleProvider="target" id="tMJ-rw-MmK"/>
+                        <segue destination="OOG-YA-RHm" kind="custom" identifier="segueToWalkthrough" customClass="CrossDissolveSegue" customModule="AdfedAR" customModuleProvider="target" id="AA5-7S-7cl"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UiM-Xl-D9b" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-711" y="10"/>
+            <point key="canvasLocation" x="-1660" y="9"/>
         </scene>
         <!--Home View Controller-->
         <scene sceneID="tXr-a1-R10">
@@ -214,14 +214,91 @@
                     </connections>
                 </view>
             </objects>
-            <point key="canvasLocation" x="306" y="9"/>
+            <point key="canvasLocation" x="343" y="9"/>
+        </scene>
+        <!--Walkthrough View Controller-->
+        <scene sceneID="4hA-QC-rzg">
+            <objects>
+                <viewController id="OOG-YA-RHm" customClass="WalkthroughViewController" customModule="AdfedAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EAW-6Q-fTY">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="35" translatesAutoresizingMaskIntoConstraints="NO" id="nFN-OK-b2y">
+                                <rect key="frame" x="37.5" y="157" width="300" height="407"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kfu-QD-TfX">
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="190"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="190" id="tkZ-4d-uyg"/>
+                                        </constraints>
+                                        <attributedString key="attributedText">
+                                            <fragment>
+                                                <string key="content">Congratulations to the winners of the Best of Show and Judges’ Choice awards!
+
+ Use this app in conjunction with the winners book to experience exclusive content about the winners and their entries. Find the runes below in the winners book and scan them to learn more.</string>
+                                                <attributes>
+                                                    <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <font key="NSFont" size="15" name="Gotham-Book"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="1" tighteningFactorForTruncation="0.0"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <stackView opaque="NO" contentMode="center" distribution="fillEqually" spacing="-20" translatesAutoresizingMaskIntoConstraints="NO" id="gxt-HJ-Wsm">
+                                        <rect key="frame" x="0.0" y="225" width="300" height="125"/>
+                                        <subviews>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bestOfShowRune" translatesAutoresizingMaskIntoConstraints="NO" id="c4h-Uh-5ZJ">
+                                                <rect key="frame" x="0.0" y="0.0" width="160" height="125"/>
+                                            </imageView>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="judgesChoiceRune" translatesAutoresizingMaskIntoConstraints="NO" id="6Ct-et-Ofh">
+                                                <rect key="frame" x="140" y="0.0" width="160" height="125"/>
+                                            </imageView>
+                                        </subviews>
+                                    </stackView>
+                                    <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9iq-w2-UDf">
+                                        <rect key="frame" x="0.0" y="385" width="300" height="22"/>
+                                        <state key="normal" title="LET'S GO" image="chevron">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="didTapLetsGo:" destination="OOG-YA-RHm" eventType="touchUpInside" id="q6e-CF-SvZ"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="300" id="2eQ-yT-xdq"/>
+                                </constraints>
+                            </stackView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="nFN-OK-b2y" firstAttribute="centerX" secondItem="EAW-6Q-fTY" secondAttribute="centerX" id="Xno-g1-zmY"/>
+                            <constraint firstItem="nFN-OK-b2y" firstAttribute="top" secondItem="NgK-9P-QAD" secondAttribute="top" constant="137" id="jqW-3S-Lzw"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="NgK-9P-QAD"/>
+                    </view>
+                    <connections>
+                        <outlet property="instructionLabel" destination="Kfu-QD-TfX" id="8D5-hh-Djl"/>
+                        <outlet property="letsGoButton" destination="9iq-w2-UDf" id="LE1-XR-cSs"/>
+                        <outlet property="logoStack" destination="gxt-HJ-Wsm" id="z9j-eo-q8T"/>
+                        <outlet property="mainStack" destination="nFN-OK-b2y" id="Q9f-e0-fqy"/>
+                        <segue destination="BV1-FR-VrT" kind="custom" identifier="segueToHome" customClass="CrossDissolveSegue" customModule="AdfedAR" customModuleProvider="target" id="jKM-Vl-mUn"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="P2x-ec-252" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-655.20000000000005" y="8.5457271364317844"/>
         </scene>
     </scenes>
     <resources>
         <image name="best-of-show-rune" width="277" height="282"/>
+        <image name="bestOfShowRune" width="110" height="112"/>
         <image name="chevron" width="12" height="21"/>
         <image name="img" width="375" height="812"/>
         <image name="judges-choice-rune" width="196" height="316"/>
+        <image name="judgesChoiceRune" width="76" height="125"/>
         <image name="rectangle" width="343" height="271"/>
     </resources>
 </document>

@@ -7,11 +7,7 @@ class LogoHintOverlay: UIView {
     @IBOutlet weak var rectangleGuide       = UIImageView()
     @IBOutlet weak var winnerView: UIImageView!
     var homeViewController: HomeViewController!
-    var isPageDetected = false {
-        didSet {
-            self.hideRunes()
-        }
-    }
+    var isPageDetected = false
    
     // MARK: - Lifecycle Methods
     override func awakeFromNib() {
@@ -31,6 +27,7 @@ class LogoHintOverlay: UIView {
 
     // MARK: - Rune Animations
     func selectRune(_ page: Page) {
+        hideRunes()
         isPageDetected = true
         removeAnimations()
         page == .bestOfShow ? glowSymbol(page: page) : glowSymbol(page: page)
@@ -79,7 +76,7 @@ class LogoHintOverlay: UIView {
             self.winnerView.isHidden    = false
             Animator.fade(view: self.winnerView,
                           to: 0.0,
-                          for: 1.5,
+                          for: 2.5,
                           options: [.curveEaseInOut],
                           completion: {
                             self.winnerView.isHidden = true
@@ -100,8 +97,8 @@ class LogoHintOverlay: UIView {
     }
     
     private func hideRunes() {
-        Animator.fade(view: bestOfShow!, to: 0, for: 0.5, options: [.curveEaseInOut], completion: nil)
-        Animator.fade(view: judgesChoice!, to: 0, for: 0.5, options: [.curveEaseInOut], completion: nil)
+        Animator.fade(view: bestOfShow!, to: 0, for: 0.25, options: [.curveEaseInOut], completion: nil)
+        Animator.fade(view: judgesChoice!, to: 0, for: 0.25, options: [.curveEaseInOut], completion: nil)
     }
     
     // MARK: - Rectangle Guide
@@ -113,7 +110,7 @@ class LogoHintOverlay: UIView {
     }
     
     func hideRectangleGuide() {
-        Animator.fade(view: rectangleGuide!, to: 0.0, for: 1.0, options: [.curveEaseInOut], completion: {
+        Animator.fade(view: rectangleGuide!, to: 0.0, for: 0.25, options: [.curveEaseInOut], completion: {
             self.rectangleGuide?.isHidden = true
         })
     }

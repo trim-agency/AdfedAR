@@ -34,6 +34,7 @@
 		69461A23203F5C3000BD8DFF /* AdFed.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 69461A22203F5C3000BD8DFF /* AdFed.mlmodel */; };
 		69461A25203F65AA00BD8DFF /* ArFrameStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69461A24203F65AA00BD8DFF /* ArFrameStruct.swift */; };
 		69881FDC2046093600D3C5DC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69881FDB2046093600D3C5DC /* AppState.swift */; };
+		696866642044B6C100A87965 /* WalkthroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696866632044B6C100A87965 /* WalkthroughViewController.swift */; };
 		69B037A32020CB7C00906004 /* CoreMLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B037A22020CB7C00906004 /* CoreMLError.swift */; };
 		69D121122016715B00B39411 /* CoreMLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121112016715B00B39411 /* CoreMLService.swift */; };
 		69D121162016727E00B39411 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121152016727E00B39411 /* Page.swift */; };
@@ -103,6 +104,7 @@
 		69461A20203E2D0300BD8DFF /* CrossDissolveSegue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrossDissolveSegue.swift; sourceTree = "<group>"; };
 		69461A22203F5C3000BD8DFF /* AdFed.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = AdFed.mlmodel; sourceTree = "<group>"; };
 		69461A24203F65AA00BD8DFF /* ArFrameStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArFrameStruct.swift; sourceTree = "<group>"; };
+		696866632044B6C100A87965 /* WalkthroughViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkthroughViewController.swift; sourceTree = "<group>"; };
 		6985CFF2203619A50069116D /* Gotham-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Medium.otf"; sourceTree = "<group>"; };
 		6985CFF3203619A60069116D /* Gotham-Book.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Gotham-Book.otf"; sourceTree = "<group>"; };
 		69881FDB2046093600D3C5DC /* AppState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
@@ -278,6 +280,7 @@
 				69355CA9201A351200241310 /* Element Subclasses */,
 				69297981200CF4120019A0B9 /* HomeViewController.swift */,
 				69461A1D203E2A2F00BD8DFF /* FakeLaunchScreen.swift */,
+				696866632044B6C100A87965 /* WalkthroughViewController.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -679,6 +682,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6937D8AA200E7ED70024AC33 /* UIViewExtension.swift in Sources */,
+				696866642044B6C100A87965 /* WalkthroughViewController.swift in Sources */,
 				69461A23203F5C3000BD8DFF /* AdFed.mlmodel in Sources */,
 				69170E0C20347AB500740745 /* Secrets.swift in Sources */,
 				69D121162016727E00B39411 /* Page.swift in Sources */,
