@@ -17,7 +17,9 @@ class HomeViewController: UIViewController {
     let scene                   = Scene()
     var animations              = [String: CAAnimation]()
     var animationNodes          = [String: [String:Any]]()
-    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
 
     @IBOutlet weak var locationLabel: UILabel!
     @IBOutlet weak var rightAwardsLabel: UILabel!
@@ -260,7 +262,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if isState(.playingAnimation) { return }
+        if !isState(.playingAnimation) { return }
         guard let touch = touches.first,
             let _ = event else {
                 return
@@ -379,7 +381,6 @@ extension HomeViewController {
         }
     }
 }
-
 
 
 

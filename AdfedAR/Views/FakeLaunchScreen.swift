@@ -2,7 +2,10 @@ import UIKit
 
 class FakeLaunchScreen: UIViewController {
     @IBOutlet weak var image: UIImageView!
-
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return UIStatusBarStyle.lightContent
+    }
+    
     override func viewDidLoad() {
         waitAndSegue()
     }

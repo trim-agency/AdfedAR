@@ -22,7 +22,7 @@ class UserInstructionLabel: UILabel {
     func updateState(_ state: State) {
         switch state {
         case .appLoading:
-            updateText(.none)
+            updateText(.lookingForRune)
         case .detectingRune:
             updateText(.lookingForRune)
         case .runeDetected:
