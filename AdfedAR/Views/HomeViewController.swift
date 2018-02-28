@@ -260,7 +260,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if isState(.playingAnimation) { return }
+        if !isState(.playingAnimation) { return }
         guard let touch = touches.first,
             let _ = event else {
                 return
