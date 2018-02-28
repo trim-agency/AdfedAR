@@ -233,13 +233,10 @@
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="190" id="tkZ-4d-uyg"/>
                                         </constraints>
                                         <attributedString key="attributedText">
-                                            <fragment>
-                                                <string key="content">Congratulations to the winners of the Best of Show and Judges’ Choice awards!
-
- Use this app in conjunction with the winners book to experience exclusive content about the winners and their entries. Find the runes below in the winners book and scan them to learn more.</string>
+                                            <fragment content="Find the runes below in the winners book and scan them to experience exclusvie content">
                                                 <attributes>
                                                     <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <font key="NSFont" size="15" name="Gotham-Book"/>
+                                                    <font key="NSFont" size="20" name="Gotham-Book"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="1" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
