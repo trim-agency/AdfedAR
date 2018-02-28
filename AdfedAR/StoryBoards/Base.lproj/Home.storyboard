@@ -233,7 +233,7 @@
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="190" id="tkZ-4d-uyg"/>
                                         </constraints>
                                         <attributedString key="attributedText">
-                                            <fragment content="Find the runes below in the winners book and scan them to experience exclusvie content">
+                                            <fragment content="Find the runes below in the winners book and scan them to experience exclusive content">
                                                 <attributes>
                                                     <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <font key="NSFont" size="20" name="Gotham-Book"/>
