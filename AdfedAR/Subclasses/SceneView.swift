@@ -68,14 +68,20 @@ class Scene: SCNScene {
     }
     
     func loadAndPlayAnimation(key: String) {
-        DispatchQueue.main.async {
-            let node        = self.animationNodes[key]!["node"] as! SCNNode
-            node.opacity    = 0.0
-            self.add(node: node, to: self.rootNode)
-//            self.rootNode.scale = SCNVector3(0.001, 0.001, 0.001)
-            self.rootNode.scale = SCNVector3(0.1, 0.1, 0.1)
-            self.fadeIn(node)
-//            self.playAnimation(key: key, for: node)
+        if let node = rootNode.childNode(withName: key, recursively: true) {
+            node.opacity = 0.0
+            node.isHidden = false
+            fadeIn(node)
+        } else {
+            DispatchQueue.main.async {
+                let node        = self.animationNodes[key]!["node"] as! SCNNode
+                node.opacity    = 0.0
+                self.add(node: node, to: self.rootNode)
+    //            self.rootNode.scale = SCNVector3(0.001, 0.001, 0.001)
+                self.rootNode.scale = SCNVector3(0.1, 0.1, 0.1)
+                self.fadeIn(node)
+    //            self.playAnimation(key: key, for: node)
+            }
         }
     }
  

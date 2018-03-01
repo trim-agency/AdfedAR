@@ -12,7 +12,11 @@ class HomeViewController: UIViewController {
 
     let planeHeight: CGFloat    = 1
     var planeIdentifiers        = [UUID]()
-    var anchors                 = [ARAnchor]()
+    var anchors                 = [ARAnchor](){
+        didSet {
+            log.debug(anchors)
+        }
+    }
     let visionHandler           = VNSequenceRequestHandler()
     let scene                   = Scene()
     var animations              = [String: CAAnimation]()
@@ -77,9 +81,13 @@ class HomeViewController: UIViewController {
         CoreMLService.instance.currentFrame = nil
         toggleUI()
         logoHintOverlay.restartPulsing()
-        scene.removeAllNodes(completion: {
-            self.startPageDetection()
-        })
+//        scene.removeAllNodes(completion: {
+//            self.startPageDetection()
+//        })
+        let node = sceneView.scene.rootNode.childNode(withName: (detectedPage?.rawValue)!, recursively: true)
+//        let node = sceneView.scene.rootNode.childNode(withName: "test", recursively: true)
+        node?.isHidden = true
+        startPageDetection()
     }
     
     
@@ -251,6 +259,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
     }
 
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        anchors.append(anchor)
         if isState(.waitingOnPlane) {
             setState(condition: .waitingOnPlane, then: .planeDetected)
             waitAndStartRectangleDetection()
