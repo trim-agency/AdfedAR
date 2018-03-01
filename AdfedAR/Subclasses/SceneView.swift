@@ -76,11 +76,9 @@ class Scene: SCNScene {
             DispatchQueue.main.async {
                 let node        = self.animationNodes[key]!["node"] as! SCNNode
                 node.opacity    = 0.0
+                node.scale = SCNVector3Make(0.1, 0.1, 0.1)
                 self.add(node: node, to: self.rootNode)
-    //            self.rootNode.scale = SCNVector3(0.001, 0.001, 0.001)
-                self.rootNode.scale = SCNVector3(0.1, 0.1, 0.1)
                 self.fadeIn(node)
-    //            self.playAnimation(key: key, for: node)
             }
         }
     }

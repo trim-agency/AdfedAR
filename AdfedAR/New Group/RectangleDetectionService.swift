@@ -1,6 +1,7 @@
 import Foundation
 import Vision
 import ARKit
+import SceneKit
 
 class RectangleDetectionService {
     var sceneView: MainARSCNView?
@@ -50,7 +51,13 @@ class RectangleDetectionService {
 
     private func updateRootAnchor(_ result: ARHitTestResult) {
         let anchor           = ARAnchor(transform: result.worldTransform)
+        let vector3 = SCNVector3Make(anchor.transform.columns.3.x, anchor.transform.columns.3.y, anchor.transform.columns.3.z)
+        let node = SCNNode()
+        node.position = vector3
+        node.name = "test"
+        sceneView?.scene.rootNode.addChildNode(node)
         sceneView?.session.add(anchor: anchor)
+
 ////        let resultTransform = SCNMatrix4(result.worldTransform)
 ////        sceneView?.node(for: rootAnchor)
 //        if let rootAnchor   = self.rootAnchor,

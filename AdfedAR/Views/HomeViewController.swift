@@ -12,11 +12,7 @@ class HomeViewController: UIViewController {
 
     let planeHeight: CGFloat    = 1
     var planeIdentifiers        = [UUID]()
-    var anchors                 = [ARAnchor](){
-        didSet {
-            log.debug(anchors)
-        }
-    }
+    var anchors                 = [ARAnchor]()
     let visionHandler           = VNSequenceRequestHandler()
     let scene                   = Scene()
     var animations              = [String: CAAnimation]()
