@@ -224,19 +224,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="35" translatesAutoresizingMaskIntoConstraints="NO" id="nFN-OK-b2y">
-                                <rect key="frame" x="37.5" y="157" width="300" height="407"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="63" translatesAutoresizingMaskIntoConstraints="NO" id="nFN-OK-b2y">
+                                <rect key="frame" x="37.5" y="162.5" width="300" height="342.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="top" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Kfu-QD-TfX">
-                                        <rect key="frame" x="0.0" y="0.0" width="300" height="190"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="190" id="tkZ-4d-uyg"/>
-                                        </constraints>
+                                        <rect key="frame" x="0.0" y="0.0" width="300" height="69.5"/>
                                         <attributedString key="attributedText">
                                             <fragment content="Find the Runes below printed in the winners book and scan them to experience exclusive content about tonight's winners.">
                                                 <attributes>
                                                     <color key="NSColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <font key="NSFont" size="20" name="Gotham-Book"/>
+                                                    <font key="NSFont" size="15" name="Gotham-Book"/>
                                                     <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" lineSpacing="1" tighteningFactorForTruncation="0.0"/>
                                                 </attributes>
                                             </fragment>
@@ -244,7 +241,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="center" distribution="fillEqually" spacing="-20" translatesAutoresizingMaskIntoConstraints="NO" id="gxt-HJ-Wsm">
-                                        <rect key="frame" x="0.0" y="225" width="300" height="125"/>
+                                        <rect key="frame" x="0.0" y="132.5" width="300" height="125"/>
                                         <subviews>
                                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bestOfShowRune" translatesAutoresizingMaskIntoConstraints="NO" id="c4h-Uh-5ZJ">
                                                 <rect key="frame" x="0.0" y="0.0" width="160" height="125"/>
@@ -255,7 +252,7 @@
                                         </subviews>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" semanticContentAttribute="forceRightToLeft" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9iq-w2-UDf">
-                                        <rect key="frame" x="0.0" y="385" width="300" height="22"/>
+                                        <rect key="frame" x="0.0" y="320.5" width="300" height="22"/>
                                         <state key="normal" title="LET'S GO" image="chevron">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         </state>
@@ -271,8 +268,8 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="nFN-OK-b2y" firstAttribute="centerY" secondItem="EAW-6Q-fTY" secondAttribute="centerY" id="Vjr-gy-17R"/>
                             <constraint firstItem="nFN-OK-b2y" firstAttribute="centerX" secondItem="EAW-6Q-fTY" secondAttribute="centerX" id="Xno-g1-zmY"/>
-                            <constraint firstItem="nFN-OK-b2y" firstAttribute="top" secondItem="NgK-9P-QAD" secondAttribute="top" constant="137" id="jqW-3S-Lzw"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="NgK-9P-QAD"/>
                     </view>
