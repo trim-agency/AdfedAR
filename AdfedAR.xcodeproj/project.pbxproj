@@ -33,8 +33,8 @@
 		69461A21203E2D0300BD8DFF /* CrossDissolveSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69461A20203E2D0300BD8DFF /* CrossDissolveSegue.swift */; };
 		69461A23203F5C3000BD8DFF /* AdFed.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = 69461A22203F5C3000BD8DFF /* AdFed.mlmodel */; };
 		69461A25203F65AA00BD8DFF /* ArFrameStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69461A24203F65AA00BD8DFF /* ArFrameStruct.swift */; };
-		69881FDC2046093600D3C5DC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69881FDB2046093600D3C5DC /* AppState.swift */; };
 		696866642044B6C100A87965 /* WalkthroughViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 696866632044B6C100A87965 /* WalkthroughViewController.swift */; };
+		69881FDC2046093600D3C5DC /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69881FDB2046093600D3C5DC /* AppState.swift */; };
 		69B037A32020CB7C00906004 /* CoreMLError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69B037A22020CB7C00906004 /* CoreMLError.swift */; };
 		69D121122016715B00B39411 /* CoreMLService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121112016715B00B39411 /* CoreMLService.swift */; };
 		69D121162016727E00B39411 /* Page.swift in Sources */ = {isa = PBXBuildFile; fileRef = 69D121152016727E00B39411 /* Page.swift */; };
@@ -877,7 +877,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 37;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = ZVRNHU225Q;
 				DISPLAY_NAME = "Adfed-debug";
@@ -897,7 +897,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 35;
+				CURRENT_PROJECT_VERSION = 37;
 				DEVELOPMENT_TEAM = ZVRNHU225Q;
 				DISPLAY_NAME = "A New Reality";
 				INFOPLIST_FILE = AdfedAR/Info.plist;
