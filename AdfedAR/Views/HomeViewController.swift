@@ -154,7 +154,7 @@ class HomeViewController: UIViewController {
     // MARK: - Core ML
     private func loadCoreMLService() {
         if !isState(.appLoading) && !isState(.reset) { return }
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+        DispatchQueue.global().asyncAfter(deadline: .now() + .seconds(2), execute: {
             CoreMLService.instance.delegate = self
             self.sceneView.session.delegate = self
             self.startPageDetection()
