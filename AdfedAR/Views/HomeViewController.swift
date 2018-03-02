@@ -77,9 +77,13 @@ class HomeViewController: UIViewController {
         CoreMLService.instance.currentFrame = nil
         toggleUI()
         logoHintOverlay.restartPulsing()
-        scene.removeAllNodes(completion: {
-            self.startPageDetection()
-        })
+//        scene.removeAllNodes(completion: {
+//            self.startPageDetection()
+//        })
+        let node = sceneView.scene.rootNode.childNode(withName: (detectedPage?.rawValue)!, recursively: true)
+//        let node = sceneView.scene.rootNode.childNode(withName: "test", recursively: true)
+        node?.isHidden = true
+        startPageDetection()
     }
     
     
@@ -239,14 +243,19 @@ class HomeViewController: UIViewController {
 // MARK: - ARKit Delegate
 extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        if !isState(.detectingRune) { return }
-        guard let exposure = frame.lightEstimate?.ambientIntensity else { return }
-        DispatchQueue.global().async {
-            CoreMLService.instance.currentFrame = ArFrameData(image: frame.capturedImage, exposure: exposure)
+        if isState(.detectingRune) {
+            guard let exposure = frame.lightEstimate?.ambientIntensity else { return }
+            DispatchQueue.global().async {
+                CoreMLService.instance.currentFrame = ArFrameData(image: frame.capturedImage, exposure: exposure)
+            }
+        } else if isState(.detectingRectangle) {
+            let rotate = simd_float4x4(SCNMatrix4MakeRotation(frame.camera.eulerAngles.y, 0, 1, 0))
+            RectangleDetectionService.instance.currentRotation = rotate
         }
     }
 
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        anchors.append(anchor)
         if isState(.waitingOnPlane) {
             setState(condition: .waitingOnPlane, then: .planeDetected)
             waitAndStartRectangleDetection()
