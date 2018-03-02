@@ -2,8 +2,9 @@ import Foundation
 
 class AppState {
     static let instance = AppState()
+    var hasReset        = false
+    var canPlayVideos   = true
     var instructionLabel: UserInstructionLabel?
-    var hasReset = false
     var current: State! {
         didSet {
             instructionLabel?.updateState(current)

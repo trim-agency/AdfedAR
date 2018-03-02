@@ -42,7 +42,9 @@ class UserInstructionLabel: UILabel {
         case .loadingAnimation:
             updateText(.none)
         case .playingAnimation:
-            updateText(.tapForVideo)
+            if AppState.instance.canPlayVideos {
+                updateText(.tapForVideo)
+            }
         case .reset:
             updateText(.none)
         }

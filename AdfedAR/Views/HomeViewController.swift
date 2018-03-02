@@ -271,7 +271,7 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if !isState(.playingAnimation) { return }
+        if !isState(.playingAnimation) || !AppState.instance.canPlayVideos { return }
         guard let touch = touches.first,
             let _ = event else {
                 return
@@ -293,10 +293,12 @@ extension HomeViewController: ARSCNViewDelegate, ARSessionObserver, ARSessionDel
                     do {
                         let jsonResponse = try JSON(data: response.data!)
                         
-                        if let judgesChoice = jsonResponse["judgesChoice"].string,
-                            let bestOfShow = jsonResponse["bestOfShow"].string {
+                        if let judgesChoice     = jsonResponse["judgesChoice"].string,
+                            let bestOfShow      = jsonResponse["bestOfShow"].string,
+                            let canPlayVideo    = jsonResponse["canPlayVideo"].bool {
                             self.videos = Videos(bestOfShow: bestOfShow,
                                                  judgesChoice: judgesChoice)
+                            AppState.instance.canPlayVideos = canPlayVideo
                         }
                     } catch {
                         log.error("json deserialization error")
