@@ -29,6 +29,8 @@ class AppState {
                 log.debug(current)
             case .playingAnimation:
                 log.debug(current)
+            case .playingVideo:
+                log.debug(current)
             case .reset:
                 log.debug(current)
                 hasReset = true
@@ -55,6 +57,7 @@ enum State {
     case rectangleDetected
     case loadingAnimation
     case playingAnimation
+    case playingVideo
     case reset
 }
 

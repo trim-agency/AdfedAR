@@ -55,6 +55,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        didDismissVideo()
         displayLogoHintOverlay()
     }
     
@@ -371,17 +372,26 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
 // MARK: - Video Player
 extension HomeViewController {
     private func playVideo(videoIdentifier: String?) {
-        let playerViewController = AVPlayerViewController()
+        if !isState(.playingAnimation){ return }
+        let playerViewController        = AVPlayerViewController()
+        self.definesPresentationContext = true
+        setState(condition: .playingAnimation, then: .playingVideo)
         self.present(playerViewController, animated: true, completion: nil)
         
         XCDYouTubeClient.default().getVideoWithIdentifier(videoIdentifier) { [weak playerViewController] (video: XCDYouTubeVideo?, error: Error?) in
-            if let streamURLs = video?.streamURLs, let streamURL = (streamURLs[XCDYouTubeVideoQualityHTTPLiveStreaming] ?? streamURLs[YouTubeVideoQuality.hd720] ?? streamURLs[YouTubeVideoQuality.medium360] ?? streamURLs[YouTubeVideoQuality.small240]) {
+            if let streamURLs = video?.streamURLs,
+               let streamURL = (streamURLs[XCDYouTubeVideoQualityHTTPLiveStreaming] ?? streamURLs[YouTubeVideoQuality.hd720] ?? streamURLs[YouTubeVideoQuality.medium360] ?? streamURLs[YouTubeVideoQuality.small240]) {
                 playerViewController?.player = AVPlayer(url: streamURL)
                 playerViewController?.player?.play()
             } else {
                 self.dismiss(animated: true, completion: nil)
             }
         }
+    }
+    
+    func didDismissVideo() {
+        if !isState(.playingVideo) { return }
+        reset()
     }
     
     private func videoId() -> String {
