@@ -24,6 +24,9 @@ class CoreMLService {
                 let cgImage         = context.createCGImage(transformedImage, from: transformedImage.extent)
                 let croppedImage    = UIImage(cgImage: cgImage!).cropToCenter(to: CGSize(width: UIScreen.main.bounds.width * 0.6, height: UIScreen.main.bounds.width * 0.6))
                 let ciImage         = CIImage(image: croppedImage)
+                if currentFrame.exposure > 300 && currentFrame.exposure < 600 {
+                    print("foo")
+                }
                 let request         = VNCoreMLRequest(model: self.model, completionHandler: self.pageRecognitionHandler)
                 request.usesCPUOnly = true
                 let handler         = VNImageRequestHandler(ciImage: ciImage!, options: [:])
@@ -39,21 +42,25 @@ class CoreMLService {
         if let exposure = exposure {
             modifyExposure(exposure: exposure, for: &image)
         }
-        
-        filterImage(image: &image, filterName: "CIColorControls", filterKey: "inputContrast", value: 1.2)
+
+        filterImage(image: &image, filterName: "CIColorControls", filterKey: "inputContrast", value: 1.1)
         filterImage(image: &image, filterName: "CISharpenLuminance", filterKey: "inputSharpness", value: 1)
         return image
     }
     
     private func modifyExposure(exposure: CGFloat, for image: inout CIImage) {
+        var inputEV: Float!
         switch exposure {
-        case 0..<1000:
-            log.debug("low light")
-        case 1000..<2000:
-            log.debug("above neutral")
+        case 0..<300:
+            inputEV = 2.5
+        case 300..<600:
+            inputEV = 0.75
+        case 600..<1000:
+            inputEV = 0.6
         default:
-            log.debug("Ambience error")
+            inputEV = 0.5
         }
+        filterImage(image: &image, filterName: "CIExposureAdjust", filterKey: "inputEV", value: inputEV)
     }
     
     private func filterImage(image: inout CIImage, filterName: String, filterKey: String, value: Float ) {
