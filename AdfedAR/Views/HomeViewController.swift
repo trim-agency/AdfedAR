@@ -370,11 +370,10 @@ extension HomeViewController: RectangleDetectionServiceDelegate {
 }
 
 // MARK: - Video Player
-extension HomeViewController: AVPlayerViewControllerDelegate {
+extension HomeViewController {
     private func playVideo(videoIdentifier: String?) {
         if !isState(.playingAnimation){ return }
         let playerViewController        = AVPlayerViewController()
-        playerViewController.delegate   = self
         self.definesPresentationContext = true
         setState(condition: .playingAnimation, then: .playingVideo)
         self.present(playerViewController, animated: true, completion: nil)
