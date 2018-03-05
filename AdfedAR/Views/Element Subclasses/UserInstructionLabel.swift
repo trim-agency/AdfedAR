@@ -45,6 +45,8 @@ class UserInstructionLabel: UILabel {
             if AppState.instance.canPlayVideos {
                 updateText(.tapForVideo)
             }
+        case .playingVideo:
+            print("")
         case .reset:
             updateText(.none)
         }
