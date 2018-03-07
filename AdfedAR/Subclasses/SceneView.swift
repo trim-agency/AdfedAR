@@ -9,22 +9,23 @@ class Scene: SCNScene {
 
     // MARK: - Node Management
     func removeAllNodes(completion: (() -> ())?) {
-//        for node in rootNode.childNodes {
-//            if isPlayingAnimation {
-//                let action = SCNAction.fadeOut(duration: 1.0)
-//                node.runAction(action){
-//                    node.removeFromParentNode()
-//                    self.isPlayingAnimation = false
-//                    completion?()
-//                }
-//            } else {
-//                self.isPlayingAnimation = false
-//                node.removeFromParentNode()
-//                completion?()
-//            }
-//        }
-        let node = rootNode.childNode(withName: currentNodeName, recursively: true)
-        node?.removeFromParentNode()
+        for node in rootNode.childNodes {
+            if isPlayingAnimation {
+                let action = SCNAction.fadeOut(duration: 1.0)
+                node.runAction(action){
+                    node.removeFromParentNode()
+                    self.isPlayingAnimation = false
+                    completion?()
+                }
+            } else {
+                self.isPlayingAnimation = false
+                node.removeFromParentNode()
+                completion?()
+            }
+        }
+//        let node = rootNode.childNode(withName: currentNodeName, recursively: true)
+//        node?.removeFromParentNode()
+//        completion?()
     }
     
     // Mark: - Asset management
@@ -64,7 +65,7 @@ class Scene: SCNScene {
             DispatchQueue.main.async {
                 let node        = self.animationNodes[key]!["node"] as! SCNNode
                 node.opacity    = 0.0
-                node.scale = SCNVector3Make(0.1, 0.1, 0.1)
+                node.scale      = SCNVector3Make(0.1, 0.1, 0.1)
                 self.add(node: node, to: self.rootNode)
                 self.fadeIn(node)
             }
