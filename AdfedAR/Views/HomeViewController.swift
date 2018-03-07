@@ -133,11 +133,9 @@ class HomeViewController: UIViewController {
     // MARK: - RESET
     private func pageDetected() {
         if AppState.instance.hasReset {
-            log.debug("display animations")
             displayAnimations()
         } else {
             scene.removeAllNodes {
-                log.debug("Remove all nodes")
                 self.displayAnimations()
             }
         }
@@ -147,13 +145,11 @@ class HomeViewController: UIViewController {
         if !isState(.rectangleDetected) { return }
         setState(condition: .rectangleDetected, then: .loadingAnimation)
         scene.removeAllAnimations()
-        log.debug("animations removed")
         guard let detectedPage = self.detectedPage else { return }
         switch detectedPage {
         case .judgesChoice:
             scene.loadAndPlayAnimation(key: "judgesChoice")
         case .bestOfShow:
-            log.debug("best of show playing")
             scene.loadAndPlayAnimation(key: "bestOfShow")
         }
         toggleUI()

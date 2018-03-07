@@ -23,9 +23,6 @@ class Scene: SCNScene {
                 completion?()
             }
         }
-//        let node = rootNode.childNode(withName: currentNodeName, recursively: true)
-//        node?.removeFromParentNode()
-//        completion?()
     }
     
     // Mark: - Asset management
