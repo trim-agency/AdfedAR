@@ -65,6 +65,7 @@ class HomeViewController: UIViewController {
         setupDebug()
         getVideoIds()
         loadRectangleDetection()
+        setupAudio()
     }
     
     private func start() {
@@ -87,6 +88,10 @@ class HomeViewController: UIViewController {
         startPageDetection()
     }
     
+    private func setupAudio() {
+        try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+        try? AVAudioSession.sharedInstance().setActive(true)
+    }
     
     //MARK: - State
     private func setState(condition startingState: State, then targetState: State) {

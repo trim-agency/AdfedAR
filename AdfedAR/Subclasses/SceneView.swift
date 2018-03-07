@@ -5,37 +5,26 @@ class Scene: SCNScene {
     var isPlayingAnimation = false
     var animations              = [String: CAAnimation]()
     var animationNodes          = [String: [String:Any]]()
+    var currentNodeName         = ""
 
-    // MARK: - Initialization
-    override init() {
-        super.init()
-        setup()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    private func setup() {
-        
-    }
-    
     // MARK: - Node Management
     func removeAllNodes(completion: (() -> ())?) {
-        for node in rootNode.childNodes {
-            if isPlayingAnimation {
-                let action = SCNAction.fadeOut(duration: 1.0)
-                node.runAction(action){
-                    node.removeFromParentNode()
-                    self.isPlayingAnimation = false
-                    completion?()
-                }
-            } else {
-                self.isPlayingAnimation = false
-                node.removeFromParentNode()
-                completion?()
-            }
-        }
+//        for node in rootNode.childNodes {
+//            if isPlayingAnimation {
+//                let action = SCNAction.fadeOut(duration: 1.0)
+//                node.runAction(action){
+//                    node.removeFromParentNode()
+//                    self.isPlayingAnimation = false
+//                    completion?()
+//                }
+//            } else {
+//                self.isPlayingAnimation = false
+//                node.removeFromParentNode()
+//                completion?()
+//            }
+//        }
+        let node = rootNode.childNode(withName: currentNodeName, recursively: true)
+        node?.removeFromParentNode()
     }
     
     // Mark: - Asset management
@@ -49,8 +38,7 @@ class Scene: SCNScene {
         let parentNode  = SCNNode()
         parentNode.name = key
         add(node: scene.rootNode, to: parentNode)
-//        let animation: CAAnimation = loadAnimation(withKey: key,
-//                                                   sceneName: filePath)!
+        currentNodeName = key
         let animationDetails = [ "node": parentNode ]
         animationNodes[key] = animationDetails
     }
@@ -63,7 +51,7 @@ class Scene: SCNScene {
             log.error("animation nil")
             return nil
         }
-
+        
         return animationObject
     }
     
