@@ -5,21 +5,8 @@ class Scene: SCNScene {
     var isPlayingAnimation = false
     var animations              = [String: CAAnimation]()
     var animationNodes          = [String: [String:Any]]()
+    var currentNodeName         = ""
 
-    // MARK: - Initialization
-    override init() {
-        super.init()
-        setup()
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-
-    private func setup() {
-        
-    }
-    
     // MARK: - Node Management
     func removeAllNodes(completion: (() -> ())?) {
         for node in rootNode.childNodes {
@@ -49,8 +36,7 @@ class Scene: SCNScene {
         let parentNode  = SCNNode()
         parentNode.name = key
         add(node: scene.rootNode, to: parentNode)
-//        let animation: CAAnimation = loadAnimation(withKey: key,
-//                                                   sceneName: filePath)!
+        currentNodeName = key
         let animationDetails = [ "node": parentNode ]
         animationNodes[key] = animationDetails
     }
@@ -63,7 +49,7 @@ class Scene: SCNScene {
             log.error("animation nil")
             return nil
         }
-
+        
         return animationObject
     }
     
@@ -76,7 +62,7 @@ class Scene: SCNScene {
             DispatchQueue.main.async {
                 let node        = self.animationNodes[key]!["node"] as! SCNNode
                 node.opacity    = 0.0
-                node.scale = SCNVector3Make(0.1, 0.1, 0.1)
+                node.scale      = SCNVector3Make(0.1, 0.1, 0.1)
                 self.add(node: node, to: self.rootNode)
                 self.fadeIn(node)
             }
